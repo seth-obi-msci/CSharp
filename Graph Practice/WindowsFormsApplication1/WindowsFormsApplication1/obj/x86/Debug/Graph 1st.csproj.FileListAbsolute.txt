@@ -1,0 +1,23 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Graph1st.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\Graph 1st.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\ZedGraph.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\ZedGraph.xml
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\ru\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\sk\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\Graph 1st.csprojResolveAssemblyReference.cache

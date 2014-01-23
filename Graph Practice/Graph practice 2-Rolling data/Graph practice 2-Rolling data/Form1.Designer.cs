@@ -1,4 +1,6 @@
-﻿namespace Graph_practice_2_Rolling_data
+﻿using ZedGraph;
+
+namespace Graph_practice_2_Rolling_data
 {
     partial class RollingGraph
     {
@@ -31,6 +33,7 @@
             this.components = new System.ComponentModel.Container();
             this.zgc = new ZedGraph.ZedGraphControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // zgc
@@ -83,6 +86,11 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            //
+            // timer2
+            //
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+
             // 
             // RollingGraph
             // 
@@ -102,5 +110,6 @@
 
         private ZedGraph.ZedGraphControl zgc;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer2;
     }
 }

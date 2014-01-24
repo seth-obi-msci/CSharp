@@ -34,75 +34,94 @@ namespace Graph_practice_2_Rolling_data
             this.zgc = new ZedGraph.ZedGraphControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // zgc
             // 
             this.zgc.EditButtons = System.Windows.Forms.MouseButtons.Left;
-            this.zgc.EditModifierKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.None)));
-            this.zgc.IsAutoScrollRange = false;
-            this.zgc.IsEnableHEdit = false;
-            this.zgc.IsEnableHPan = true;
-            this.zgc.IsEnableHZoom = true;
-            this.zgc.IsEnableVEdit = false;
-            this.zgc.IsEnableVPan = true;
-            this.zgc.IsEnableVZoom = true;
-            this.zgc.IsPrintFillPage = true;
-            this.zgc.IsPrintKeepAspectRatio = true;
-            this.zgc.IsScrollY2 = false;
-            this.zgc.IsShowContextMenu = true;
-            this.zgc.IsShowCopyMessage = true;
-            this.zgc.IsShowCursorValues = false;
-            this.zgc.IsShowHScrollBar = false;
-            this.zgc.IsShowPointValues = false;
-            this.zgc.IsShowVScrollBar = false;
-            this.zgc.IsSynchronizeXAxes = false;
-            this.zgc.IsSynchronizeYAxes = false;
-            this.zgc.IsZoomOnMouseCenter = false;
-            this.zgc.LinkButtons = System.Windows.Forms.MouseButtons.Left;
-            this.zgc.LinkModifierKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.None)));
             this.zgc.Location = new System.Drawing.Point(12, 12);
             this.zgc.Name = "zgc";
-            this.zgc.PanButtons = System.Windows.Forms.MouseButtons.Left;
-            this.zgc.PanButtons2 = System.Windows.Forms.MouseButtons.Middle;
             this.zgc.PanModifierKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.None)));
-            this.zgc.PanModifierKeys2 = System.Windows.Forms.Keys.None;
-            this.zgc.PointDateFormat = "g";
-            this.zgc.PointValueFormat = "G";
-            this.zgc.ScrollMaxX = 0;
-            this.zgc.ScrollMaxY = 0;
-            this.zgc.ScrollMaxY2 = 0;
-            this.zgc.ScrollMinX = 0;
-            this.zgc.ScrollMinY = 0;
-            this.zgc.ScrollMinY2 = 0;
+            this.zgc.ScrollGrace = 0D;
+            this.zgc.ScrollMaxX = 0D;
+            this.zgc.ScrollMaxY = 0D;
+            this.zgc.ScrollMaxY2 = 0D;
+            this.zgc.ScrollMinX = 0D;
+            this.zgc.ScrollMinY = 0D;
+            this.zgc.ScrollMinY2 = 0D;
             this.zgc.Size = new System.Drawing.Size(547, 325);
             this.zgc.TabIndex = 0;
-            this.zgc.ZoomButtons = System.Windows.Forms.MouseButtons.Left;
-            this.zgc.ZoomButtons2 = System.Windows.Forms.MouseButtons.None;
-            this.zgc.ZoomModifierKeys = System.Windows.Forms.Keys.None;
-            this.zgc.ZoomModifierKeys2 = System.Windows.Forms.Keys.None;
-            this.zgc.ZoomStepFraction = 0.1;
             // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            //
+            // 
             // timer2
-            //
+            // 
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(476, 19);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(69, 21);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "SaveBytes";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.SaveBytesButton);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(38, 21);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(73, 17);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "AutoSave";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.AutoSave);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(395, 19);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 21);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "FreshScreen";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.FreshScreenButton);
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(118, 21);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(100, 17);
+            this.checkBox2.TabIndex = 4;
+            this.checkBox2.Text = "Stop";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.StopGraph);
             // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(571, 349);
+            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.zgc);
             this.Name = "RollingGraph";
             this.Text = "RollingGraph";
-            this.Resize += new System.EventHandler(this.RollingGraph_Resize);
             this.Load += new System.EventHandler(this.RollingGraph_Load);
+            this.Resize += new System.EventHandler(this.RollingGraph_Resize);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -111,5 +130,9 @@ namespace Graph_practice_2_Rolling_data
         private ZedGraph.ZedGraphControl zgc;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }

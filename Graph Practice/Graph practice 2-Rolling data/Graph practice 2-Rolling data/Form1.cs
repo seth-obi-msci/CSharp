@@ -19,27 +19,35 @@ namespace Graph_practice_2_Rolling_data
         int tickStart = 0;
 
         //Integer to use as time coord for plotting out of Plotting_1 array
-        int time1 = 0;
-        int time2 = 5;
-
+        public int time1 = 0;
+        double time2 = 0;
+        int NumValuesToScreen = 300;
         int COPY_POS = 0;
         int trans_index = 0;
+        bool AutoSaveBool = false;
+        bool Stop = false;
 
         //TextWriter Data_file = new StreamWriter(@"C:\Users\localadmin\Desktop\Data_file1.txt", true);
 
+        // The RollingPointPairList is an efficient storage class that always
+        // keeps a rolling set of point data without needing to shift any data values
+        // New RollingPairList with 1200000 values
+        RollingPointPairList list1 = new RollingPointPairList(300);
+        RollingPointPairList list2 = new RollingPointPairList(300);
 
-        byte[] Data = new byte[100];
+        byte[] ScreenBuffer = new byte[300];
+        byte[] UART_Buffer;
         byte[] Plotting_1 = new byte[1];
 
+        
+ 
         public RollingGraph()
         {
             InitializeComponent();
         }
 
-
         private void RollingGraph_Load(object sender, EventArgs e)
         {
-            CreateGraph(zgc);
             CreateGraph(zgc);
             Console.WriteLine("Load");
         }
@@ -55,20 +63,16 @@ namespace Graph_practice_2_Rolling_data
         }*/
 
 
-        private void CreateGraph(ZedGraph.ZedGraphControl zgc)
+        public void CreateGraph(ZedGraph.ZedGraphControl zgc)
         {
             GraphPane myPane = zgc.GraphPane;
 
             myPane.Title.Text = "Plotting arrays of bytes";
 
-            // The RollingPointPairList is an efficient storage class that always
-            // keeps a rolling set of point data without needing to shift any data values
-            // New RollingPairList with 1200 values
-            RollingPointPairList list1 = new RollingPointPairList(1200000);
 
             //Make a new curve
             LineItem curve = myPane.AddCurve("Counts", list1, Color.DarkGoldenrod, SymbolType.None);
-
+            LineItem curve2 = myPane.AddCurve("Counts (Avg ten)", list2, Color.DimGray, SymbolType.None);
             //Timer fort the X axis, defined later
             timer1.Interval = 1000;
             timer1.Enabled = true;
@@ -91,54 +95,22 @@ namespace Graph_practice_2_Rolling_data
 
             //Save begging item for reference (?)
             tickStart = Environment.TickCount;
-            Console.WriteLine("Create Graphs");
+            Console.WriteLine("Create Graph");
         }
 
-        /*private void CreateGraph2(ZedGraph.ZedGraphControl zgc)
-        {
-            GraphPane myPane2 = zgc.GraphPane;
-            myPane2.Title.Text = "Plotting arrays of averaged bytes";
-
-            // The RollingPointPairList is an efficient storage class that always
-            // keeps a rolling set of point data without needing to shift any data values
-            // New RollingPairList with 1200 values
-            RollingPointPairList list2 = new RollingPointPairList(1200000);
-
-            //Make a new curve
-            LineItem curve2 = myPane2.AddCurve("Counts (Avg ten)", list2, Color.DimGray, SymbolType.None);
-
-            //Timer fort the X axis, defined later
-
-            // Just manually control the X axis range so it scrolls continuously
-            // instead of discrete step-sized jumps (DONT UNDERSTAND)
-            myPane2.XAxis.Scale.Min = 0;
-            myPane2.XAxis.Scale.Max = 300;
-            myPane2.XAxis.Scale.MinorStep = 10;
-            myPane2.XAxis.Scale.MajorStep = 50;
-
-            //Scale axis
-            zgc.AxisChange();
-
-            //Save begging item for reference (?)
-            tickStart = Environment.TickCount;
-        }*/
-
+    
         public void timer1_Tick(object sender, EventArgs e)
         {
+            
             int t = (Environment.TickCount - tickStart);
             //Read bytes, gives array of bytes, the data.
+            UART_Buffer = FPGA.ReadBytes();
 
-            byte[] UART_Buffer = FPGA.ReadBytes();
-            int UART_Length = UART_Buffer.Length;
-
-            //Console.WriteLine("t at tick is {0}", t);
-            Console.WriteLine("Size of Data array {0}", Data.Length);
-            Console.WriteLine("Size of Buffer array {0}", UART_Buffer.Length);
-
+            double UART_Average = SumBytes(UART_Buffer) / UART_Buffer.Length;
             // Ensures there's at least one curve in GraphPane
             if (zgc.GraphPane.CurveList.Count <= 0)
                 return;
-
+            
             LineItem curve = zgc.GraphPane.CurveList[0] as LineItem;
             LineItem curve2 = zgc.GraphPane.CurveList[1] as LineItem;
             if (curve == null || curve2 == null)
@@ -154,23 +126,29 @@ namespace Graph_practice_2_Rolling_data
                 return;
 
             // Think this gives time in milliseconds
-            double time = (Environment.TickCount - tickStart) / 1000.0;
+           double time = (Environment.TickCount - tickStart) / 1000.0;
+           if (!Stop)
+           {
+               //For loop to add data points to the list
+               for (int i = 0; i < UART_Buffer.Length; i++)
+               {
 
-            //For loop to add data points to the list
-            for (int i = 0; i < UART_Buffer.Length; i++)
-            {
+                   double y = UART_Buffer[i];
 
+                   list.Add(time1, y);
+                   time1++;
 
-                double y = UART_Buffer[i];
-                //Console.WriteLine(y);
+                   double j = i;
+                   double k = UART_Buffer.Length;
+                   if (i - 1 < k / 2 && k / 2 <= i)
+                   {
+                       time2 += k / 2;
+                       list2.Add(time2, UART_Average);
+                       time2 += k / 2;
+                   }
+               }
 
-
-                list.Add(time1, y);
-                time1++;
-            }
-
-
-
+           }
             // Used to control max and min values of the x-axis so that 
             // axis moves along as 
             Scale xScale = zgc.GraphPane.XAxis.Scale;
@@ -191,8 +169,8 @@ namespace Graph_practice_2_Rolling_data
 
 
 
-            int Diff = Data.Length - COPY_POS;
-            bool Condition = UART_Length > Diff;
+            int Diff = ScreenBuffer.Length - COPY_POS;
+            bool Condition = UART_Buffer.Length > Diff;
 
 
 
@@ -202,57 +180,63 @@ namespace Graph_practice_2_Rolling_data
             if (!Condition)
             {
 
-                Array.Copy(UART_Buffer, 0, Data, COPY_POS, UART_Length);
-                for (int i = 0; i < 100; i++)
-                {
-                    Console.WriteLine(Data[i]);
-                }
+                Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, UART_Buffer.Length);
 
-                Console.WriteLine("COPY_POS = {0}", COPY_POS);
-                COPY_POS = COPY_POS + UART_Length;
+
+                //Console.WriteLine("time1%100 is {0}", time1%100);
+                COPY_POS = COPY_POS + UART_Buffer.Length;
 
                 //WRITE TO FILE
             }
             else
             {
-                Array.Copy(UART_Buffer, 0, Data, COPY_POS, Data.Length - COPY_POS);
-                for (int i = 0; i < Data.Length / 10; i++)
+                Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, ScreenBuffer.Length - COPY_POS);
+
+                if(AutoSaveBool)
                 {
-
-                    int[] Avg_ten = new int[10];
-                    Array.Copy(Data, i * 10, Avg_ten, 0, 10);
-
-                    double Sum = Avg_ten.Sum();
-                    double Average = Avg_ten.Sum() / 10.0;
-                    Console.WriteLine("Avg_ten={0}", Average);
-
-                    list2.Add(time2, Average);
-                    time2 = time2 + 10;
-
-                    //trans_index++; // will equal 9 if there are 94 values in data array, since equas 1 to start
+                    SaveToFile(@"C:\Users\localadmin\Desktop\Data_file1.txt", ScreenBuffer);
                 }
-                Console.WriteLine("Gets into transfer bit");
-                /* for (int i = 0; i < 100; i++)
+
+                /* for (int i = 0; i < Data.Length / 10; i++)
                  {
-                     Console.WriteLine(Data[i]);
+
+                     int[] Avg_ten = new int[10];
+                     Array.Copy(Data, i * 10, Avg_ten, 0, 10);
+
+                     double Sum = Avg_ten.Sum();
+                     double Average = Avg_ten.Sum() / 10.0;
+                     Console.WriteLine("Avg_ten={0}", Average);
+
+                     //list2.Add(time2, Average);
+                     //time2 = time2 + 10;
+                    
+                     //trans_index++; // will equal 9 if there are 94 values in data array, since equas 1 to start
                  }
-                 */
+                */
+
+                //WriteToScreen(ScreenBuffer);
 
 
-                List<int> Data_Readings = new List<int>(Data.Length);
 
-                for (int k = 0; k < Data.Length; k++)
-                {
-                    int Data_Reading = Data[k];
-                    Data_Readings.Add(Data_Reading);
-                }
+                //WriteToScreen(Data);
 
 
-                foreach (int j in Data)
-                {
-                    string Reading = j.ToString() + "\r\n";
-                    File.AppendAllText(@"C:\Users\localadmin\Desktop\Data_file1.txt", Reading);
-                }
+                /*
+                 List<int> Data_Readings = new List<int>(Data.Length);
+
+                 for (int k = 0; k < Data.Length; k++)
+                 {
+                     int Data_Reading = Data[k];
+                     Data_Readings.Add(Data_Reading);
+                 }
+
+
+                 foreach (int j in Data)
+                 {
+                     string Reading = j.ToString() + "\r\n";
+                     File.AppendAllText(@"C:\Users\localadmin\Desktop\Data_file1.txt", Reading);
+                 }
+               */
                 /* char[] data_string = new ( System.Text.Encoding.GetDecoder(Data));
                  using (Data_file)
                  {
@@ -270,10 +254,10 @@ namespace Graph_practice_2_Rolling_data
                      Console.WriteLine("The {0}th element is {1}", j, read_data[j]);
                  }*/
 
-                Array.Clear(Data, 0, Data.Length);
-                Array.Copy(UART_Buffer, Data.Length - COPY_POS, Data, 0, UART_Buffer.Length - (Data.Length - COPY_POS));
+                //Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
+                Array.Copy(UART_Buffer, ScreenBuffer.Length - COPY_POS, ScreenBuffer, 0, UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS));
 
-                COPY_POS = UART_Buffer.Length - (Data.Length - COPY_POS);
+                COPY_POS = UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS);
 
 
 
@@ -335,7 +319,7 @@ namespace Graph_practice_2_Rolling_data
         }
 
 
-
+    
         // This event is controlled by a second timer. Will try to use it to 
         // plot average counts on different time scale.
 
@@ -382,9 +366,91 @@ namespace Graph_practice_2_Rolling_data
 
         }
 
+        private void SaveBytesButton(object sender, EventArgs e)
+        {
+            //Button SaveButton = sender as Button;
+            if (sender == null) return;
+            if (sender != null)
+            {
+                SaveToFile(@"C:\Users\localadmin\Desktop\Data_file1.txt", ScreenBuffer);
+            }
+        }
+
+        private void FreshScreenButton(object sender, EventArgs e)
+        {
+            if (sender == null) return;
+            if (sender != null)
+            {
+                time1 = 0;
+                time2 = 0;
+                list1.Clear();
+                list2.Clear();
+                Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
+            }
+            return;
+        }
+
+        public void AutoSave(object sender, EventArgs e)
+        {
+            if (sender == null) return;
+            if (sender != null)
+            {
+                AutoSaveBool = true;
+            }
+
+        }
+
+
+        public void SaveToFile(string FileLocation, byte[] DataToSave)
+        {
+            List<int> Data_Readings = new List<int>(DataToSave.Length);
+
+            foreach (int j in DataToSave)
+            {
+                string Reading = j.ToString() + "\r\n";
+                File.AppendAllText(FileLocation, Reading);
+            }
+            return;
+        }
+
+        public void WriteToScreen(byte[] DataToWrite)
+        {
+            for (int j = 0; j < DataToWrite.Length; j++)
+            {
+                Console.WriteLine("{0}th element is {1}", j, DataToWrite[j]);
+            }
+            return;
+        }
+
+        public double SumBytes(byte[] DataToSum)
+        {
+            double total = 0;
+            for (int j = 0; j < DataToSum.Length; j++)
+            {
+                total += DataToSum[j];
+            }
+
+            return total;
+        }
+
+        private void StopGraph(object sender, EventArgs e)
+        {
+            if (sender == null) Stop = false;
+            if (sender != null)
+            {
+                Stop = true;
+            }
+         return;
+
+        }
+    
     }
 
+
+
 }
+
+       
 
 
 

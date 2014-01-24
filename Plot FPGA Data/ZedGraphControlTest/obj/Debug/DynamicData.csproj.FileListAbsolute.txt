@@ -1,0 +1,18 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\bin\Debug\DynamicData.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\bin\Debug\DynamicData.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\bin\Debug\ZedGraph.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\obj\Debug\DynamicData.csprojResolveAssemblyReference.cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\obj\Debug\DynamicData.Form1.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\obj\Debug\DynamicData.Properties.Resources.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\obj\Debug\DynamicData.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\obj\Debug\DynamicData.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\ZedGraphControlTest\obj\Debug\DynamicData.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\obj\Debug\DynamicData.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\obj\Debug\DynamicData.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\obj\Debug\DynamicData.csprojResolveAssemblyReference.cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\obj\Debug\DynamicData.Properties.Resources.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\obj\Debug\DynamicData.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\bin\Debug\DynamicData.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\bin\Debug\DynamicData.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\bin\Debug\ZedGraph.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Plot FPGA Data\ZedGraphControlTest\obj\Debug\Read_and_Plot_FPGA_Data.Form1.resources

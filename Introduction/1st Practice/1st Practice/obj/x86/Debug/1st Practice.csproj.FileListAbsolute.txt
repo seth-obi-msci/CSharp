@@ -1,0 +1,5 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Introduction\1st Practice\1st Practice\bin\Debug\1st Practice.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Introduction\1st Practice\1st Practice\bin\Debug\1st Practice.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Introduction\1st Practice\1st Practice\obj\x86\Debug\1st Practice.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Introduction\1st Practice\1st Practice\obj\x86\Debug\1st Practice.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Introduction\1st Practice\1st Practice\obj\x86\Debug\1st Practice.csprojResolveAssemblyReference.cache

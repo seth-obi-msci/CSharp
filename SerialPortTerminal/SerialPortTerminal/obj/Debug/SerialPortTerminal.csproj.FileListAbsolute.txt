@@ -1,0 +1,13 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\bin\Debug\SerialPort Terminal.exe.config
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\bin\Debug\SerialPort Terminal.exe.manifest
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\bin\Debug\SerialPort Terminal.application
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\bin\Debug\SerialPort Terminal.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\bin\Debug\SerialPort Terminal.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPortTerminal.frmAbout.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPortTerminal.frmTerminal.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPortTerminal.Properties.Resources.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPortTerminal.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPort Terminal.exe.manifest
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPort Terminal.application
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPort Terminal.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\SerialPortTerminal\SerialPortTerminal\obj\Debug\SerialPort Terminal.pdb

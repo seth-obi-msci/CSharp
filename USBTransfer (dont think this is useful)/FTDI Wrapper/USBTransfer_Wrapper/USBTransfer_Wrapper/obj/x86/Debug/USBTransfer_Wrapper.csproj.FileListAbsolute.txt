@@ -1,0 +1,9 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\bin\Debug\USBTransfer_Wrapper.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\bin\Debug\USBTransfer_Wrapper.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\obj\x86\Debug\USBTransfer_Wrapper.Properties.Resources.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\obj\x86\Debug\USBTransfer_Wrapper.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\obj\x86\Debug\USBTransfer_Wrapper.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\obj\x86\Debug\USBTransfer_Wrapper.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\bin\Debug\FTD2XX_NET.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\bin\Debug\FTD2XX_NET.xml
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\FTDI Wrapper\USBTransfer_Wrapper\USBTransfer_Wrapper\obj\x86\Debug\USBTransfer_Wrapper.csprojResolveAssemblyReference.cache

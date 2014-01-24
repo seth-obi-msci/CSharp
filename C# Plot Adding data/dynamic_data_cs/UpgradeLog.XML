@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DynamicData">
+</Property><Property Name="Solution File" Value="C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\DynamicData.sln">
+</Property><Property Name="Date" Value="10 December 2013">
+</Property><Property Name="Time" Value="18:05">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="DynamicData.sln" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\DynamicData.sln">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\DynamicData.csproj" Description="Project file successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\DynamicData.csproj">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Form1.cs" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Form1.cs">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Form1.Designer.cs" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Program.cs" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Program.cs">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Properties\AssemblyInfo.cs" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Properties\Resources.Designer.cs" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Properties\Settings.Designer.cs" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Properties\Settings.settings" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Form1.resx" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Form1.resx">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\Properties\Resources.resx" Description="File successfully backed up as C:\Users\localadmin\Desktop\FPGANewVersion\C#\C# Plot Adding data\dynamic_data_cs\Backup\ZedGraphControlTest\Properties\Resources.resx">
+</Event><Event ErrorLevel="1" Project="DynamicData" Source="ZedGraphControlTest\DynamicData.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\DynamicData.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DynamicData" Source="ZedGraphControlTest\DynamicData.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DynamicData.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="DynamicData.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DynamicData" Source="ZedGraphControlTest\DynamicData.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

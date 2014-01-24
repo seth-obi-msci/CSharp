@@ -1,0 +1,6 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\bin\Debug\USBTransfer.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\bin\Debug\USBTransfer.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Debug\USBTransfer.Form.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Debug\USBTransfer.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Debug\USBTransfer.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Debug\USBTransfer.pdb

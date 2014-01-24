@@ -1,0 +1,5 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\bin\Release\USBTransfer.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Release\USBTransfer.Form.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Release\USBTransfer.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Release\USBTransfer.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\USBTransfer\obj\Release\USBTransfer.csprojResolveAssemblyReference.cache

@@ -21,6 +21,8 @@ namespace Graph_practice_2_Rolling_data
             Console.WriteLine("No. of devices is {0}",FPGA.CountDevices());
             FPGA.OpenDevice();
             Application.Run(new RollingGraph());
+            //Application.Run(new ByteSimulator());
+            
                         
 		}
 	}

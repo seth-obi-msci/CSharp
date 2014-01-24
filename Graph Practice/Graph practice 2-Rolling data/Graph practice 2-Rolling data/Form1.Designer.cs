@@ -38,6 +38,8 @@ namespace Graph_practice_2_Rolling_data
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // zgc
@@ -100,17 +102,27 @@ namespace Graph_practice_2_Rolling_data
             this.checkBox2.AutoSize = true;
             this.checkBox2.Location = new System.Drawing.Point(118, 21);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(100, 17);
+            this.checkBox2.Size = new System.Drawing.Size(48, 17);
             this.checkBox2.TabIndex = 4;
             this.checkBox2.Text = "Stop";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.StopGraph);
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(12, 343);
+            this.trackBar1.Maximum = 255;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(547, 45);
+            this.trackBar1.TabIndex = 5;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 349);
+            this.ClientSize = new System.Drawing.Size(571, 388);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.checkBox1);
@@ -120,6 +132,7 @@ namespace Graph_practice_2_Rolling_data
             this.Text = "RollingGraph";
             this.Load += new System.EventHandler(this.RollingGraph_Load);
             this.Resize += new System.EventHandler(this.RollingGraph_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,5 +147,6 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }

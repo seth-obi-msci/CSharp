@@ -51,7 +51,7 @@ namespace Graph_practice_2_Rolling_data
                 return false;
             }
 
-            S = USBPort.SetBaudRate(14400);
+            S = USBPort.SetBaudRate(115200);
             if (S != FTDI.FT_STATUS.FT_OK)
             {
                 Console.WriteLine("Baud Rate Not Ok");

@@ -18,12 +18,10 @@ namespace Graph_practice_2_Rolling_data
             msTimer.Enabled = true;*/
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault( false );
-            Console.WriteLine("No. of devices is {0}",FPGA.CountDevices());
+            //Console.WriteLine("No. of devices is {0}",FPGA.CountDevices());
             FPGA.OpenDevice();
             Application.Run(new RollingGraph());
-            //Application.Run(new ByteSimulator());
-            
-                        
+          
 		}
 	}
 }

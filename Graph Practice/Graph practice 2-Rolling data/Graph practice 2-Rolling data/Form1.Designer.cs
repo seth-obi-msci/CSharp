@@ -37,15 +37,21 @@ namespace Graph_practice_2_Rolling_data
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.zgc2 = new ZedGraph.ZedGraphControl();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // zgc
             // 
             this.zgc.EditButtons = System.Windows.Forms.MouseButtons.Left;
-            this.zgc.Location = new System.Drawing.Point(12, 12);
+            this.zgc.Location = new System.Drawing.Point(12, 46);
             this.zgc.Name = "zgc";
             this.zgc.PanModifierKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.None)));
             this.zgc.ScrollGrace = 0D;
@@ -55,8 +61,9 @@ namespace Graph_practice_2_Rolling_data
             this.zgc.ScrollMinX = 0D;
             this.zgc.ScrollMinY = 0D;
             this.zgc.ScrollMinY2 = 0D;
-            this.zgc.Size = new System.Drawing.Size(547, 325);
+            this.zgc.Size = new System.Drawing.Size(547, 317);
             this.zgc.TabIndex = 0;
+            this.zgc.Load += new System.EventHandler(this.zgc_Load);
             // 
             // timer1
             // 
@@ -68,7 +75,7 @@ namespace Graph_practice_2_Rolling_data
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(476, 19);
+            this.button1.Location = new System.Drawing.Point(360, 17);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(69, 21);
             this.button1.TabIndex = 1;
@@ -79,7 +86,7 @@ namespace Graph_practice_2_Rolling_data
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(38, 21);
+            this.checkBox1.Location = new System.Drawing.Point(465, 20);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(73, 17);
             this.checkBox1.TabIndex = 2;
@@ -89,7 +96,7 @@ namespace Graph_practice_2_Rolling_data
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(395, 19);
+            this.button2.Location = new System.Drawing.Point(279, 17);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 21);
             this.button2.TabIndex = 3;
@@ -97,33 +104,95 @@ namespace Graph_practice_2_Rolling_data
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.FreshScreenButton);
             // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(118, 21);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(48, 17);
-            this.checkBox2.TabIndex = 4;
-            this.checkBox2.Text = "Stop";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.StopGraph);
-            // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(12, 343);
+            this.trackBar1.Location = new System.Drawing.Point(12, 382);
             this.trackBar1.Maximum = 255;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(547, 45);
             this.trackBar1.TabIndex = 5;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(131, 18);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 21);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "Pause";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.PauseButton);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(212, 17);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(61, 23);
+            this.button4.TabIndex = 7;
+            this.button4.Text = "Continue";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.ContinueButton);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 23);
+            this.label1.TabIndex = 13;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(84, 432);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "File Location:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(160, 429);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(247, 20);
+            this.textBox2.TabIndex = 12;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // zgc2
+            // 
+            this.zgc2.EditButtons = System.Windows.Forms.MouseButtons.Left;
+            this.zgc2.Location = new System.Drawing.Point(565, 46);
+            this.zgc2.Name = "zgc2";
+            this.zgc2.PanModifierKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.None)));
+            this.zgc2.ScrollGrace = 0D;
+            this.zgc2.ScrollMaxX = 0D;
+            this.zgc2.ScrollMaxY = 0D;
+            this.zgc2.ScrollMaxY2 = 0D;
+            this.zgc2.ScrollMinX = 0D;
+            this.zgc2.ScrollMinY = 0D;
+            this.zgc2.ScrollMinY2 = 0D;
+            this.zgc2.Size = new System.Drawing.Size(547, 317);
+            this.zgc2.TabIndex = 14;
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 388);
+            this.ClientSize = new System.Drawing.Size(1195, 461);
+            this.Controls.Add(this.zgc2);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
@@ -146,7 +215,13 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox2;
+        private ZedGraphControl zgc2;
     }
 }

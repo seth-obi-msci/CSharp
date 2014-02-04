@@ -47,14 +47,20 @@ namespace Graph_practice_2_Rolling_data
             this.label4 = new System.Windows.Forms.Label();
             this.YMinNum = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.AvChunkSize = new System.Windows.Forms.NumericUpDown();
+            this.AvChunkSize1 = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
-            this.XRange = new System.Windows.Forms.NumericUpDown();
+            this.XRange1 = new System.Windows.Forms.NumericUpDown();
+            this.XRange2 = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.AvChunkSize2 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XRange)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XRange1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XRange2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize2)).BeginInit();
             this.SuspendLayout();
             // 
             // zgc
@@ -88,7 +94,7 @@ namespace Graph_practice_2_Rolling_data
             // button1
             // 
             this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(360, 15);
+            this.button1.Location = new System.Drawing.Point(575, 432);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(69, 23);
             this.button1.TabIndex = 1;
@@ -99,7 +105,7 @@ namespace Graph_practice_2_Rolling_data
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(465, 20);
+            this.checkBox1.Location = new System.Drawing.Point(669, 435);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(73, 17);
             this.checkBox1.TabIndex = 2;
@@ -169,11 +175,12 @@ namespace Graph_practice_2_Rolling_data
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1016, 21);
+            this.label1.Location = new System.Drawing.Point(739, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.Size = new System.Drawing.Size(71, 26);
             this.label1.TabIndex = 14;
-            this.label1.Text = "Set X Range";
+            this.label1.Text = "Set X Range \r\n LHS";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // YMaxNum
             // 
@@ -182,7 +189,7 @@ namespace Graph_practice_2_Rolling_data
             0,
             0,
             0});
-            this.YMaxNum.Location = new System.Drawing.Point(863, 19);
+            this.YMaxNum.Location = new System.Drawing.Point(513, 17);
             this.YMaxNum.Maximum = new decimal(new int[] {
             300,
             0,
@@ -196,7 +203,7 @@ namespace Graph_practice_2_Rolling_data
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(820, 21);
+            this.label4.Location = new System.Drawing.Point(474, 21);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 13);
             this.label4.TabIndex = 21;
@@ -209,7 +216,7 @@ namespace Graph_practice_2_Rolling_data
             0,
             0,
             0});
-            this.YMinNum.Location = new System.Drawing.Point(759, 17);
+            this.YMinNum.Location = new System.Drawing.Point(421, 18);
             this.YMinNum.Maximum = new decimal(new int[] {
             300,
             0,
@@ -223,65 +230,124 @@ namespace Graph_practice_2_Rolling_data
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(719, 19);
+            this.label5.Location = new System.Drawing.Point(383, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(34, 13);
             this.label5.TabIndex = 23;
             this.label5.Text = "Y Min";
             // 
-            // AvChunkSize
+            // AvChunkSize1
             // 
-            this.AvChunkSize.Increment = new decimal(new int[] {
+            this.AvChunkSize1.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.AvChunkSize.Location = new System.Drawing.Point(656, 17);
-            this.AvChunkSize.Maximum = new decimal(new int[] {
+            this.AvChunkSize1.Location = new System.Drawing.Point(687, 17);
+            this.AvChunkSize1.Maximum = new decimal(new int[] {
             50000,
             0,
             0,
             0});
-            this.AvChunkSize.Name = "AvChunkSize";
-            this.AvChunkSize.Size = new System.Drawing.Size(46, 20);
-            this.AvChunkSize.TabIndex = 24;
-            this.AvChunkSize.ValueChanged += new System.EventHandler(this.AvChunkSize_ValueChanged);
+            this.AvChunkSize1.Name = "AvChunkSize1";
+            this.AvChunkSize1.Size = new System.Drawing.Size(46, 20);
+            this.AvChunkSize1.TabIndex = 24;
+            this.AvChunkSize1.ValueChanged += new System.EventHandler(this.AvChunkSize1_ValueChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(555, 19);
+            this.label6.Location = new System.Drawing.Point(588, 14);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(95, 13);
+            this.label6.Size = new System.Drawing.Size(98, 26);
             this.label6.TabIndex = 25;
-            this.label6.Text = "Counts to Average";
+            this.label6.Text = "Counts to Average \r\n LHS";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
-            // XRange
+            // XRange1
             // 
-            this.XRange.Increment = new decimal(new int[] {
+            this.XRange1.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.XRange.Location = new System.Drawing.Point(1090, 17);
-            this.XRange.Maximum = new decimal(new int[] {
+            this.XRange1.Location = new System.Drawing.Point(807, 16);
+            this.XRange1.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.XRange1.Name = "XRange1";
+            this.XRange1.Size = new System.Drawing.Size(57, 20);
+            this.XRange1.TabIndex = 26;
+            this.XRange1.ValueChanged += new System.EventHandler(this.XRange1_ValueChanged);
+            // 
+            // XRange2
+            // 
+            this.XRange2.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.XRange2.Location = new System.Drawing.Point(1112, 16);
+            this.XRange2.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.XRange2.Name = "XRange2";
+            this.XRange2.Size = new System.Drawing.Size(56, 20);
+            this.XRange2.TabIndex = 27;
+            this.XRange2.ValueChanged += new System.EventHandler(this.XRange2_ValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1041, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 26);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Set X Range \r\n RHS";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(899, 13);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(98, 26);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Counts to Average \r\n RHS";
+            // 
+            // AvChunkSize2
+            // 
+            this.AvChunkSize2.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.AvChunkSize2.Location = new System.Drawing.Point(993, 19);
+            this.AvChunkSize2.Maximum = new decimal(new int[] {
             50000,
             0,
             0,
             0});
-            this.XRange.Name = "XRange";
-            this.XRange.Size = new System.Drawing.Size(57, 20);
-            this.XRange.TabIndex = 26;
-            this.XRange.ValueChanged += new System.EventHandler(this.XRange_ValueChanged);
+            this.AvChunkSize2.Name = "AvChunkSize2";
+            this.AvChunkSize2.Size = new System.Drawing.Size(46, 20);
+            this.AvChunkSize2.TabIndex = 30;
+            this.AvChunkSize2.ValueChanged += new System.EventHandler(this.AvChunkSize2_ValueChanged);
             // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1195, 461);
-            this.Controls.Add(this.XRange);
+            this.Controls.Add(this.AvChunkSize2);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.XRange2);
+            this.Controls.Add(this.XRange1);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.AvChunkSize);
+            this.Controls.Add(this.AvChunkSize1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.YMinNum);
             this.Controls.Add(this.label4);
@@ -302,8 +368,10 @@ namespace Graph_practice_2_Rolling_data
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XRange)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XRange1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XRange2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -334,8 +402,12 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown YMinNum;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown AvChunkSize;
+        private System.Windows.Forms.NumericUpDown AvChunkSize1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown XRange;
+        private System.Windows.Forms.NumericUpDown XRange1;
+        private System.Windows.Forms.NumericUpDown XRange2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown AvChunkSize2;
     }
 }

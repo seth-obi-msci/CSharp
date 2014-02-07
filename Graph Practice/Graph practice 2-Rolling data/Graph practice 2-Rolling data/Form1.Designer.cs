@@ -81,18 +81,14 @@ namespace Graph_practice_2_Rolling_data
             this.zgc.ScrollMinY2 = 0D;
             this.zgc.Size = new System.Drawing.Size(1164, 373);
             this.zgc.TabIndex = 0;
-            this.zgc.Load += new System.EventHandler(this.zgc_Load);
             // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // timer2
-            // 
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.AutoSize = true;
             this.button1.Location = new System.Drawing.Point(575, 432);
             this.button1.Name = "button1";
@@ -100,10 +96,11 @@ namespace Graph_practice_2_Rolling_data
             this.button1.TabIndex = 1;
             this.button1.Text = "SaveBytes";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.SaveBytesButton);
+            this.button1.Click += new System.EventHandler(this.SaveBytesButton_Click);
             // 
             // checkBox1
             // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(669, 435);
             this.checkBox1.Name = "checkBox1";
@@ -180,7 +177,6 @@ namespace Graph_practice_2_Rolling_data
             this.label1.Size = new System.Drawing.Size(71, 26);
             this.label1.TabIndex = 14;
             this.label1.Text = "Set X Range \r\n LHS";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // YMaxNum
             // 
@@ -262,7 +258,6 @@ namespace Graph_practice_2_Rolling_data
             this.label6.Size = new System.Drawing.Size(98, 26);
             this.label6.TabIndex = 25;
             this.label6.Text = "Counts to Average \r\n LHS";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // XRange1
             // 

@@ -21,7 +21,13 @@ namespace Graph_practice_2_Rolling_data
         public int time1 = 0; //Integer to use as time coord for plotting arrays
         public int time2=0; //double to allow division for plotting average
         double Average;
-        double Average1;
+
+
+
+        int SumProcessedBytes1 = 0;
+        int PreviousScreenRemainder1 = 0;
+        int AverageIndex1 = 1;
+        int AverageChunkSize1 = 50;
 
         int SumProcessedBytes2=0;
         int PreviousScreenRemainder2 = 0;
@@ -30,15 +36,7 @@ namespace Graph_practice_2_Rolling_data
 
         int[] AverageArray2 = new int[3];
         int[] AverageArray1 = new int[3];
-     
-
-        int SumProcessedBytes1=0;
-        int PreviousScreenRemainder1 = 0;
-        int AverageIndex1 = 1;
-        int AverageChunkSize1 = 50;
-        
-        
-
+    
         int XMin1=0;
         int XMax1=30000;
         int XMin2 = 0;
@@ -54,7 +52,7 @@ namespace Graph_practice_2_Rolling_data
 
         //Booleans used in the form for various functions 
         bool AutoSaveBool = false;
-        bool Stop = false;
+        bool Pause = false;
         double slider;
         
         // The RollingPointPairList is an efficient storage class that always
@@ -65,14 +63,14 @@ namespace Graph_practice_2_Rolling_data
     
         //byte arrays
         byte[] SimulatedBytes = new byte [10];
-        byte[] ScreenBuffer = new byte[10000];
+        byte[] ScreenBuffer = new byte[30000];
         byte[] UART_Buffer;
         byte[] Plotting_1 = new byte[1];
 
         
         //Images for fill
-        Image Joe = Bitmap.FromFile(@"C:\Users\localadmin\Downloads\70583720.JPG");
-        Image graham = Bitmap.FromFile(@"C:\Users\localadmin\Downloads\graham.jpg");
+        //Image Joe = Bitmap.FromFile(@"C:\Users\localadmin\Downloads\70583720.JPG");
+        //Image graham = Bitmap.FromFile(@"C:\Users\localadmin\Downloads\graham.jpg");
 
         string FileLocation;
 
@@ -94,51 +92,46 @@ namespace Graph_practice_2_Rolling_data
         {
             zgc.MasterPane.PaneList.Clear();
 
+            time1 = 0;
             time2 = 0;
-            GraphPane myPane = new GraphPane();
+            GraphPane myPane1 = new GraphPane();
             GraphPane myPane2 = new GraphPane();
-            zgc.MasterPane.Add(myPane);
+            zgc.MasterPane.Add(myPane1);
             zgc.MasterPane.Add(myPane2);
           
 
-            myPane.Title.Text = "Plotting arrays of bytes";
-            myPane2.Title.Text = "Average of Buffer Counts";
+            myPane1.Title.Text = "myPane1" ;
+            myPane2.Title.Text = "myPane2";
 
-            myPane2.XAxis.Title.Text = "X Axis (time)";
+          
+
             
 
 
 
             //Make a new curve
-             LineItem curve = myPane.AddCurve("Counts", list1, Color.White, SymbolType.None);
+             BarItem curve = myPane1.AddBar("Average Counts" ,list1, Color.Black);
             // TextureBrush joebrush = new TextureBrush(Joe);
-             curve.Line.Fill = new Fill(Color.Black);
-             curve.Line.Width = 3.0F;
-            
+             curve.Bar.Fill = new Fill(Color.Black);
+            // curve.Line.Width = 1.0F;
+             
 
-            LineItem curve2 = myPane2.AddCurve("Counts (Avg ten)", list2, Color.White, SymbolType.None);
-           // TextureBrush grahambrush = new TextureBrush(graham);
-            curve2.Line.Fill = new Fill(Color.Black);
-            curve2.Line.Width = 3.0F;
+             LineItem curve2 = myPane2.AddCurve("Counts (Avg ten)", list2, Color.Black, SymbolType.None);
+             //TextureBrush grahambrush = new TextureBrush(graham);
+             curve2.Line.Fill = new Fill(Color.Black);
+             curve2.Line.Width = 3.0F;
             
             
             //Timer fort the X axis, defined later
-            timer1.Interval = 10; //10 - buffer size increases due to build up but levels out at about 112 bytes.
+           // timer1.Interval = 15; //10 - buffer size increases due to build up but levels out at about 112 bytes.
             timer1.Enabled = true;
             timer1.Start();
-
-            // Second timer
-            timer2.Interval = 10;
-            timer2.Enabled = true;
-            timer2.Start();
 
             //Function to set axes of graphpanes.
             SetXAxis1();
             SetXAxis2();
             SetYAxis();
 
-            
-            
 
             // Layout the GraphPanes using a default Pane Layout
             using (Graphics g = this.CreateGraphics())
@@ -147,8 +140,8 @@ namespace Graph_practice_2_Rolling_data
             }
 
 
-            //Save begging time for reference
-            tickStart = Environment.TickCount;
+            /*Save begging time for reference
+            tickStart = Environment.TickCount;*/
 
             Console.WriteLine("Create Graph");
            
@@ -159,41 +152,43 @@ namespace Graph_practice_2_Rolling_data
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
-            
+            //  Must create new instance of graphpanes to access them.
+            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
+            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
+             
             
             int t = (Environment.TickCount - tickStart);
            
-            if (Stop) //Ensures points only plotted if stop button NOT pressed on form
+            if (Pause) //Ensures points only plotted if stop button NOT pressed on form
             {
                 
             }
             else
             {
-               // l++;
+                //l++;
                // SimulatedBytes[l % 10] = Convert.ToByte(slider);
 
 
-              //  if (l % 10 == 9) //Only reads and plots once every 10 ticks
+               // if (l % 10 == 9) //Only reads and plots once every 10 ticks
                 {
 
 
                     UART_Buffer = FPGA.ReadBytes();
-                   // Console.WriteLine("Length of Buffer = {0}", UART_Buffer.Length);
-
+                    byte[] TestBuff = FPGA.ReadBytes();
+                    Console.WriteLine("Length of Buffer = {0}", UART_Buffer.Length);
+                    Console.WriteLine("Length of TestBuffer = {0}", TestBuff.Length);
                     SetSize();
 
-                    //Calculates average of buffer load
-                    double UART_Average = SumBytes(UART_Buffer) / UART_Buffer.Length;
 
                     
                     // Ensures there's at least one curve in GraphPane
                     if (zgc.GraphPane.CurveList.Count <= 0)
                         return;
 
-                    LineItem curve = zgc.GraphPane.CurveList[0] as LineItem;
-                   // LineItem curve2 = zgc.GraphPane.CurveList[1] as LineItem;
-                    if (curve == null)
-                        return;
+                  /*  BarItem curve = myPane1.CurveList[0] as LineItem;
+                    LineItem curve2 = myPane2.CurveList[0] as LineItem;
+                    if (curve == null || curve2==null)
+                        return;*/
 
 
                     // If list is null then reference at curve.Points doesn't
@@ -205,64 +200,25 @@ namespace Graph_practice_2_Rolling_data
                     double time = (Environment.TickCount - tickStart) / 1000.0;
 
 
-                    //For loop to add data points to the list
-                    for (int i = 0; i < UART_Buffer.Length; i++)
-                    {
-                        double y = UART_Buffer[i]; //Plots buffer value
-        
-                        //list1.Add(time1, y);
-                        //time1++;
-                        
-                        //Plots running average of each buffer load at central x value
-                        /*double k = UART_Buffer.Length;
-                        double j = i;
-                        if (k > 1)
-                        {
-                            if (j - 1 < k / 2 && k / 2 <= j) //Inequalities necessary as k/2 may fall between 2 values of i
-                            {
-                                time2 += k / 2;
-                                list2.Add(time2, UART_Average);
-                                time2 += k / 2;
-                            }
-                        }
-                        else
-                        {
-                            time2 += k / 2;
-                            list2.Add(time2, UART_Average);
-                            time2 += k / 2;
-                        }*/
-                    }
-
-
-
-                    // Used to control max and min values of the x-axis so that 
-                    // axis moves along as 
-                    GraphPane myPane = zgc.MasterPane.PaneList[0];
-                    Scale xScale = myPane.XAxis.Scale;
-                    GraphPane myPane2 = zgc.MasterPane.PaneList[1];
+                   
+                    Scale xScale = myPane1.XAxis.Scale;
                     Scale xScale2 = myPane2.XAxis.Scale;
 
-                    if (time2 > xScale.Max - xScale.MajorStep)
-                    {
-                        xScale2.Max = time2 + xScale2.MajorStep; //Keep the end of x axis MajorStep (5) away from end of curve
-                        xScale2.Min = xScale2.Max - XMax2;    //Increase min values of x axis acordingly
-                    }
-
+                    // if loops used to rescale x axis for each graph
                     if (time1 > xScale.Max - xScale.MajorStep) // When the time values are within one 'MajorStep' (5) of the max x value
                     {
                         xScale.Max = time1 + xScale.MajorStep; //Keep the end of x axis MajorStep (5) away from end of curve
-                        xScale.Min = xScale.Max - XMax1;
+                        xScale.Min = xScale.Max - XMax1;    ////Increase min values of x axis acordingly
                         
                         
                     }
 
-                   
-                   
-
-                   
-                    //Rescale axis so that y axis changes also
-                    zgc.AxisChange();
-                    
+                    if (time2 > xScale2.Max - xScale2.MajorStep)
+                    {
+                        xScale2.Max = time2 + xScale2.MajorStep;
+                        xScale2.Min = xScale2.Max - XMax2;    
+                    }
+               
 
                     //Redraw
                     zgc.Invalidate();
@@ -270,18 +226,19 @@ namespace Graph_practice_2_Rolling_data
 
                     //Remaining spaces in ScreenBuffer
                     int Diff = ScreenBuffer.Length - COPY_POS;
-                    //Remaining spaces fewer than next buffer load
-                    bool Condition = UART_Buffer.Length > Diff;
 
 
-                    // Copies buffer array into a larger ScreenBuffer array. When ScreenBuffer is filled overwrites
-                    // least recent with most recent. 
-                    if (!Condition)
+                    // if condition satisfied when there's enough room for a UART_Buffer array to be
+                    // copied into the Screen array. 
+                    if (Diff>UART_Buffer.Length)
                     { 
 
-                        Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, UART_Buffer.Length);
+                        Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, UART_Buffer.Length); // Copies UART_Buffer (FPGA.ReadBytes into Screen array, overwriting oldest values
                         COPY_POS = COPY_POS + UART_Buffer.Length; //COPY_POS shifted by UART buffer size
 
+
+                        // if conditions controll when averaging function 'AverageScreenUnfilled' is call for weither of the graphpanes (1 & 2)
+                        // should only be called when an 'AverageChunkSize' worth of new values have been copied into ScreenBuffer
                         if (COPY_POS >= AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2)
                         {
                             
@@ -301,37 +258,43 @@ namespace Graph_practice_2_Rolling_data
 
                     }
 
-                    else //Not enough room at end of ScreenBuffer for whole UART bufferload
+                    //Not enough room at end of ScreenBuffer for whole UART bufferload
+                    else 
                     {
                         
-                        //Fills remaining ScreenBuffer spaces with portion of UART buffer load
+                        // Fills remaining ScreenBuffer spaces with portion of UART buffer load
+                        // UART_Buffer values that don't get copied in due to not enough space are placed 
+                        // at the begining of the ScreenBuffer next 'tick'
                         Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, ScreenBuffer.Length - COPY_POS);
 
-                        if (AutoSaveBool) //Saves if AutoSave function selected on form
-                        {
-                            SaveBytesToFile(@FileLocation, ScreenBuffer);
-                        }
+                      
+
+                        // Different averaging function, 'AverageScreenFilled', used when ScreenBuffer is filled so that no values 
+                        // are left out of averaging. i.e. those at end of ScreenBuffer that don't make up an entire AverageChunkSize
                         AverageArray2 = AverageScreenFilled(AverageIndex2, AverageChunkSize2, PreviousScreenRemainder2, SumProcessedBytes2, list2, time2);
                         time2 = AverageArray2[0];
                         SumProcessedBytes2 = AverageArray2[1];
                         PreviousScreenRemainder2 = AverageArray2[2];
 
                         Console.WriteLine("Average is {0}", Average);
-                        Console.WriteLine("Previous Screen Remainder = {0}", PreviousScreenRemainder2);
-                        Console.WriteLine("Sum Processed Bytes = {0}", SumProcessedBytes2);
+                        Console.WriteLine("Previous Screen Remainder = {0}", PreviousScreenRemainder1);
+                        Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
+                        Console.WriteLine("TickCount is {0}", Environment.TickCount);
 
                         AverageArray1 = AverageScreenFilled(AverageIndex1, AverageChunkSize1, PreviousScreenRemainder1, SumProcessedBytes1, list1, time1);
                         time1 = AverageArray1[0];
                         SumProcessedBytes1 = AverageArray1[1];
                         PreviousScreenRemainder1 = AverageArray1[2];
 
+                        // Indexes set to one so that next timer tick averaging begins at start of ScreenBuffer (most recent values)
                         AverageIndex2 = 1;
                         AverageIndex1 = 1;
 
-                        //Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length); //ScreenBuffer not cleared to ensures complete array is written to file
+                        
                         //Remaining of UART bufferload copied to first spaces in ScreenBuffer and COPY_POS shifted accordingly
                         Array.Copy(UART_Buffer, ScreenBuffer.Length - COPY_POS, ScreenBuffer, 0, UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS));
                         COPY_POS = UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS);
+                       
 
                        
                     }
@@ -343,23 +306,11 @@ namespace Graph_practice_2_Rolling_data
 
 
 
-        // This event is controlled by a second timer. Will try to use it to 
-        // plot average counts on different time scale.
-
-        public void timer2_Tick(object sender, EventArgs e)
-        {
-           
-        }
+        
 
         
 //Below are functions which have been outsourced for clarity in main code (above)
 
-       /* private void RollingGraph_Resize(object sender, EventArgs e)
-        {
-            SetSize();
-            int t3 = (Environment.TickCount - tickStart);
-            Console.WriteLine("RESIZE");
-        }*/
 
         //Used to set size and location of the graph
         private void SetSize()
@@ -376,22 +327,22 @@ namespace Graph_practice_2_Rolling_data
             }
         }
 
-         // Just manually control the X axis range so it scrolls continuously
-         // instead of discrete step-sized jumps (DONT UNDERSTAND)
+         // Function to set X Axis on myPane1
         private void SetXAxis1()
         {
-            GraphPane myPane = zgc.MasterPane.PaneList[0];
-            Scale xScale = myPane.XAxis.Scale;
+            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
+            Scale xScale = myPane1.XAxis.Scale;
            
 
-            myPane.XAxis.Scale.Min = XMin1;
-            myPane.XAxis.Scale.Max = XMax1;
-            myPane.XAxis.Scale.MinorStep = XMax1/100;
-            myPane.XAxis.Scale.MajorStep = XMax1/10;
+            myPane1.XAxis.Scale.Min = XMin1;
+            myPane1.XAxis.Scale.Max = XMax1;
+            myPane1.XAxis.Scale.MinorStep = XMax1/100;
+            myPane1.XAxis.Scale.MajorStep = XMax1/10;
 
             zgc.AxisChange();
         }
 
+        // Function to set X Axis on myPane2
         private void SetXAxis2()
         {
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
@@ -404,15 +355,16 @@ namespace Graph_practice_2_Rolling_data
             zgc.AxisChange();
         }
 
+        // Function to set Y Axis on both panes (generally similar Y values)
         public void SetYAxis()
         {
-            GraphPane myPane = zgc.MasterPane.PaneList[0];
+            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
 
-            myPane.YAxis.Scale.Min = YMin;
-            myPane.YAxis.Scale.Max = YMax;
-            myPane.YAxis.Scale.MinorStep = YMax/100;
-            myPane.YAxis.Scale.MajorStep = YMax/10;
+            myPane1.YAxis.Scale.Min = YMin;
+            myPane1.YAxis.Scale.Max = YMax;
+            myPane1.YAxis.Scale.MinorStep = YMax/100;
+            myPane1.YAxis.Scale.MajorStep = YMax/10;
 
             myPane2.YAxis.Scale.Min = YMin;
             myPane2.YAxis.Scale.Max = YMax;
@@ -427,7 +379,7 @@ namespace Graph_practice_2_Rolling_data
 
         }
         
-
+        // Used for checking code
         public void WriteBytesToScreen(byte[] DataToWrite)
         {
             for (int j = 0; j < DataToWrite.Length; j++)
@@ -438,6 +390,7 @@ namespace Graph_practice_2_Rolling_data
         }
 
 
+        // Finds sum of byte array, used in averaging
         public double SumBytes(byte[] DataToSum)
         {
             double total = 0;
@@ -450,47 +403,85 @@ namespace Graph_practice_2_Rolling_data
         }
 
 
+        // function to save a given arry's bytes to file
         public void SaveBytesToFile(string FileLocation, byte[] DataToSave)
         {
-            foreach (int j in DataToSave)
+            File.AppendAllText(FileLocation, Convert.ToString(DateTime.Now) + "\r\n");
+            File.AppendAllText(FileLocation, this.filename.Text + "\r\n");
+            //  Stop = true;
+            for (int j = COPY_POS; j < ScreenBuffer.Length; j++)
             {
-                string Reading = j.ToString() + "\r\n";
+                string Reading = ScreenBuffer[j].ToString() + "\r\n";
                 File.AppendAllText(FileLocation, Reading);
             }
-            return;
-        }
 
-
-        private void SaveBytesButton(object sender, EventArgs e)
-        {
-            //Button SaveButton = sender as Button;
-            if (sender == null) return;
-            if (sender != null)
+            for (int j = 0; j < COPY_POS; j++)
             {
-                for (int j = COPY_POS; j<ScreenBuffer.Length; j++)
-                {
-                    string Reading = ScreenBuffer[j].ToString() + "\r\n";
-                    File.AppendAllText(@FileLocation, Reading);
-                }
-
-                for (int j = 0; j < COPY_POS; j++)
-                {
-                    string Reading = ScreenBuffer[j].ToString() + "\r\n";
-                    File.AppendAllText(@FileLocation, Reading);
-                }
-                return;
+                string Reading = ScreenBuffer[j].ToString() + "\r\n";
+                File.AppendAllText(FileLocation, Reading);
             }
+           
+
+            SumProcessedBytes1 = 0;
+            SumProcessedBytes2 = 0;
+            PreviousScreenRemainder1 = 0;
+            PreviousScreenRemainder2 = 0;
+            AverageIndex1 = 1;
+            AverageIndex2 = 1;
+            list1.Clear();
+            list2.Clear();
+            Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
+            COPY_POS = 0;
+            CreateGraph(zgc);
+
         }
+
+
+        private void SaveBytesButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd1 = new SaveFileDialog();
+            sfd1.InitialDirectory = @"C:\";
+            sfd1.Title = "SAVE BITCH";
+            //sfd1.CheckFileExists = true;
+            sfd1.CheckPathExists = true;
+            sfd1.DefaultExt = "txt";
+            sfd1.ShowDialog();
+            //sfd1.FileOk += new CancelEventHandler(sfd1_FileOk);
+            if (sfd1.ShowDialog() == DialogResult.OK)
+            {
+                Pause = true;
+                SaveBytesToFile(@sfd1.FileName, ScreenBuffer);
+                FPGA.ReadBytes();
+                UART_Buffer = FPGA.ReadBytes();
+                UART_Buffer = FPGA.ReadBytes();
+                UART_Buffer = FPGA.ReadBytes();
+                Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
+                Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
+                Pause = false;
+            }
+
+
+
+        }
+
+
+
 
         /*Functions below use buttons/sliders on the form itself*/
-        //Wipes both average and running pointpairlists and resets x axis to 0 for new screen
+
+        //Wipes both average and running pointpairlists and resets x axis to 0 for new screen, effectively restarts program
         private void FreshScreenButton(object sender, EventArgs e)
         {
             if (sender == null) return;
             if (sender != null)
             {
-                time1 = 0;
-                time2 = 0;
+                
+                SumProcessedBytes1 = 0;
+                SumProcessedBytes2 = 0;
+                PreviousScreenRemainder1 = 0;
+                PreviousScreenRemainder2 = 0;
+                AverageIndex1 = 1;
+                AverageIndex2 = 1;
                 list1.Clear();
                 list2.Clear();
                 Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
@@ -501,6 +492,7 @@ namespace Graph_practice_2_Rolling_data
         }
 
         
+        // Triggers autosave function, which saves ScreenBuffer everytime all values are replaced
         public void AutoSave(object sender, EventArgs e)
         {
             if (sender == null) return;
@@ -512,34 +504,31 @@ namespace Graph_practice_2_Rolling_data
         }
 
 
+        // Stops everything
         private void PauseButton(object sender, EventArgs e)
         {
             if (sender == null) return;
             else if (sender != null)
             {
-                Stop = true;
+                Pause = true;
                 return;
             }
 
         }
 
+        // Resumes everything
         private void ContinueButton(object sender, EventArgs e)
         {
             if (sender == null) return;
             else if (sender != null)
             {
-                Stop = false;
+                Pause = false;
                 return;
             }
         }
 
 
-
-        private void EnterButton(object sender, EventArgs e)
-        {
-
-        }
-
+        // Can choose location and file name of file to save
         private void filename_TextChanged(object sender, EventArgs e)
         {
             this.Text = filename.Text;
@@ -547,31 +536,28 @@ namespace Graph_practice_2_Rolling_data
         }
 
 
-        //Extracts value of slider to "slider" integer in main code
+        //Extracts value of slider to "slider" integer in main code (Used as replacement for incoming bytes)
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             slider = trackBar1.Value;
         }
+  
 
-        private void zgc_Load(object sender, EventArgs e)
-        {
-
-        }
-
-       
-
+        // Used to alter X Axis range myPane1
         void XRange1_ValueChanged(object sender, System.EventArgs e)
         {
             XMax1 = Convert.ToInt32(XRange1.Value);
             SetXAxis1();
         }
 
+        // Used to alter X Axis range myPane2
         void XRange2_ValueChanged(object sender, System.EventArgs e)
         {
-            XMax2 = Convert.ToInt32(XRange1.Value);
+            XMax2 = Convert.ToInt32(XRange2.Value);
             SetXAxis2();
         }
 
+        // Used to change Y axis on both Panes
         public void YMaxNum_Enter(object sender, System.EventArgs e)
         {
             YMax = Convert.ToInt32(YMaxNum.Value);
@@ -584,129 +570,122 @@ namespace Graph_practice_2_Rolling_data
             SetYAxis();
         }
 
+        // Changes no of values to average over, resets everything and starts plotting
+        // from scratch with new average
         void AvChunkSize1_ValueChanged(object sender, System.EventArgs e)
         {
             AverageChunkSize1 = Convert.ToInt32(AvChunkSize1.Value);
             SumProcessedBytes1 = 0;
-           
+            SumProcessedBytes2 = 0;
             PreviousScreenRemainder1 = 0;
+            PreviousScreenRemainder2 = 0;
             AverageIndex1 = 1;
-                time1 = 0;
-                time2 = 0;
+            AverageIndex2 = 1;
                 list1.Clear();
                 list2.Clear();
                 Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
-                SetXAxis1();
-                SetYAxis();
                 COPY_POS = 0;
                 CreateGraph(zgc);
         }
        
+
+        // Same as above but for myPane2
         void AvChunkSize2_ValueChanged(object sender, System.EventArgs e)
         {
             AverageChunkSize2 = Convert.ToInt32(AvChunkSize2.Value);
+            SumProcessedBytes1 = 0;
             SumProcessedBytes2 = 0;
-
+            PreviousScreenRemainder1 = 0;
             PreviousScreenRemainder2 = 0;
+            AverageIndex1 = 1;
             AverageIndex2 = 1;
-            time1 = 0;
-            time2 = 0;
             list1.Clear();
             list2.Clear();
             Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
-            SetXAxis2();
-            SetYAxis();
             COPY_POS = 0;
             CreateGraph(zgc);
         }
 
 
-        private int[] AverageScreenUnfilled(int AverageIndex2, int AverageChunkSize2, int PreviousScreenRemainder2, int SumProcessedBytes2, RollingPointPairList list, int time)
+
+        // Function to average bytes in ScreenBuffer while it isn't filled (still room for UART_Buffer to be coppied in)
+        private int[] AverageScreenUnfilled(int AverageIndex, int AverageChunkSize, int PreviousScreenRemainder, int SumProcessedBytes, RollingPointPairList list, int time)
         {
+            // Two values must be return so function returns an array
             int[] Properties = new int[2];
-            int SumChunk = SumProcessedBytes2;//Running total carried over from end of previous ScreenBuffer
-            if (AverageIndex2 == 1) //Ensures first value of i is not negative as it would be if set to (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2 and AverageIndex2=1
+            int SumChunk = SumProcessedBytes;//Running total carried over from end of previous ScreenBuffer
+            if (AverageIndex == 1) //Ensures first value of i in for loop is not negative as it would be if set to (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2 and AverageIndex2=1 (as it is in if loop below
             {
-                for (int i = 0; i < AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2; i++) //Sums first values of new buffer
+                for (int i = 0; i < AverageIndex * AverageChunkSize - PreviousScreenRemainder; i++) //Sums first values of new buffer
                 {
                     SumChunk += Convert.ToInt32(ScreenBuffer[i]);
                 }
-                Average = SumChunk / AverageChunkSize2;
+                Average = SumChunk / AverageChunkSize;
                 list.Add(time, Average);
-                time += AverageChunkSize2;
-                AverageIndex2++;
+                time += 10;
+                AverageIndex++;
                 SumChunk = 0;
             }
-            while (AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2 < COPY_POS)
+            while (AverageIndex * AverageChunkSize - PreviousScreenRemainder < COPY_POS) // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize', 
+                                                                                         // at this point requique new UART_Buffer to be coppied into ScreenBuffer
             {
-                for (int i = (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2; i < AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2; i++) //Sums a chunk from middle of array
+                for (int i = (AverageIndex - 1) * AverageChunkSize - PreviousScreenRemainder; i < AverageIndex * AverageChunkSize - PreviousScreenRemainder; i++) //Sums a chunk from middle of array
                 {
                     SumChunk += Convert.ToInt32(ScreenBuffer[i]);
                 }
-                Average = SumChunk / AverageChunkSize2;
-                list.Add(time, Average);
-                time += AverageChunkSize2;
-                AverageIndex2++;
+                Average = SumChunk / AverageChunkSize;
+                list.Add(time, Average);    // Once computed average is added to PoinPairList along with time coordinate. Points are added to curve next time 'tick', each 'tick' many point may be added to curve
+                time += 10;
+                AverageIndex++; // Average index hold placed of where to start averaging from. 
                 SumChunk = 0;
             }
 
-            Properties[0] = AverageIndex2;
+            Properties[0] = AverageIndex;  // Setting required variables to elemant in array to be returned.
             Properties[1] = time;
             return Properties;
         }
 
-        private int[] AverageScreenFilled(int AverageIndex2, int AverageChunkSize2, int PreviousScreenRemainder2, int SumProcessedBytes2, RollingPointPairList list, int time)
+        private int[] AverageScreenFilled(int AverageIndex, int AverageChunkSize, int PreviousScreenRemainder, int SumProcessedBytes, RollingPointPairList list, int time)
         {
             int[] FilledProperties = new int[3];
 
             int SumScreenRemainder=0;
             int SumEndChunk = 0;
 
-            //Ensures an average is plotted if more than AverageChunkSize2 of array is yet to be averaged
-            //Then sums remaining bytes to be carried over into next loop
-            while(ScreenBuffer.Length-((AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2) > AverageChunkSize2)
+            // Ensures averages are plotted if more than AverageChunkSize of array is yet to be averaged
+            // Then sums remaining bytes to be carried over into next loop
+
+            while(ScreenBuffer.Length-((AverageIndex-1) * AverageChunkSize - PreviousScreenRemainder) > AverageChunkSize) // Same while loop as above function to average remaining bytes that can make up an 'AverageChunkSize'
             {
-                for (int i = (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2; i < AverageChunkSize2 * AverageIndex2 - PreviousScreenRemainder2; i++)
+                for (int i = (AverageIndex - 1) * AverageChunkSize - PreviousScreenRemainder; i < AverageChunkSize * AverageIndex - PreviousScreenRemainder; i++)
                 {
                     SumEndChunk += Convert.ToInt32(ScreenBuffer[i]);
                 }
 
-                Average = SumEndChunk / AverageChunkSize2;
+                Average = SumEndChunk / AverageChunkSize;
                 list.Add(time, Average);
-                time += AverageChunkSize2;
+                time += 10;
                 SumEndChunk = 0;
-                AverageIndex2++;
+                AverageIndex++;
             }
 
-                for (int i = (AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2; i < ScreenBuffer.Length; i++)
+                for (int i = (AverageIndex-1) * AverageChunkSize - PreviousScreenRemainder; i < ScreenBuffer.Length; i++) // For loop to sum remaining bytes in ScreenBuffer
                 {
                     SumScreenRemainder += Convert.ToInt32(ScreenBuffer[i]);
                 }
-                PreviousScreenRemainder2 = ScreenBuffer.Length - ((AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2);
-                Console.WriteLine("Going into wrong bit of AverageScreenFilled");
-                //PreviousScreenRemainder2 = ScreenBuffer.Length - ((AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2);
+                PreviousScreenRemainder = ScreenBuffer.Length - ((AverageIndex-1) * AverageChunkSize - PreviousScreenRemainder); // Index to acount for how many 'new' bytes need to be added to the sum of the remainder to make up 'AverageChunkSize'
+               
             
 
-            SumProcessedBytes2 = SumScreenRemainder;  //Running Total
+            SumProcessedBytes = SumScreenRemainder;  // Carries over remainder bytes' sum 
             SumScreenRemainder = 0;
             
             FilledProperties[0] = time;
-            FilledProperties[1] = SumProcessedBytes2;
-            FilledProperties[2] = PreviousScreenRemainder2;
+            FilledProperties[1] = SumProcessedBytes;
+            FilledProperties[2] = PreviousScreenRemainder;
 
             return FilledProperties;
         }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
     }       
 }

@@ -79,7 +79,7 @@ namespace Graph_practice_2_Rolling_data
                 return false;
             }
 
-            bUSBPortIsOpen = true;
+           bUSBPortIsOpen = true; 
             
             //ResetDevice(0);
 

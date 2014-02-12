@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Timers;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -12,12 +13,12 @@ using ZedGraph;
 
 namespace Graph_practice_2_Rolling_data
 {
-
+    
+    
     public partial class RollingGraph : Form
     {
         // Starting time in millisecs. 
         int tickStart = 0;
-
         public int time1 = 0; //Integer to use as time coord for plotting arrays
         public int time2=0; //double to allow division for plotting average
         double Average;
@@ -54,12 +55,16 @@ namespace Graph_practice_2_Rolling_data
         bool AutoSaveBool = false;
         bool Pause = false;
         double slider;
-        
+        bool LHSSaveBool;
+        bool RHSSaveBool;
+
         // The RollingPointPairList is an efficient storage class that always
         // keeps a rolling set of point data without needing to shift any data values
         // New RollingPairList with 30000 values
-        RollingPointPairList list1 = new RollingPointPairList(30000);
-        RollingPointPairList list2 = new RollingPointPairList(30000);
+        PointPairList list1 = new PointPairList();
+        PointPairList list2 = new PointPairList();
+        
+        
     
         //byte arrays
         byte[] SimulatedBytes = new byte [10];
@@ -73,11 +78,11 @@ namespace Graph_practice_2_Rolling_data
         //Image graham = Bitmap.FromFile(@"C:\Users\localadmin\Downloads\graham.jpg");
 
         string FileLocation;
-
+       
         public RollingGraph()
         {
             InitializeComponent();
-
+           
         }
 
 
@@ -98,24 +103,27 @@ namespace Graph_practice_2_Rolling_data
             GraphPane myPane2 = new GraphPane();
             zgc.MasterPane.Add(myPane1);
             zgc.MasterPane.Add(myPane2);
+
+            
+            list2.Capacity = 300;
           
 
             myPane1.Title.Text = "myPane1" ;
             myPane2.Title.Text = "myPane2";
 
           
-
+            
             
 
 
 
             //Make a new curve
-             BarItem curve = myPane1.AddBar("Average Counts" ,list1, Color.Black);
+             LineItem curve = myPane1.AddCurve("Average Counts" ,list1, Color.Black, SymbolType.None);
             // TextureBrush joebrush = new TextureBrush(Joe);
-             curve.Bar.Fill = new Fill(Color.Black);
+             curve.Line.Fill = new Fill(Color.Black);
             // curve.Line.Width = 1.0F;
              
-
+            
              LineItem curve2 = myPane2.AddCurve("Counts (Avg ten)", list2, Color.Black, SymbolType.None);
              //TextureBrush grahambrush = new TextureBrush(graham);
              curve2.Line.Fill = new Fill(Color.Black);
@@ -123,16 +131,17 @@ namespace Graph_practice_2_Rolling_data
             
             
             //Timer fort the X axis, defined later
-           // timer1.Interval = 15; //10 - buffer size increases due to build up but levels out at about 112 bytes.
+            timer1.Interval = 1; //10 - buffer size increases due to build up but levels out at about 112 bytes.
             timer1.Enabled = true;
             timer1.Start();
+            
 
             //Function to set axes of graphpanes.
             SetXAxis1();
             SetXAxis2();
             SetYAxis();
 
-
+            
             // Layout the GraphPanes using a default Pane Layout
             using (Graphics g = this.CreateGraphics())
             {
@@ -152,6 +161,7 @@ namespace Graph_practice_2_Rolling_data
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
+                              
             //  Must create new instance of graphpanes to access them.
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
@@ -174,9 +184,9 @@ namespace Graph_practice_2_Rolling_data
 
 
                     UART_Buffer = FPGA.ReadBytes();
-                    byte[] TestBuff = FPGA.ReadBytes();
+                   // byte[] TestBuff = FPGA.ReadBytes();
                     Console.WriteLine("Length of Buffer = {0}", UART_Buffer.Length);
-                    Console.WriteLine("Length of TestBuffer = {0}", TestBuff.Length);
+                   // Console.WriteLine("Length of TestBuffer = {0}", TestBuff.Length);
                     SetSize();
 
 
@@ -298,8 +308,7 @@ namespace Graph_practice_2_Rolling_data
 
                        
                     }
-
-
+                    
                 }
             }
         }
@@ -404,22 +413,26 @@ namespace Graph_practice_2_Rolling_data
 
 
         // function to save a given arry's bytes to file
-        public void SaveBytesToFile(string FileLocation, byte[] DataToSave)
+        public void SaveListToFile(string FileLocation, PointPairList list)
         {
+           
             File.AppendAllText(FileLocation, Convert.ToString(DateTime.Now) + "\r\n");
             File.AppendAllText(FileLocation, this.filename.Text + "\r\n");
+            File.AppendAllText(FileLocation, "Data from Graph" + "\r\n");
+           
+
+            double[] SaveArray = list.Select(P => P.Y).ToArray();
+            Console.WriteLine("Size of SvarArray {0}", SaveArray.Length);
+
+          
             //  Stop = true;
-            for (int j = COPY_POS; j < ScreenBuffer.Length; j++)
+            for (int j = 0; j < SaveArray.Length; j++)
             {
-                string Reading = ScreenBuffer[j].ToString() + "\r\n";
+                string Reading = SaveArray[j].ToString() + "\r\n";
                 File.AppendAllText(FileLocation, Reading);
             }
 
-            for (int j = 0; j < COPY_POS; j++)
-            {
-                string Reading = ScreenBuffer[j].ToString() + "\r\n";
-                File.AppendAllText(FileLocation, Reading);
-            }
+           
            
 
             SumProcessedBytes1 = 0;
@@ -435,32 +448,133 @@ namespace Graph_practice_2_Rolling_data
             CreateGraph(zgc);
 
         }
+      
+        // function to save both graphs' data
+        public void SaveBothListsToFile(string FileLocation)
+        {
+            string LHSfile = FileLocation + "LHS";
+            string RHSfile = FileLocation + "RHS";
+            File.AppendAllText(FileLocation, Convert.ToString(DateTime.Now) + "\r\n");
+            File.AppendAllText(FileLocation, this.filename.Text + "\r\n");
+            File.AppendAllText(FileLocation, "Data from Graph0" + "\r\n");
+            
 
+            double[] SaveArray1 = list1.Select(P => P.Y).ToArray();
+            Console.WriteLine("Size of SvarArray {0}", SaveArray1.Length);
+
+
+            //  Stop = true;
+            for (int j = 0; j < SaveArray1.Length; j++)
+            {
+                string Reading = SaveArray1[j].ToString() + "\r\n";
+                File.AppendAllText(LHSfile, Reading);
+            }
+           
+            double[] SaveArray2 = list2.Select(P => P.Y).ToArray();
+            Console.WriteLine("Size of SvarArray {0}", SaveArray2.Length);
+
+            File.AppendAllText(FileLocation, "Data from Graph1" + "\r\n"+"\r\n"+"\r\n"+"\r\n");
+            //  Stop = true;
+            for (int j = 0; j < SaveArray2.Length; j++)
+            {
+                string Reading = SaveArray2[j].ToString() + "\r\n";
+                File.AppendAllText(RHSfile, Reading);
+            }
+           
+
+
+            SumProcessedBytes1 = 0;
+            SumProcessedBytes2 = 0;
+            PreviousScreenRemainder1 = 0;
+            PreviousScreenRemainder2 = 0;
+            AverageIndex1 = 1;
+            AverageIndex2 = 1;
+            list1.Clear();
+            list2.Clear();
+            Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
+            COPY_POS = 0;
+            CreateGraph(zgc);
+
+        }
 
         private void SaveBytesButton_Click(object sender, EventArgs e)
         {
-            SaveFileDialog sfd1 = new SaveFileDialog();
-            sfd1.InitialDirectory = @"C:\";
-            sfd1.Title = "SAVE BITCH";
-            //sfd1.CheckFileExists = true;
-            sfd1.CheckPathExists = true;
-            sfd1.DefaultExt = "txt";
-            sfd1.ShowDialog();
-            //sfd1.FileOk += new CancelEventHandler(sfd1_FileOk);
-            if (sfd1.ShowDialog() == DialogResult.OK)
+            if (LHSSaveBool && RHSSaveBool)
             {
-                Pause = true;
-                SaveBytesToFile(@sfd1.FileName, ScreenBuffer);
-                FPGA.ReadBytes();
-                UART_Buffer = FPGA.ReadBytes();
-                UART_Buffer = FPGA.ReadBytes();
-                UART_Buffer = FPGA.ReadBytes();
-                Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
-                Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
-                Pause = false;
+
+                SaveFileDialog sfd1 = new SaveFileDialog();
+                sfd1.InitialDirectory = @"C:\";
+                sfd1.Title = "SAVE BITCH";
+                //sfd1.CheckFileExists = true;
+                sfd1.CheckPathExists = true;
+                sfd1.DefaultExt = "txt";
+                sfd1.ShowDialog();
+                //sfd1.FileOk += new CancelEventHandler(sfd1_FileOk);
+                if (sfd1.ShowDialog() == DialogResult.OK)
+                {
+                    Pause = true;
+                    SaveBothListsToFile(@sfd1.FileName);
+                    FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
+                    Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
+                    Pause = false;
+                }
             }
+            else if (!RHSSaveBool && LHSSaveBool)
+            {
+                SaveFileDialog sfd1 = new SaveFileDialog();
+                sfd1.InitialDirectory = @"C:\";
+                sfd1.Title = "SAVE BITCH";
+                //sfd1.CheckFileExists = true;
+                sfd1.CheckPathExists = true;
+                sfd1.DefaultExt = "txt";
+                sfd1.ShowDialog();
+                //sfd1.FileOk += new CancelEventHandler(sfd1_FileOk);
+                if (sfd1.ShowDialog() == DialogResult.OK)
+                {
+                    Pause = true;
+                    SaveListToFile(@sfd1.FileName, list1);
+                    FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
+                    Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
+                    Pause = false;
+                }
+            }
+            else if (RHSSaveBool && !LHSSaveBool)
+            {
+                SaveFileDialog sfd1 = new SaveFileDialog();
+                sfd1.InitialDirectory = @"C:\";
+                sfd1.Title = "SAVE BITCH";
+                //sfd1.CheckFileExists = true;
+                sfd1.CheckPathExists = true;
+                sfd1.DefaultExt = "txt";
+                sfd1.ShowDialog();
+                //sfd1.FileOk += new CancelEventHandler(sfd1_FileOk);
+                if (sfd1.ShowDialog() == DialogResult.OK)
+                {
+                    Pause = true;
+                    SaveListToFile(@sfd1.FileName, list2);
+                    FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    UART_Buffer = FPGA.ReadBytes();
+                    Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
+                    Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
+                    Pause = false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Must select graph to save");
 
-
+                return;
+            }
 
         }
 
@@ -609,7 +723,7 @@ namespace Graph_practice_2_Rolling_data
 
 
         // Function to average bytes in ScreenBuffer while it isn't filled (still room for UART_Buffer to be coppied in)
-        private int[] AverageScreenUnfilled(int AverageIndex, int AverageChunkSize, int PreviousScreenRemainder, int SumProcessedBytes, RollingPointPairList list, int time)
+        private int[] AverageScreenUnfilled(int AverageIndex, int AverageChunkSize, int PreviousScreenRemainder, int SumProcessedBytes, PointPairList list, int time)
         {
             // Two values must be return so function returns an array
             int[] Properties = new int[2];
@@ -622,7 +736,7 @@ namespace Graph_practice_2_Rolling_data
                 }
                 Average = SumChunk / AverageChunkSize;
                 list.Add(time, Average);
-                time += 10;
+                time += 1;
                 AverageIndex++;
                 SumChunk = 0;
             }
@@ -635,7 +749,11 @@ namespace Graph_practice_2_Rolling_data
                 }
                 Average = SumChunk / AverageChunkSize;
                 list.Add(time, Average);    // Once computed average is added to PoinPairList along with time coordinate. Points are added to curve next time 'tick', each 'tick' many point may be added to curve
-                time += 10;
+                if (list.Count > 30000)
+                {
+                    list.RemoveAt(0);
+                }
+                time += 1;
                 AverageIndex++; // Average index hold placed of where to start averaging from. 
                 SumChunk = 0;
             }
@@ -645,7 +763,7 @@ namespace Graph_practice_2_Rolling_data
             return Properties;
         }
 
-        private int[] AverageScreenFilled(int AverageIndex, int AverageChunkSize, int PreviousScreenRemainder, int SumProcessedBytes, RollingPointPairList list, int time)
+        private int[] AverageScreenFilled(int AverageIndex, int AverageChunkSize, int PreviousScreenRemainder, int SumProcessedBytes, PointPairList list, int time)
         {
             int[] FilledProperties = new int[3];
 
@@ -664,7 +782,11 @@ namespace Graph_practice_2_Rolling_data
 
                 Average = SumEndChunk / AverageChunkSize;
                 list.Add(time, Average);
-                time += 10;
+                if (list.Count > 30000)
+                {
+                    list.RemoveAt(0);
+                }
+                time += 1;
                 SumEndChunk = 0;
                 AverageIndex++;
             }
@@ -685,6 +807,18 @@ namespace Graph_practice_2_Rolling_data
             FilledProperties[2] = PreviousScreenRemainder;
 
             return FilledProperties;
+        }
+
+        private void LHSSave_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender == null) LHSSaveBool=false ;
+            else if (sender != null) LHSSaveBool = true;
+        }
+
+        private void RHSSave_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender == null) RHSSaveBool = false;
+            else if (sender != null) RHSSaveBool = true;
         }
 
     }       

@@ -28,7 +28,7 @@ namespace Graph_practice_2_Rolling_data
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        public void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
             this.zgc = new ZedGraph.ZedGraphControl();
@@ -54,6 +54,8 @@ namespace Graph_practice_2_Rolling_data
             this.label3 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.AvChunkSize2 = new System.Windows.Forms.NumericUpDown();
+            this.RHSSave = new System.Windows.Forms.CheckBox();
+            this.LHSSave = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum)).BeginInit();
@@ -90,7 +92,7 @@ namespace Graph_practice_2_Rolling_data
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(575, 432);
+            this.button1.Location = new System.Drawing.Point(466, 429);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(69, 23);
             this.button1.TabIndex = 1;
@@ -102,7 +104,7 @@ namespace Graph_practice_2_Rolling_data
             // 
             this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(669, 435);
+            this.checkBox1.Location = new System.Drawing.Point(541, 431);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(73, 17);
             this.checkBox1.TabIndex = 2;
@@ -126,7 +128,7 @@ namespace Graph_practice_2_Rolling_data
             this.trackBar1.Location = new System.Drawing.Point(12, 421);
             this.trackBar1.Maximum = 255;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(547, 45);
+            this.trackBar1.Size = new System.Drawing.Size(448, 45);
             this.trackBar1.TabIndex = 5;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
@@ -331,11 +333,35 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkSize2.TabIndex = 30;
             this.AvChunkSize2.ValueChanged += new System.EventHandler(this.AvChunkSize2_ValueChanged);
             // 
+            // RHSSave
+            // 
+            this.RHSSave.AutoSize = true;
+            this.RHSSave.Location = new System.Drawing.Point(765, 435);
+            this.RHSSave.Name = "RHSSave";
+            this.RHSSave.Size = new System.Drawing.Size(77, 17);
+            this.RHSSave.TabIndex = 33;
+            this.RHSSave.Text = "Save RHS";
+            this.RHSSave.UseVisualStyleBackColor = true;
+            this.RHSSave.CheckedChanged += new System.EventHandler(this.RHSSave_CheckedChanged);
+            // 
+            // LHSSave
+            // 
+            this.LHSSave.AutoSize = true;
+            this.LHSSave.Location = new System.Drawing.Point(676, 435);
+            this.LHSSave.Name = "LHSSave";
+            this.LHSSave.Size = new System.Drawing.Size(75, 17);
+            this.LHSSave.TabIndex = 34;
+            this.LHSSave.Text = "Save LHS";
+            this.LHSSave.UseVisualStyleBackColor = true;
+            this.LHSSave.CheckedChanged += new System.EventHandler(this.LHSSave_CheckedChanged);
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1195, 461);
+            this.Controls.Add(this.LHSSave);
+            this.Controls.Add(this.RHSSave);
             this.Controls.Add(this.AvChunkSize2);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label3);
@@ -404,5 +430,7 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown AvChunkSize2;
+        private System.Windows.Forms.CheckBox RHSSave;
+        private System.Windows.Forms.CheckBox LHSSave;
     }
 }

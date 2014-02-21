@@ -161,9 +161,8 @@ namespace Graph_practice_2_Rolling_data
             timer1.Interval = 10; //10 - buffer size increases due to build up but levels out at about 112 bytes.
             timer1.Enabled = true;
             timer1.Start();
-            Point origin = new Point(0,0);
-            myPane1.GeneralTransform(origin, CoordType.AxisXYScale);
-            Console.WriteLine("Coordinate transform of origin {0}, {1}", myPane1.GeneralTransform(origin, CoordType.PaneFraction).X, myPane1.GeneralTransform(origin, CoordType.PaneFraction).Y);
+            
+           
            
             //Function to set axes of graphpanes.
             SetXAxis1();
@@ -179,14 +178,14 @@ namespace Graph_practice_2_Rolling_data
                 zgc.MasterPane.SetLayout(g, PaneLayout.SingleRow);
             }
 
-
+            zgc.AxisChange();
             /*Save begging time for reference
             tickStart = Environment.TickCount;*/
-
+            myPane1.XAxis.IsVisible = true;
             Console.WriteLine("Create Graph");
-           
-            
 
+  
+           
         }
 
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
@@ -195,6 +194,11 @@ namespace Graph_practice_2_Rolling_data
                       
             //  Must create new instance of graphpanes to access them.
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
+            Point XMax_Pane = new Point(1, 0);
+            Point origin = new Point(0, 0);
+            Point endchart = new Point(1, 0);
+            Console.WriteLine("origin point is {0}", myPane1.GeneralTransform(origin,CoordType.ChartFraction).X);
+            Console.WriteLine("XMax point is {0}", myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
            // GraphPane myPane2 = zgc.MasterPane.PaneList[1];
             Console.WriteLine(myPane1.Chart.Rect.X); 
            /* if (ChangeTimebin)
@@ -373,8 +377,8 @@ namespace Graph_practice_2_Rolling_data
         private void SetSize()
         {
 
-            Rectangle formRect = new Rectangle(0,0, 1164, 373);
-            //formRect.Inflate(0,-43);
+            Rectangle formRect = this.ClientRectangle;
+            formRect.Inflate(0,-43);
             //formRect.Size=
             //this.ClientSize = Size;
            // SetClientSizeCore(475, 500);
@@ -390,8 +394,12 @@ namespace Graph_practice_2_Rolling_data
         {
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
             Scale xScale = myPane1.XAxis.Scale;
-            XMax1 = 1164;
-            //XMax1 = Convert.ToInt16((myPane1.Chart.Rect.X)*20);
+            Point XMax_Pane = new Point(1, 0);
+            Point origin = new Point(0, 0);
+            Point endchart = new Point(1, 0);
+            Console.WriteLine("*origin point is {0}", myPane1.GeneralTransform(origin, CoordType.ChartFraction).X);
+            Console.WriteLine("*XMax point is {0}", myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
+            XMax1 = Convert.ToInt16(myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane1.GeneralTransform(origin, CoordType.ChartFraction).X);
             myPane1.XAxis.Scale.Min = 0;
             xScale.Max = XMax1;
             myPane1.XAxis.Scale.MinorStep = 1;

@@ -40,11 +40,13 @@ namespace Graph_practice_2_Rolling_data
         int[] AverageArray2 = new int[3];
         int[] AverageArray1 = new int[3];
     
-        int XMin1=0;
-        int XMax1=30000;
-        int XMin2 = 0;
-        int XMax2 = 30000;
-        int YMin=0;
+        int XMin1;
+        int XMax1;
+        int XScaleValue1;
+        int XMin2;
+        int XMax2;
+        int XScaleValue2;
+        int YMin;
         int YMax=300;
         
 
@@ -116,6 +118,10 @@ namespace Graph_practice_2_Rolling_data
 
             time1 = 0;
             time2 = 0;
+
+            XScaleValue1 = Convert.ToInt16(XScale1.Value);
+            XScaleValue2 = Convert.ToInt16(XScale2.Value);
+
             GraphPane myPane1 = new GraphPane();
             GraphPane myPane2 = new GraphPane();
             zgc.MasterPane.Add(myPane1);
@@ -131,17 +137,17 @@ namespace Graph_practice_2_Rolling_data
             //FilterList = Flist;
             //Flist.SetBounds(x[j] - 10000, x[j], 500);
             //Make a new curve
-             LineItem curve = myPane1.AddCurve("Average Counts", list1, Color.Black, SymbolType.None);
+             BarItem curve = myPane1.AddBar("Average Counts", list1, Color.Black/*, SymbolType.None*/);
             // TextureBrush joebrush = new TextureBrush(Joe);
-            curve.Line.Fill = new Fill(Color.Black);
+            curve.Bar.Fill = new Fill(Color.Black);
              //curve.Line.IsVisible = false;
-            zgc.IsAntiAlias = true;
+            //zgc.IsAntiAlias = true;
 
             
             
-             LineItem curve2 = myPane2.AddCurve("Counts (Avg ten)", list2, Color.Black, SymbolType.None);
+             BarItem curve2 = myPane2.AddBar("Counts (Avg ten)", list2, Color.Black/*, SymbolType.None*/);
              //TextureBrush grahambrush = new TextureBrush(graham);
-             curve2.Line.Fill = new Fill(Color.Black);
+             curve2.Bar.Fill = new Fill(Color.Black);
            //  curve2.Line.Width = 3.0F;
             
             
@@ -178,11 +184,19 @@ namespace Graph_practice_2_Rolling_data
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
+            zgc.AxisChange();
                               
             //  Must create new instance of graphpanes to access them.
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
+            SetXAxis1();
+            SetXAxis2();
 
+            Point XMax_Pane = new Point(1, 0);
+            Point origin = new Point(0, 0);
+            Point endchart = new Point(1, 0);
+            Console.WriteLine("*origin point is {0}", myPane1.GeneralTransform(origin, CoordType.ChartFraction).X);
+            Console.WriteLine("*XMax point is {0}", myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
            /* if (ChangeTimebin)
             {
                 FPGA.ReadBytes();
@@ -211,14 +225,7 @@ namespace Graph_practice_2_Rolling_data
                 {
 
                     UART_Buffer = FPGA.ReadBytes();
-                   // Console.WriteLine("Bytes in buffer is {0}", UART_Buffer.Length);
-     
-                   // byte[] TestBuff = FPGA.ReadBytes();
-                    /*Console.WriteLine("Length of Buffer = {0}", UART_Buffer.Length);
-                    Console.WriteLine("time1 is {0}", time1);
-                    Console.WriteLine("XMax1 is {0}", myPane1.XAxis.Scale.Max);
-                    Console.WriteLine("MajorStep is {0}", myPane1.XAxis.Scale.MajorStep);*/
-                   // Console.WriteLine("Length of TestBuffer = {0}", TestBuff.Length);
+
                     SetSize();
 
 
@@ -339,7 +346,7 @@ namespace Graph_practice_2_Rolling_data
                         Array.Copy(UART_Buffer, ScreenBuffer.Length - COPY_POS, ScreenBuffer, 0, UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS));
                         COPY_POS = UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS);
                        
-
+                       
                        
                     }
                     
@@ -373,23 +380,36 @@ namespace Graph_practice_2_Rolling_data
          // Function to set X Axis on myPane1
         private void SetXAxis1()
         {
+            zgc.AxisChange();
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
             Scale xScale = myPane1.XAxis.Scale;
-
+            Point XMax_Pane = new Point(1, 0);
+            Point origin = new Point(0, 0);
+            Point endchart = new Point(1, 0);
+            Console.WriteLine("*origin point is {0}", myPane1.GeneralTransform(origin, CoordType.ChartFraction).X);
+            Console.WriteLine("*XMax point is {0}", myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
+            XMax1 = Convert.ToInt16(myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane1.GeneralTransform(origin, CoordType.ChartFraction).X)*XScaleValue1;
             
             myPane1.XAxis.Scale.Min = 0;
             xScale.Max = XMax1;
             myPane1.XAxis.Scale.MinorStep = XMax1/100;
             myPane1.XAxis.Scale.MajorStep = XMax1/10;
 
-            zgc.Invalidate();
+            zgc.AxisChange();
         }
 
         // Function to set X Axis on myPane2
         private void SetXAxis2()
         {
+            zgc.AxisChange();
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
             Scale xScale2 = myPane2.XAxis.Scale;
+            Point XMax_Pane = new Point(1, 0);
+            Point origin = new Point(0, 0);
+            Point endchart = new Point(1, 0);
+            Console.WriteLine("*origin point is {0}", myPane2.GeneralTransform(origin, CoordType.ChartFraction).X);
+            Console.WriteLine("*XMax point is {0}", myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
+            XMax2 = Convert.ToInt16(myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X)*XScaleValue2;
             myPane2.XAxis.Scale.Min = XMin2;
             myPane2.XAxis.Scale.Max = XMax2;
             myPane2.XAxis.Scale.MinorStep = XMax2 / 100.0;
@@ -416,7 +436,6 @@ namespace Graph_practice_2_Rolling_data
                 myPane2.YAxis.Scale.MajorStep = YMax / 10;
 
                 zgc.AxisChange();
-            
         }
 
         private void RollingGraph_Load_1(object sender, EventArgs e)
@@ -829,16 +848,16 @@ namespace Graph_practice_2_Rolling_data
   
 
         // Used to alter X Axis range myPane1
-        void XRange1_ValueChanged(object sender, System.EventArgs e)
+        void XScale1_ValueChanged(object sender, System.EventArgs e)
         {
-            XMax1 = Convert.ToInt32(XRange1.Value);
-            SetXAxis1();
+            XScaleValue1 = Convert.ToInt32(XScale1.Value);
+            SetXAxis1(); 
         }
 
         // Used to alter X Axis range myPane2
-        void XRange2_ValueChanged(object sender, System.EventArgs e)
+        void XScale2_ValueChanged(object sender, System.EventArgs e)
         {
-            XMax2 = Convert.ToInt32(XRange2.Value);
+            XScaleValue2 = Convert.ToInt32(XScale2.Value);
             SetXAxis2();
         }
 

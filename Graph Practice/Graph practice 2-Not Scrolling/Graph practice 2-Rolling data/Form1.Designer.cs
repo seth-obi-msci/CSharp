@@ -49,8 +49,8 @@ namespace Graph_practice_2_Rolling_data
             this.label5 = new System.Windows.Forms.Label();
             this.AvChunkSize1 = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
-            this.XRange1 = new System.Windows.Forms.NumericUpDown();
-            this.XRange2 = new System.Windows.Forms.NumericUpDown();
+            this.XScale1 = new System.Windows.Forms.NumericUpDown();
+            this.XScale2 = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.AvChunkSize2 = new System.Windows.Forms.NumericUpDown();
@@ -66,8 +66,8 @@ namespace Graph_practice_2_Rolling_data
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XRange1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XRange2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XScale1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XScale2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Timebinfactorvalue)).BeginInit();
             this.SuspendLayout();
@@ -184,9 +184,9 @@ namespace Graph_practice_2_Rolling_data
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(739, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 26);
+            this.label1.Size = new System.Drawing.Size(80, 26);
             this.label1.TabIndex = 14;
-            this.label1.Text = "Set X Range \r\n LHS";
+            this.label1.Text = "X Scale Factor \r\n LHS";
             // 
             // YMaxNum
             // 
@@ -279,60 +279,40 @@ namespace Graph_practice_2_Rolling_data
             this.label6.TabIndex = 25;
             this.label6.Text = "Counts to Average \r\n LHS";
             // 
-            // XRange1
+            // XScale1
             // 
-            this.XRange1.Increment = new decimal(new int[] {
-            10,
+            this.XScale1.Location = new System.Drawing.Point(816, 10);
+            this.XScale1.Name = "XScale1";
+            this.XScale1.Size = new System.Drawing.Size(57, 20);
+            this.XScale1.TabIndex = 26;
+            this.XScale1.Value = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            this.XRange1.Location = new System.Drawing.Point(807, 10);
-            this.XRange1.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.XRange1.Name = "XRange1";
-            this.XRange1.Size = new System.Drawing.Size(57, 20);
-            this.XRange1.TabIndex = 26;
-            this.XRange1.Value = new decimal(new int[] {
-            30000,
-            0,
-            0,
-            0});
-            this.XRange1.ValueChanged += new System.EventHandler(this.XRange1_ValueChanged);
+            this.XScale1.ValueChanged += new System.EventHandler(this.XScale1_ValueChanged);
             // 
-            // XRange2
+            // XScale2
             // 
-            this.XRange2.Increment = new decimal(new int[] {
-            100,
+            this.XScale2.Location = new System.Drawing.Point(1121, 8);
+            this.XScale2.Name = "XScale2";
+            this.XScale2.Size = new System.Drawing.Size(56, 20);
+            this.XScale2.TabIndex = 27;
+            this.XScale2.Value = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            this.XRange2.Location = new System.Drawing.Point(1112, 8);
-            this.XRange2.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.XRange2.Name = "XRange2";
-            this.XRange2.Size = new System.Drawing.Size(56, 20);
-            this.XRange2.TabIndex = 27;
-            this.XRange2.Value = new decimal(new int[] {
-            30000,
-            0,
-            0,
-            0});
-            this.XRange2.ValueChanged += new System.EventHandler(this.XRange2_ValueChanged);
+            this.XScale2.ValueChanged += new System.EventHandler(this.XScale2_ValueChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(1041, 7);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 26);
+            this.label3.Size = new System.Drawing.Size(80, 26);
             this.label3.TabIndex = 28;
-            this.label3.Text = "Set X Range \r\n RHS";
+            this.label3.Text = "X Scale Factor \r\n RHS";
             // 
             // label7
             // 
@@ -469,8 +449,8 @@ namespace Graph_practice_2_Rolling_data
             this.Controls.Add(this.AvChunkSize2);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.XRange2);
-            this.Controls.Add(this.XRange1);
+            this.Controls.Add(this.XScale2);
+            this.Controls.Add(this.XScale1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.AvChunkSize1);
             this.Controls.Add(this.label5);
@@ -494,8 +474,8 @@ namespace Graph_practice_2_Rolling_data
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XRange1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XRange2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XScale1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XScale2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkSize2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Timebinfactorvalue)).EndInit();
             this.ResumeLayout(false);
@@ -530,8 +510,8 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown AvChunkSize1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown XRange1;
-        private System.Windows.Forms.NumericUpDown XRange2;
+        private System.Windows.Forms.NumericUpDown XScale1;
+        private System.Windows.Forms.NumericUpDown XScale2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown AvChunkSize2;

@@ -58,10 +58,12 @@ namespace Graph_practice_2_Rolling_data
             this.LHSSave = new System.Windows.Forms.CheckBox();
             this.SumVsAv = new System.Windows.Forms.CheckBox();
             this.AutoScale = new System.Windows.Forms.CheckBox();
-            this.ChangeTimebinButton = new System.Windows.Forms.Button();
             this.Timebinfactorvalue = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.ScrollingCheckBox = new System.Windows.Forms.CheckBox();
+            this.ZoomIn = new System.Windows.Forms.CheckBox();
+            this.LHSPane = new System.Windows.Forms.CheckBox();
+            this.RHSPane = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum)).BeginInit();
@@ -282,6 +284,11 @@ namespace Graph_practice_2_Rolling_data
             // XScale1
             // 
             this.XScale1.Location = new System.Drawing.Point(816, 10);
+            this.XScale1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.XScale1.Name = "XScale1";
             this.XScale1.Size = new System.Drawing.Size(57, 20);
             this.XScale1.TabIndex = 26;
@@ -295,6 +302,11 @@ namespace Graph_practice_2_Rolling_data
             // XScale2
             // 
             this.XScale2.Location = new System.Drawing.Point(1121, 8);
+            this.XScale2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.XScale2.Name = "XScale2";
             this.XScale2.Size = new System.Drawing.Size(56, 20);
             this.XScale2.TabIndex = 27;
@@ -390,16 +402,6 @@ namespace Graph_practice_2_Rolling_data
             this.AutoScale.Text = "Tick for auto rescale";
             this.AutoScale.UseVisualStyleBackColor = true;
             // 
-            // ChangeTimebinButton
-            // 
-            this.ChangeTimebinButton.Location = new System.Drawing.Point(789, 37);
-            this.ChangeTimebinButton.Name = "ChangeTimebinButton";
-            this.ChangeTimebinButton.Size = new System.Drawing.Size(102, 23);
-            this.ChangeTimebinButton.TabIndex = 37;
-            this.ChangeTimebinButton.Text = "ChangeTimebin";
-            this.ChangeTimebinButton.UseVisualStyleBackColor = true;
-            this.ChangeTimebinButton.Click += new System.EventHandler(this.ChangeTimebinButton_Click);
-            // 
             // Timebinfactorvalue
             // 
             this.Timebinfactorvalue.Location = new System.Drawing.Point(1044, 40);
@@ -411,7 +413,7 @@ namespace Graph_practice_2_Rolling_data
             this.Timebinfactorvalue.Name = "Timebinfactorvalue";
             this.Timebinfactorvalue.Size = new System.Drawing.Size(47, 20);
             this.Timebinfactorvalue.TabIndex = 38;
-            this.Timebinfactorvalue.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.Timebinfactorvalue.ValueChanged += new System.EventHandler(this.Timebinfactorvalue_ValueChanged);
             // 
             // label8
             // 
@@ -433,15 +435,51 @@ namespace Graph_practice_2_Rolling_data
             this.ScrollingCheckBox.UseVisualStyleBackColor = true;
             this.ScrollingCheckBox.CheckedChanged += new System.EventHandler(this.ScrollingCheckBox_CheckedChanged);
             // 
+            // ZoomIn
+            // 
+            this.ZoomIn.AutoSize = true;
+            this.ZoomIn.Location = new System.Drawing.Point(668, 37);
+            this.ZoomIn.Name = "ZoomIn";
+            this.ZoomIn.Size = new System.Drawing.Size(65, 17);
+            this.ZoomIn.TabIndex = 41;
+            this.ZoomIn.Text = "Zoom In";
+            this.ZoomIn.UseVisualStyleBackColor = true;
+            // 
+            // LHSPane
+            // 
+            this.LHSPane.AutoSize = true;
+            this.LHSPane.Checked = true;
+            this.LHSPane.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.LHSPane.Location = new System.Drawing.Point(47, 37);
+            this.LHSPane.Name = "LHSPane";
+            this.LHSPane.Size = new System.Drawing.Size(72, 17);
+            this.LHSPane.TabIndex = 42;
+            this.LHSPane.Text = "LHSPane";
+            this.LHSPane.UseVisualStyleBackColor = true;
+            // 
+            // RHSPane
+            // 
+            this.RHSPane.AutoSize = true;
+            this.RHSPane.Checked = true;
+            this.RHSPane.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RHSPane.Location = new System.Drawing.Point(150, 37);
+            this.RHSPane.Name = "RHSPane";
+            this.RHSPane.Size = new System.Drawing.Size(74, 17);
+            this.RHSPane.TabIndex = 43;
+            this.RHSPane.Text = "RHSPane";
+            this.RHSPane.UseVisualStyleBackColor = true;
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);
+            this.Controls.Add(this.RHSPane);
+            this.Controls.Add(this.LHSPane);
+            this.Controls.Add(this.ZoomIn);
             this.Controls.Add(this.ScrollingCheckBox);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.Timebinfactorvalue);
-            this.Controls.Add(this.ChangeTimebinButton);
             this.Controls.Add(this.AutoScale);
             this.Controls.Add(this.SumVsAv);
             this.Controls.Add(this.LHSSave);
@@ -519,9 +557,11 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.CheckBox LHSSave;
         private System.Windows.Forms.CheckBox SumVsAv;
         private System.Windows.Forms.CheckBox AutoScale;
-        private System.Windows.Forms.Button ChangeTimebinButton;
         private System.Windows.Forms.NumericUpDown Timebinfactorvalue;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox ScrollingCheckBox;
+        private System.Windows.Forms.CheckBox ZoomIn;
+        private System.Windows.Forms.CheckBox LHSPane;
+        private System.Windows.Forms.CheckBox RHSPane;
     }
 }

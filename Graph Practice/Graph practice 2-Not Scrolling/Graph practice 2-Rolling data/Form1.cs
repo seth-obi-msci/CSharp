@@ -71,6 +71,8 @@ namespace Graph_practice_2_Rolling_data
         // New RollingPairList with 30000 values
         PointPairList templist1 = new PointPairList();
         PointPairList templist2 = new PointPairList();
+        PointPairList savelist1 = new PointPairList();
+        PointPairList savelist2 = new PointPairList();
         PointPairList list1 = new PointPairList();
         PointPairList list2 = new PointPairList();
         PointPairList RecentPoint1 = new PointPairList();
@@ -184,8 +186,8 @@ namespace Graph_practice_2_Rolling_data
             }
 
 
-            /*Save begging time for reference
-            tickStart = Environment.TickCount;*/
+            //Save begging time for reference
+            tickStart = Environment.TickCount;
 
             Console.WriteLine("Create Graph");
            
@@ -381,12 +383,21 @@ namespace Graph_practice_2_Rolling_data
             }
             if (list1.LongCount() > 30000)
             {
-                list1.RemoveAt(0);
+                list1.RemoveRange(0, Convert.ToInt32(list1.LongCount() - 30000));
             }
             if (list2.LongCount() > 30000)
             {
-                list2.RemoveAt(0);
+                list2.RemoveRange(0, Convert.ToInt32(list2.LongCount() - 30000));
             }
+            if (savelist1.LongCount() > 30000)
+            {
+                savelist1.RemoveRange(0, Convert.ToInt32(savelist1.LongCount() - 30000));
+            }
+            if (savelist2.LongCount() > 30000)
+            {
+                savelist2.RemoveRange(0, Convert.ToInt32(savelist2.LongCount() - 30000));
+            }
+            Console.WriteLine("List 1 length = {0}", list1.LongCount());
         }
 
 
@@ -551,12 +562,9 @@ namespace Graph_practice_2_Rolling_data
             }
 
 
-
-
-            
-
         }
-        public void SaveListToFile(string FileLocation, PointPairList list, PointPairList templist)
+
+     /*   public void SaveListToFile(string FileLocation, PointPairList list, PointPairList templist)
         {
 
             MetaData(1)[4] = this.filename.Text;
@@ -584,11 +592,8 @@ namespace Graph_practice_2_Rolling_data
             }
 
 
+        }*/
 
-
-            
-
-        }
         // function to save both graphs' data
         public void SaveBothListsToFile(string FileLocation)
         {
@@ -655,10 +660,10 @@ namespace Graph_practice_2_Rolling_data
             File.AppendAllText(RHSfile, MetaData(2)[0] + "\r\n");
             File.AppendAllText(RHSfile, MetaData(2)[1] + "\r\n");
             File.AppendAllText(RHSfile, MetaData(2)[2] + "\r\n");
-            File.AppendAllText(RHSfile, MetaData(2)[3] + "\r\n");
+            File.AppendAllText(RHSfile, MetaData(2)[3] +"Environmenttime = " + Convert.ToString(Environment.TickCount - tickStart) +"\r\n" );
             File.AppendAllText(RHSfile, MetaData(2)[4] + "\r\n");
 
-            double[] SaveArray1 = list1.Concat(templist1).Select(P => P.Y).ToArray();
+            double[] SaveArray1 = savelist1.Select(P => P.Y).ToArray();
             Console.WriteLine("Size of SvarArray {0}", SaveArray1.Length);
 
 
@@ -669,7 +674,7 @@ namespace Graph_practice_2_Rolling_data
                 File.AppendAllText(LHSfile, Reading);
             }
 
-            double[] SaveArray2 = list2.Concat(templist2).Select(P => P.Y).ToArray();
+            double[] SaveArray2 = savelist2.Select(P => P.Y).ToArray();
             //Console.WriteLine("Size of SvarArray {0}", SaveArray2.Length);
 
             
@@ -724,7 +729,7 @@ namespace Graph_practice_2_Rolling_data
                     }
                     else if (!IsScrolling)
                     {
-                        SaveListToFile(@sfd1.FileName + "LHS.txt", list1, templist1);
+                        SaveListToFile(@sfd1.FileName + "LHS.txt", savelist1);
                     }
 
                     //Console.WriteLine("Length of UART_Buffer {0}", UART_Buffer.Length);
@@ -740,7 +745,7 @@ namespace Graph_practice_2_Rolling_data
                     }
                     else if (!IsScrolling)
                     {
-                        SaveListToFile(@sfd1.FileName + "RHS.txt", list2, templist2);
+                        SaveListToFile(@sfd1.FileName + "RHS.txt", savelist2);
                     }
 
                 }
@@ -783,22 +788,23 @@ namespace Graph_practice_2_Rolling_data
                 }
                 else if (!IsScrolling)
                 {
-                    double TotalTime = list1.Concat(templist1).LongCount() * AverageChunkSize1 * TimebinFactor[0] / (10000.0);
+                    double TotalTime = savelist1.LongCount() * AverageChunkSize1 * TimebinFactor[0] / (10000.0);
                     MetaData[3] = "Total seconds recorded = " + Convert.ToString(TotalTime);
                 }
             }
             else if (pane == 2)
             {
-                MetaData[2] ="Counts averaged over = " + Convert.ToString(AvChunkSize2);
+                MetaData[2] ="Counts averaged over = " + Convert.ToString(AverageChunkSize2);
                 if (IsScrolling)
                 {
                     double TotalTime = list2.LongCount() * AverageChunkSize2 * TimebinFactor[0] / (10000.0);
-                    MetaData[3] = "Total seconds recorded = " + Convert.ToString(TotalTime);
+                    double TotalTime2 = tickStart - Environment.TickCount;
+                    MetaData[3] = "Total seconds recorded = " + Convert.ToString(TotalTime)/*+"Environment time = " + Convert.ToString(TotalTime2)*/;
                 }
                 else if (!IsScrolling)
                 {
-                    double TotalTime = list1.Concat(templist2).LongCount() * AverageChunkSize2 * TimebinFactor[0] / (10000.0);
-                    MetaData[3] = "Total seconds recorded = " + Convert.ToString(TotalTime);
+                    double TotalTime = savelist2.LongCount() * AverageChunkSize2 * TimebinFactor[0] / (10000.0);
+                    MetaData[3] = "Total seconds recorded = " + Convert.ToString(TotalTime) ;
                 }
             }
 
@@ -1006,11 +1012,11 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (!IsScrolling)
                 {
+                    savelist1.Add(time1, Average1);
                     if (time1 > XMax1)
                     {
                         templist1.Clear();
                         templist1.Add(list1);
-                        Console.WriteLine("length of templist {0}", templist1.LongCount());
                         list1.Clear();
                         time1 = 0;
 
@@ -1023,10 +1029,9 @@ namespace Graph_practice_2_Rolling_data
                     }
                 }
                 list1.Add(time1, Average1);
-                
-                
+               
 
-                 RecentPoint1.Add(time1,Average1);
+                RecentPoint1.Add(time1,Average1);
                  if (RecentPoint1.LongCount() > 1)
                  {
                      RecentPoint1.RemoveAt(0);
@@ -1057,13 +1062,12 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (!IsScrolling)
                 {
+                    savelist1.Add(time1, Average1);
                     if (time1 > XMax1)
                     {
                         templist1.Clear();
-
                         templist1.Add(list1);
                         list1.Clear();
-
                         time1 = 0;
 
                     }
@@ -1075,15 +1079,13 @@ namespace Graph_practice_2_Rolling_data
                     }
                 }
                 list1.Add(time1, Average1);
-               
- 
+
                 RecentPoint1.Add(time1, Average1);
                 if (RecentPoint1.LongCount() > 1)
                 {
                     RecentPoint1.RemoveAt(0);
                 }
 
-                Console.WriteLine("length of templist 2 {0}", templist1.LongCount());
                 zgc.Invalidate();
 
 
@@ -1126,14 +1128,12 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (!IsScrolling)
                 {
+                    savelist1.Add(time1, Average1);
                     if (time1 > XMax1)
                     {
                         templist1.Clear();
-
                         templist1.Add(list1);
-                        
                         list1.Clear();
-
                         time1 = 0;
                     }
 
@@ -1145,15 +1145,14 @@ namespace Graph_practice_2_Rolling_data
                 }
                
                 list1.Add(time1, Average1);
-                
-
+               
                 RecentPoint1.Add(time1, Average1);
 
                 if (RecentPoint1.LongCount() > 1)
                 {
                     RecentPoint1.RemoveAt(0);
                 }
-                Console.WriteLine("length of templist 4 {0}", zgc.MasterPane.PaneList[0].CurveList[1].Points.Count.ToString());
+
                 zgc.Invalidate();
 
 
@@ -1199,8 +1198,10 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (!IsScrolling)
                 {
+                    savelist2.Add(time2,Average2);
                     if (time2 > XMax2)
                     {
+                        
                         templist2.Clear();
                         templist2.Add(list2);
                         list2.Clear();
@@ -1213,7 +1214,7 @@ namespace Graph_practice_2_Rolling_data
 
                     }
                 }
-                list2.Add(time2, Average1);
+                list2.Add(time2, Average2);
 
                 RecentPoint2.Add(time2, Average2);
                 if (RecentPoint2.LongCount() > 1)
@@ -1246,6 +1247,7 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (!IsScrolling)
                 {
+                    savelist2.Add(time2, Average2);
                     if (time2 > XMax2)
                     {
                         templist2.Clear();
@@ -1310,6 +1312,7 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (!IsScrolling)
                 {
+                    savelist2.Add(time2, Average2);
                     if (time2 > XMax2)
                     {
                         templist2.Clear();

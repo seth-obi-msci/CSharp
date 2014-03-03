@@ -121,8 +121,10 @@ namespace Graph_practice_2_Rolling_data
             zgc.MasterPane.Add(myPane2);
             zgc.MasterPane.PaneList[0].Legend.IsVisible = false;
             zgc.MasterPane.PaneList[1].Legend.IsVisible = false;
-                    
-           
+
+          
+            myPane1.Chart.Fill = new Fill(Color.Black);
+            myPane2.Chart.Fill = new Fill(Color.Black);
             myPane1.Title.Text = "myPane1";
             myPane2.Title.Text = "myPane2";
 
@@ -133,31 +135,31 @@ namespace Graph_practice_2_Rolling_data
 
             //Make a new curve
 
-             BarItem RecentBar1 = myPane1.AddBar("RecentBar", RecentPoint1, Color.Purple);
+             BarItem RecentBar1 = myPane1.AddBar("RecentBar", RecentPoint1, Color.Red);
              RecentBar1.Bar.Fill = new Fill(Color.Red);
              RecentBar1.Bar.Border = new Border(Color.Red, 2.0F);
 
-             BarItem curve = myPane1.AddBar("Average Counts", list1, Color.Red/*, SymbolType.None*/);
-             curve.Bar.Fill = new Fill(Color.Black);
-             curve.Bar.Border = new Border(Color.Black, (float)(1.0));
+             BarItem curve = myPane1.AddBar("Average Counts", list1, Color.White/*, SymbolType.None*/);
+             curve.Bar.Fill = new Fill(Color.White);
+             curve.Bar.Border = new Border(Color.White, (float)(1.0));
 
-             BarItem tempcurve1 = myPane1.AddBar("Average Counts", templist1, Color.Black);
-             tempcurve1.Bar.Fill = new Fill(Color.Black);
-             tempcurve1.Bar.Border.Width = (float)(1.0);
+             BarItem tempcurve1 = myPane1.AddBar("Average Counts", templist1, Color.White);
+             tempcurve1.Bar.Fill = new Fill(Color.White);
+             tempcurve1.Bar.Border = new Border(Color.White, (float)(1.0));
 
 
 
-             BarItem RecentBar2 = myPane2.AddBar("RecentBar", RecentPoint2, Color.Purple);
+             BarItem RecentBar2 = myPane2.AddBar("RecentBar", RecentPoint2, Color.Red);
              RecentBar2.Bar.Fill = new Fill(Color.Red);
              RecentBar2.Bar.Border = new Border(Color.Red, 2.0F);
        
-             BarItem curve2 = myPane2.AddBar("Counts (Avg ten)", list2, Color.Black/*, SymbolType.None*/);
-             curve2.Bar.Fill = new Fill(Color.Black);
-             curve2.Bar.Border = new Border(Color.Black, 1.0F);
+             BarItem curve2 = myPane2.AddBar("Counts (Avg ten)", list2, Color.White/*, SymbolType.None*/);
+             curve2.Bar.Fill = new Fill(Color.White);
+             curve2.Bar.Border = new Border(Color.White, 1.0F);
 
-             BarItem tempcurve2 = myPane2.AddBar("Average Counts", templist2, Color.Black);
-             tempcurve2.Bar.Fill = new Fill(Color.Black);
-             tempcurve2.Bar.Border = new Border(Color.Black, 1.0F);
+             BarItem tempcurve2 = myPane2.AddBar("Average Counts", templist2, Color.White);
+             tempcurve2.Bar.Fill = new Fill(Color.White);
+             tempcurve2.Bar.Border = new Border(Color.White, 1.0F);
  
 
 
@@ -397,7 +399,8 @@ namespace Graph_practice_2_Rolling_data
             {
                 savelist2.RemoveRange(0, Convert.ToInt32(savelist2.LongCount() - 30000));
             }
-            Console.WriteLine("List 1 length = {0}", list1.LongCount());
+
+            Console.WriteLine("Size of buffer = {0}", UART_Buffer.Length);
         }
 
 
@@ -834,6 +837,8 @@ namespace Graph_practice_2_Rolling_data
             AverageIndex2 = 1;
             list1.Clear();
             list2.Clear();
+            templist1.Clear();
+            templist2.Clear();
             Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
             COPY_POS = 0;
             CreateGraph(zgc);

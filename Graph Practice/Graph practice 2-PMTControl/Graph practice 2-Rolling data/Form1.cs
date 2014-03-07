@@ -29,7 +29,6 @@ namespace Graph_practice_2_Rolling_data
         int PreviousScreenRemainder1 = 0;
         int AverageIndex1 = 1;
         int AverageChunkSize1 = 50;
-        int FilterIndex1 = 0;
 
         double Average2;
         int SumProcessedBytes2=0;
@@ -68,6 +67,10 @@ namespace Graph_practice_2_Rolling_data
         bool IsScrolling;
         bool PastOneScreen1 = false;
         bool PastOneScreen2 = false;
+        bool PMT1_pane1=true;
+        bool PMT2_pane1=true;
+        bool PMT1_pane2=true;
+        bool PMT2_pane2=true;
 
         byte[] TimebinFactor =new byte[1]; 
         
@@ -83,8 +86,6 @@ namespace Graph_practice_2_Rolling_data
         PointPairList list2 = new PointPairList();
         PointPairList RecentPoint1 = new PointPairList();
         PointPairList RecentPoint2 = new PointPairList();
-        double[] X;
-        double[] Y;
 
         //byte arrays
         byte[] SimulatedBytes = new byte [10];
@@ -103,7 +104,6 @@ namespace Graph_practice_2_Rolling_data
         {
             InitializeComponent();
             TimebinFactor[0] = 1;
-            
         }
 
 
@@ -136,9 +136,9 @@ namespace Graph_practice_2_Rolling_data
             myPane1.Chart.Fill = new Fill(Color.Black);
             myPane2.Chart.Fill = new Fill(Color.Black);
             myPane1.Title.Text = "myPane1";
-            myPane1.Title.FontSpec.Size = 12F;
+            //myPane1.Title.FontSpec.Size = 12F;
             myPane2.Title.Text = "myPane2";
-            myPane2.Title.FontSpec.Size = 12F;
+           // myPane2.Title.FontSpec.Size = 12F;
 
 
             if (IsScrolling)
@@ -156,13 +156,12 @@ namespace Graph_practice_2_Rolling_data
             RecentBar2.Bar.Border = new Border(Color.Red, 10.0F);
 
 
-
-            LineItem curve = myPane1.AddCurve("Average Counts", list1, Color.White, SymbolType.None);
-            curve.Line.Fill = new Fill (Color.White);
+            BarItem curve = myPane1.AddBar("Average Counts", list1, Color.White);
+            curve.Bar.Border = new Border(Color.White, 1.0F);
 
             BarItem curve2 = myPane2.AddBar("Counts (Avg ten)", list2, Color.White);
             curve2.Bar.Border = new Border(Color.White, 1.0F);
-            
+
 
 
             //Timer fort the X axis, defined later
@@ -185,36 +184,34 @@ namespace Graph_practice_2_Rolling_data
                 SetYAxis1();
                 SetYAxis2();
             }
-
+            
 
             //Save begging time for reference
             tickStart = Environment.TickCount;
 
             Console.WriteLine("Create Graph");
+           
+            
 
-
-            zgc.Invalidate();
         }
 
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
-          
            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
 
            zgc.AxisChange();
-           //Console.WriteLine("Length of X{0}", X.Length);
-
+           SetSize();
 
            if (LHSPane.Checked && !RHSPane.Checked)
             {
                 RectangleF zero_rect2 = new RectangleF(Convert.ToInt16(XMax2), 0F, 0F, 0F);
                 myPane2.ReSize(this.CreateGraphics(), zero_rect2);
                 myPane1.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
-                myPane1.XAxis.Scale.FontSpec.Size = 5.0F;
-                myPane1.YAxis.Scale.FontSpec.Size = 5.0F;
-                myPane1.Title.FontSpec.Size = 6.0F;
+                myPane1.XAxis.Scale.FontSpec.Size = 9.0F;
+                myPane1.YAxis.Scale.FontSpec.Size = 9.0F;
+                myPane1.Title.FontSpec.Size = 9.0F;
 
 
             }
@@ -223,16 +220,15 @@ namespace Graph_practice_2_Rolling_data
                 RectangleF zero_rect1 = new RectangleF(0F, 0F, 0F, 0F);
                 myPane1.ReSize(this.CreateGraphics(), zero_rect1);
                 myPane2.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
-                myPane2.XAxis.Scale.FontSpec.Size = 5.0F;
-                myPane2.YAxis.Scale.FontSpec.Size = 5.0F;
-                myPane2.Title.FontSpec.Size = 6.0F;
+                myPane2.XAxis.Scale.FontSpec.Size = 9.0F;
+                myPane2.YAxis.Scale.FontSpec.Size = 9.0F;
+                myPane2.Title.FontSpec.Size = 9.0F;
                
             }
             else
             {
-
-                RectangleF panerect1 = new RectangleF(0F, 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
-                RectangleF panerect2 = new RectangleF((zgc.ClientSize.Width / 2), 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
+                RectangleF panerect1 = new RectangleF(0F,0F, (zgc.ClientSize.Width/2),(zgc.ClientSize.Height));
+                RectangleF panerect2 = new RectangleF((zgc.ClientSize.Width / 2), 0F, (zgc.ClientSize.Width/2), (zgc.ClientSize.Height));
                 myPane2.XAxis.Scale.FontSpec.Size = 10.0F;
                 myPane2.YAxis.Scale.FontSpec.Size = 10.0F;
                 myPane2.Title.FontSpec.Size = 12.0F;
@@ -242,14 +238,12 @@ namespace Graph_practice_2_Rolling_data
 
                 myPane1.ReSize(this.CreateGraphics(), panerect1);
                 myPane2.ReSize(this.CreateGraphics(), panerect2);
-                Console.WriteLine("Pane1 width = {0}", myPane1.Rect.Width);
-                Console.WriteLine("Pane2 Left = {0}", myPane2.Rect.Left);
+
             }
-            SetSize();
+            
             SetXAxis1();
             SetXAxis2();
-            
-            
+
            /* Point XMax_Pane = new Point(1, 0);
             Point origin = new Point(0, 0);
             Point endchart = new Point(1, 0);*/
@@ -264,19 +258,20 @@ namespace Graph_practice_2_Rolling_data
             }
             else
             {
-                //l++;
-               // SimulatedBytes[l % 10] = Convert.ToByte(slider);
-
-
-               // if (l % 10 == 9) //Only reads and plots once every 10 ticks
+               /* l++;
+                if (l % 2 == 0)
+                {
+                    SimulatedBytes[l % 10] = Convert.ToByte(slider);
+                }
+                else if (l % 2 == 1)
+                {
+                    SimulatedBytes[l % 10] = Convert.ToByte(0);
+                }
+                if (l % 10 == 9) //Only reads and plots once every 10 ticks*/
                 {
 
                     UART_Buffer = FPGA.ReadBytes();
 
-                   
-
-
-                    
                     // Ensures there's at least one curve in GraphPane
                     if (zgc.GraphPane.CurveList.Count <= 0)
                         return;
@@ -285,7 +280,6 @@ namespace Graph_practice_2_Rolling_data
                    // LineItem curve2 = myPane2.CurveList[0] as LineItem;
                     /*if (curve1 == null || curve2==null)
                         return;*/
-
 
                     // If list is null then reference at curve.Points doesn't
                     // support IPointPairList and can't be modified
@@ -296,15 +290,12 @@ namespace Graph_practice_2_Rolling_data
 
                     if (templist2 == null || templist1 == null)
                     {
-                        
                         return;
                     }
 
                     // Think this gives time in milliseconds
                     double time = (Environment.TickCount - tickStart) / 1000.0;
 
-
-                   
                     Scale xScale = myPane1.XAxis.Scale;
                     Scale xScale2 = myPane2.XAxis.Scale;
 
@@ -315,7 +306,6 @@ namespace Graph_practice_2_Rolling_data
                         {
                             xScale.Max = time1 + xScale.MajorStep; //Keep the end of x axis MajorStep (5) away from end of curve
                             xScale.Min = xScale.Max - XMax1;   ////Increase min values of x axis acordingly
-
                         }
 
                         if (time2 > xScale2.Max - xScale.MajorStep)
@@ -331,7 +321,7 @@ namespace Graph_practice_2_Rolling_data
                     {
                         zgc.AxisChange();
                     }
-                    
+                    zgc.Invalidate();
                    
                     //Remaining spaces in ScreenBuffer
                     int Diff = ScreenBuffer.Length - COPY_POS;
@@ -364,7 +354,7 @@ namespace Graph_practice_2_Rolling_data
                             SumProcessedBytes1 = 0;  //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2 loop
                             
                         }
-                        
+
                     }
 
                     //Not enough room at end of ScreenBuffer for whole UART bufferload
@@ -376,15 +366,11 @@ namespace Graph_practice_2_Rolling_data
                         // at the begining of the ScreenBuffer next 'tick'
                         Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, ScreenBuffer.Length - COPY_POS);
 
-                      
-
                         // Different averaging function, 'AverageScreenFilled', used when ScreenBuffer is filled so that no values 
                         // are left out of averaging. i.e. those at end of ScreenBuffer that don't make up an entire AverageChunkSize
                         AverageScreenFilled2();
 
-
                         AverageScreenFilled1();
-
 
                         // Indexes set to one so that next timer tick averaging begins at start of ScreenBuffer (most recent values)
                         AverageIndex2 = 1;
@@ -418,8 +404,7 @@ namespace Graph_practice_2_Rolling_data
                 savelist2.RemoveRange(0, Convert.ToInt32(savelist2.LongCount() - 30000));
             }
 
-            Console.WriteLine("Size of buffer = {0}", UART_Buffer.Length);
-
+            //Console.WriteLine("Size of buffer = {0}", UART_Buffer.Length);
         }
 
 //Below are functions which have been outsourced for clarity in main code (above)
@@ -428,7 +413,6 @@ namespace Graph_practice_2_Rolling_data
         //Used to set size and location of the graph
         private void SetSize()
         {
-
             Rectangle formRect = this.ClientRectangle;
             Rectangle formRect2 = new Rectangle(this.ClientRectangle.Location.X, this.ClientRectangle.Location.Y, this.ClientRectangle.Size.Width-1, this.ClientRectangle.Size.Height-1);
             formRect2.Inflate(0,-43);
@@ -448,25 +432,22 @@ namespace Graph_practice_2_Rolling_data
             Point XMax_Pane = new Point(1, 0);
             Point origin = new Point(0, 0);
             Point endchart = new Point(1, 0);
-            if (LHSPane.Checked || (!LHSPane.Checked && !RHSPane.Checked))
+            if (LHSPane.Checked||(!LHSPane.Checked && !RHSPane.Checked))
             {
                 myPane1.XAxis.Scale.Max = Convert.ToDouble((myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane1.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
             }
-
 
             myPane1.XAxis.Scale.Min = XMin1;
             XMax1 = myPane1.XAxis.Scale.Max;
             myPane1.XAxis.Scale.MinorStep = XMax1 / 100;
             myPane1.XAxis.Scale.MajorStep = XMax1 / 10;
-            
-           
+
             zgc.AxisChange();
         }
-
+        
         // Function to set X Axis on myPane2
         private void SetXAxis2()
         {
-         
                 zgc.AxisChange();
                 GraphPane myPane2 = zgc.MasterPane.PaneList[1];
                 Point XMax_Pane = new Point(1, 0);
@@ -474,7 +455,7 @@ namespace Graph_practice_2_Rolling_data
                 Point endchart = new Point(1, 0);
                 // Console.WriteLine("*origin point is {0}", myPane2.GeneralTransform(origin, CoordType.ChartFraction).X);
                 // Console.WriteLine("*XMax point is {0}", myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
-                if (RHSPane.Checked || (!LHSPane.Checked && !RHSPane.Checked))
+                if (RHSPane.Checked||(!LHSPane.Checked && !RHSPane.Checked))
                 {
                     myPane2.XAxis.Scale.Max = Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue2);
                 }
@@ -1004,7 +985,7 @@ namespace Graph_practice_2_Rolling_data
         // from scratch with new average
         void AvChunkSize1_ValueChanged(object sender, System.EventArgs e)
         {
-            AverageChunkSize1 = Convert.ToInt32(Math.Round(Convert.ToDouble(AvChunkSize1.Value) * 10.0));
+            AverageChunkSize1 = Convert.ToInt16(Math.Round(Convert.ToDouble(AvChunkSize1.Value)*10.0/TimebinFactor[0]));
             FreshScreen();
         }
        
@@ -1012,7 +993,7 @@ namespace Graph_practice_2_Rolling_data
         // Same as above but for myPane2
         void AvChunkSize2_ValueChanged(object sender, System.EventArgs e)
         {
-            AverageChunkSize2 = Convert.ToInt32(Math.Round(Convert.ToDouble(AvChunkSize2.Value) * 10.0));
+            AverageChunkSize2 = Convert.ToInt16(Math.Round(Convert.ToDouble(AvChunkSize2.Value) * 10.0 / TimebinFactor[0]));
             FreshScreen();
         }
 
@@ -1022,21 +1003,54 @@ namespace Graph_practice_2_Rolling_data
             // Two values must be return so function returns an array
            
             int[] Properties = new int[2];
-            int SumChunk = SumProcessedBytes1;//Running total carried over from end of previous ScreenBuffer
+            int SumChunkEven = 0;//Running total carried over from end of previous ScreenBuffer
+            int SumChunkOdd = 0;
 
             if (AverageIndex1 == 1) //Ensures first value of i in for loop is not negative as it would be if set to (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2 and AverageIndex2=1 (as it is in if loop below
             {
                 for (int i = 0; i < AverageIndex1 * AverageChunkSize1 - PreviousScreenRemainder1; i++) //Sums first values of new buffer
                 {
-                    SumChunk += Convert.ToInt32(ScreenBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumChunkEven += Convert.ToInt16(ScreenBuffer[i]);
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumChunkOdd += Convert.ToInt16(ScreenBuffer[i]);
+                    }
                 }
-                if (SumVsAv.Checked == false)
+                if (PMT1_pane1)
                 {
-                    Average1 = SumChunk / (AverageChunkSize1*TimebinFactor[0]);
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = (SumChunkEven +SumProcessedBytes1)/ (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = (SumChunkEven +SumProcessedBytes1)/ TimebinFactor[0];
+                    }
                 }
-                else if (SumVsAv.Checked == true)
+                if (PMT2_pane1)
                 {
-                    Average1 = SumChunk / TimebinFactor[0];
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = (SumChunkOdd+SumProcessedBytes1) / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = (SumChunkOdd +SumProcessedBytes1)/ TimebinFactor[0];
+                    }
+                }
+                if (PMT1_pane1&&PMT2_pane1)
+                {
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = (SumChunkEven+SumChunkOdd+SumProcessedBytes1) / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1) / TimebinFactor[0];
+                    }
                 }
                 if (!IsScrolling)
                 {
@@ -1046,7 +1060,6 @@ namespace Graph_practice_2_Rolling_data
                         time1 = 0;
                         PastOneScreen1 = true;
                     }
-
 
                      if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
                     {
@@ -1066,29 +1079,8 @@ namespace Graph_practice_2_Rolling_data
                 }
                 
                 list1.Add(time1, Average1);
-              /*  if (time1 == Convert.ToInt32(XMax1 - 1))
-                {
-                    FilterIndex1 = 0;
-                    time1 = 0;
-                }
-              
-                if (time1 > 500 * (FilterIndex1 + 1))
-                {
-                    int i = Convert.ToInt32(list1.LongCount() - 500);
-                    
-                    
+               
 
-                    while (i < list1.LongCount() && i >= list1.LongCount() - 500)
-                    {
-                        list1.RemoveRange(i, 9);
-                        i += 11;
-
-                    }
-
-                    FilterIndex1++;
-
-                }
-                */
                 RecentPoint1.Add(time1,Average1);
                  if (RecentPoint1.LongCount() > 1)
                  {
@@ -1096,14 +1088,12 @@ namespace Graph_practice_2_Rolling_data
                  }
 
                 zgc.Invalidate();
-                /* GraphPane myPane1 = zgc.MasterPane.PaneList[0];
-                 Rectangle RectToInvalidate = new Rectangle(Convert.ToInt32(myPane1.GeneralTransform(Convert.ToDouble(time1 - 1), 300, CoordType.AxisXYScale).X), Convert.ToInt32(myPane1.GeneralTransform(Convert.ToDouble(time1 - 1), 300, CoordType.AxisXYScale).Y), 1, 500);
-                 zgc.Invalidate(RectToInvalidate);*/
 
                 time1 += 1;// TimebinFactor[0] * AverageChunkSize1;
     
                 AverageIndex1++;
-                SumChunk = 0;
+                SumChunkEven = 0;
+                SumChunkOdd = 0;
        
             }
             while (AverageIndex1 * AverageChunkSize1 - PreviousScreenRemainder1 < COPY_POS) // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize', 
@@ -1111,15 +1101,47 @@ namespace Graph_practice_2_Rolling_data
             {
                 for (int i = (AverageIndex1 - 1) * AverageChunkSize1 - PreviousScreenRemainder1; i < AverageIndex1 * AverageChunkSize1 - PreviousScreenRemainder1; i++) //Sums a chunk from middle of array
                 {
-                    SumChunk += Convert.ToInt32(ScreenBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumChunkEven += Convert.ToInt16(ScreenBuffer[i]);
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumChunkOdd += Convert.ToInt16(ScreenBuffer[i]);
+                    }
                 }
-                if (SumVsAv.Checked == false)
+                if (PMT1_pane1)
                 {
-                    Average1 = SumChunk / (AverageChunkSize1 * TimebinFactor[0]);
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = SumChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = SumChunkEven / TimebinFactor[0];
+                    }
                 }
-                else if (SumVsAv.Checked == true)
+                if (PMT2_pane1)
                 {
-                    Average1 = SumChunk / TimebinFactor[0];
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = SumChunkOdd / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = SumChunkOdd / TimebinFactor[0];
+                    }
+                }
+                if (PMT1_pane1 && PMT2_pane1)
+                {
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = (SumChunkEven + SumChunkOdd) / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = (SumChunkEven + SumChunkOdd) / TimebinFactor[0];
+                    }
                 }
                 if (!IsScrolling)
                 {
@@ -1148,29 +1170,7 @@ namespace Graph_practice_2_Rolling_data
                 }
 
                 list1.Add(time1, Average1);
-                 /*  if (time1==Convert.ToInt32(XMax1-1))
-                   {
-                       FilterIndex1 = 0;
-                       time1 = 0;
-                   }
-                  
-                   if (time1 > 500 * (FilterIndex1 + 1))
-                   {
-                       int i = Convert.ToInt32(list1.LongCount() - 500);
-                      
-                       
 
-                       while (i < list1.LongCount() && i >= list1.LongCount() - 500)
-                       {
-                           
-                           list1.RemoveRange(i, 9);
-                           i += 11;
-
-                       }
-
-                       FilterIndex1++;
-
-                   }*/
                 RecentPoint1.Add(time1, Average1);
                 if (RecentPoint1.LongCount() > 1)
                 {
@@ -1178,13 +1178,12 @@ namespace Graph_practice_2_Rolling_data
                 }
 
                 zgc.Invalidate();
-                /*GraphPane myPane1 = zgc.MasterPane.PaneList[0];
-                Rectangle RectToInvalidate = new Rectangle(Convert.ToInt32(myPane1.GeneralTransform(Convert.ToDouble(time1 - 1), 300, CoordType.AxisXYScale).X), Convert.ToInt32(myPane1.GeneralTransform(Convert.ToDouble(time1 - 10), 300, CoordType.AxisXYScale).Y), 1, 500);
-                zgc.Invalidate(RectToInvalidate);
-                */
+
+
                 time1 += 1;// TimebinFactor[0] * AverageChunkSize1;
                 AverageIndex1++; // Average index hold placed of where to start averaging from. 
-                SumChunk = 0;
+                SumChunkEven = 0;
+                SumChunkOdd = 0;
                 //Console.WriteLine(zgc.MasterPane.PaneList[0].CurveList.Count());
   
             }
@@ -1197,8 +1196,14 @@ namespace Graph_practice_2_Rolling_data
 
 
 
-            int SumScreenRemainder = 0;
-            int SumEndChunk = 0;
+            int SumProcessedBytesEven = 0;
+            int SumProcessedBytesOdd = 0;
+            int PreviousScreenRemainderEven = 0;
+            int PreviousScreenRemainderOdd = 0;
+            //int SumProcessedBytesEven = 0;
+           // int SumProcessedBytesOdd = 0;
+            int SumEndChunkOdd = 0;
+            int SumEndChunkEven = 0;
 
             // Ensures averages are plotted if more than AverageChunkSize of array is yet to be averaged
             // Then sums remaining bytes to be carried over into next loop
@@ -1208,16 +1213,47 @@ namespace Graph_practice_2_Rolling_data
 
                 for (int i = (AverageIndex1 - 1) * AverageChunkSize1 - PreviousScreenRemainder1; i < AverageChunkSize1 * AverageIndex1 - PreviousScreenRemainder1; i++)
                 {
-                    SumEndChunk += Convert.ToInt32(ScreenBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumEndChunkEven += Convert.ToInt16(ScreenBuffer[i]);
+                    }
+                    else if (i % 2 ==1)
+                    {
+                        SumEndChunkOdd += Convert.ToInt16(ScreenBuffer[i]);
+                    }
                 }
-
-                if (SumVsAv.Checked == false)
+                if (PMT1_pane1)
                 {
-                    Average1 = SumEndChunk / (AverageChunkSize1 * TimebinFactor[0]);
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = SumEndChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = SumEndChunkEven / TimebinFactor[0];
+                    }
                 }
-                else if (SumVsAv.Checked == true)
+                if (PMT2_pane1)
                 {
-                    Average1 = SumEndChunk / TimebinFactor[0];
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = SumEndChunkOdd / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = SumEndChunkOdd / TimebinFactor[0];
+                    }
+                }
+                if (PMT1_pane1 && PMT2_pane1)
+                {
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average1 = (SumEndChunkEven + SumEndChunkOdd) / (AverageChunkSize1 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average1 = (SumEndChunkEven + SumEndChunkOdd) / TimebinFactor[0];
+                    }
                 }
                 if (!IsScrolling)
                 {
@@ -1246,58 +1282,60 @@ namespace Graph_practice_2_Rolling_data
                 }
                
                 list1.Add(time1, Average1);
-            /*   if (time1==Convert.ToInt32(XMax1-1))
-                {
-                    FilterIndex1 = 0;
-                    time1 = 0;
-                }
-                
-                if (time1 > 500 * (FilterIndex1 + 1))
-                {
-                    int i = Convert.ToInt32(list1.LongCount() - 500);
-                   
-                   
-
-                    while (i < list1.LongCount() && i >= list1.LongCount() - 500)
-                    {
-                       
-                        list1.RemoveRange(i, 9);
-                        i += 11;
-
-                    }
-
-                    FilterIndex1++;
-
-                }*/
+               
                 RecentPoint1.Add(time1, Average1);
 
                 if (RecentPoint1.LongCount() > 1)
                 {
                     RecentPoint1.RemoveAt(0);
                 }
-                
-               zgc.Invalidate();
-                /*GraphPane myPane1 = zgc.MasterPane.PaneList[0];
-                Rectangle RectToInvalidate = new Rectangle(Convert.ToInt32(myPane1.GeneralTransform(Convert.ToDouble(time1 - 1), 300, CoordType.AxisXYScale).X), Convert.ToInt32(myPane1.GeneralTransform(Convert.ToDouble(time1 - 10), 300, CoordType.AxisXYScale).Y), 1, 500);
-                zgc.Invalidate(RectToInvalidate);*/
-              
+
+                zgc.Invalidate();
+
 
                 time1 += 1;// TimebinFactor[0] * AverageChunkSize1;
-                SumEndChunk = 0;
+                SumEndChunkEven = 0;
+                SumEndChunkOdd = 0;
                 AverageIndex1++;
             }
 
 
             for (int i = (AverageIndex1 - 1) * AverageChunkSize1 - PreviousScreenRemainder1; i < ScreenBuffer.Length; i++) // For loop to sum remaining bytes in ScreenBuffer
             {
-                SumScreenRemainder += Convert.ToInt32(ScreenBuffer[i]);
+                if (i % 2 == 0)
+                {
+                    SumProcessedBytesEven += Convert.ToInt32(ScreenBuffer[i]);
+                    PreviousScreenRemainderEven++;
+                }
+                if (i % 2 == 1)
+                {
+                    SumProcessedBytesOdd += Convert.ToInt32(ScreenBuffer[i]);
+                    PreviousScreenRemainderOdd++;
+                }
+                if (PMT1_pane1)
+                {
+                    SumProcessedBytes1 = SumProcessedBytesEven;
+                    PreviousScreenRemainder1 = PreviousScreenRemainderEven;
+                    
+                }
+                else if (PMT2_pane1)
+                {
+                    SumProcessedBytes1 = SumProcessedBytesEven;
+                    PreviousScreenRemainder1=PreviousScreenRemainderOdd;
+                }
+                else if (PMT1_pane1 && PMT2_pane1)
+                {
+                    SumProcessedBytes1 = SumProcessedBytesEven + SumProcessedBytesOdd;
+                    PreviousScreenRemainder1 = PreviousScreenRemainderOdd + PreviousScreenRemainderEven;
+                }
             }
-            PreviousScreenRemainder1 = ScreenBuffer.Length - ((AverageIndex1 - 1) * AverageChunkSize1 - PreviousScreenRemainder1); // Index to acount for how many 'new' bytes need to be added to the sum of the remainder to make up 'AverageChunkSize'
+           // PreviousScreenRemainder1 = ScreenBuffer.Length - ((AverageIndex1 - 1) * AverageChunkSize1 - PreviousScreenRemainder1); // Index to acount for how many 'new' bytes need to be added to the sum of the remainder to make up 'AverageChunkSize'
 
 
 
-            SumProcessedBytes1 = SumScreenRemainder;  // Carries over remainder bytes' sum 
-            SumScreenRemainder = 0;
+             // Carries over remainder bytes' sum 
+            SumProcessedBytesEven = 0;
+            SumProcessedBytesOdd = 0;
 
         }
         // Function to average bytes in ScreenBuffer while it isn't filled (still room for UART_Buffer to be coppied in)
@@ -1306,21 +1344,55 @@ namespace Graph_practice_2_Rolling_data
             // Two values must be return so function returns an array
 
            
-            int SumChunk = SumProcessedBytes2;//Running total carried over from end of previous ScreenBuffer
+            int SumChunkEven = 0;//Running total carried over from end of previous ScreenBuffer
+            int SumChunkOdd = 0;
 
             if (AverageIndex2 == 1) //Ensures first value of i in for loop is not negative as it would be if set to (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2 and AverageIndex2=1 (as it is in if loop below
             {
-                for (int i = 0; i < AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2; i++) //Sums first values of new buffer
+                for (int i = 0; i < (AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2); i++) //Sums first values of new buffer
                 {
-                    SumChunk += Convert.ToInt32(ScreenBuffer[i]);
+                    if (i%2==0)
+                    {
+                        SumChunkEven += Convert.ToInt32(ScreenBuffer[i]);
+                    }
+                    else if (i%2==1)
+                    {
+                        SumChunkOdd += Convert.ToInt32(ScreenBuffer[i]);
+                    }
                 }
-                if (SumVsAv.Checked == false)
+                if (PMT1_pane2)
                 {
-                    Average2 = SumChunk / (AverageChunkSize2 * TimebinFactor[0]);
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = (SumChunkEven+SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = (SumChunkEven + SumProcessedBytes2) / TimebinFactor[0];
+                    }
                 }
-                else if (SumVsAv.Checked == true)
+                if (PMT2_pane2)
                 {
-                    Average2 = SumChunk / TimebinFactor[0];
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = (SumChunkOdd + SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = (SumChunkOdd + SumProcessedBytes2) / TimebinFactor[0];
+                    }
+                }
+                if(PMT1_pane2&&PMT2_pane2)
+                {
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = (SumChunkOdd + SumChunkEven+SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
+                        Console.WriteLine("Goes into 'both' if");
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = (SumChunkOdd + SumChunkEven+SumProcessedBytes2) / TimebinFactor[0];
+                    }
                 }
                 if (!IsScrolling)
                 {
@@ -1361,23 +1433,58 @@ namespace Graph_practice_2_Rolling_data
                 time2 += 1;// TimebinFactor[0] * AverageChunkSize;
 
                 AverageIndex2++;
-                SumChunk = 0;
+                SumChunkEven = 0;
+                SumChunkOdd = 0;
                 
             }
             while (AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2 < COPY_POS) // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize', 
             // at this point requique new UART_Buffer to be coppied into ScreenBuffer
             {
-                for (int i = (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2; i < AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2; i++) //Sums a chunk from middle of array
+                for (int i = ((AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2); i < (AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2); i++) //Sums a chunk from middle of array
                 {
-                    SumChunk += Convert.ToInt32(ScreenBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumChunkEven += Convert.ToInt32(ScreenBuffer[i]);
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumChunkOdd += Convert.ToInt32(ScreenBuffer[i]);
+                    }
+
                 }
-                if (SumVsAv.Checked == false)
+                if (PMT1_pane2)
                 {
-                    Average2 = SumChunk / (AverageChunkSize2 * TimebinFactor[0]);
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = SumChunkEven / (AverageChunkSize2 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = SumChunkEven / TimebinFactor[0];
+                    }
                 }
-                else if (SumVsAv.Checked == true)
+                if (PMT2_pane2)
                 {
-                    Average2 = SumChunk / TimebinFactor[0];
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = SumChunkOdd / (AverageChunkSize2 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = SumChunkOdd / TimebinFactor[0];
+                    }
+                }
+                if(PMT1_pane2&&PMT2_pane2)
+                {
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = (SumChunkOdd + SumChunkEven) / (AverageChunkSize2 * TimebinFactor[0]);
+                        Console.WriteLine("Goes into 'both' if");
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = (100) / TimebinFactor[0];
+                    }
                 }
                 if (!IsScrolling)
                 {
@@ -1418,7 +1525,8 @@ namespace Graph_practice_2_Rolling_data
 
                 time2 += 1;// TimebinFactor[0] * AverageChunkSize;
                 AverageIndex2++; // Average index hold placed of where to start averaging from. 
-                SumChunk = 0;
+                SumChunkEven = 0;
+                SumChunkOdd = 0;
                
             }
 
@@ -1431,8 +1539,12 @@ namespace Graph_practice_2_Rolling_data
            
             int[] FilledProperties = new int[3];
 
-            int SumScreenRemainder=0;
-            int SumEndChunk = 0;
+            int SumProcessedBytesEven=0;
+            int SumProcessedBytesOdd = 0;
+            int PreviousScreenRemainderEven = 0;
+            int PreviousScreenRemainderOdd = 0;
+            int SumEndChunkEven = 0;
+            int SumEndChunkOdd = 0;
             
             // Ensures averages are plotted if more than AverageChunkSize of array is yet to be averaged
             // Then sums remaining bytes to be carried over into next loop
@@ -1440,18 +1552,50 @@ namespace Graph_practice_2_Rolling_data
             while(ScreenBuffer.Length-((AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2) > AverageChunkSize2) // Same while loop as above function to average remaining bytes that can make up an 'AverageChunkSize'
             {
                 
-                for (int i = (AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2; i < AverageChunkSize2 * AverageIndex2 - PreviousScreenRemainder2; i++)
+                for (int i = ((AverageIndex2 - 1) * AverageChunkSize2 - PreviousScreenRemainder2); i < (AverageChunkSize2 * AverageIndex2 - PreviousScreenRemainder2); i++)
                 {
-                    SumEndChunk += Convert.ToInt32(ScreenBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumEndChunkEven += Convert.ToInt32(ScreenBuffer[i]);
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumEndChunkOdd += Convert.ToInt32(ScreenBuffer[i]);
+                    }
                 }
-
-                if (SumVsAv.Checked == false)
+                if (PMT1_pane2)
                 {
-                    Average2 = SumEndChunk / (AverageChunkSize2 * TimebinFactor[0]);
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = SumEndChunkEven / (AverageChunkSize2 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = SumEndChunkEven / TimebinFactor[0];
+                    }
                 }
-                else if (SumVsAv.Checked == true)
+                if (PMT2_pane2)
                 {
-                    Average2 = SumEndChunk / TimebinFactor[0];
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = SumEndChunkOdd / (AverageChunkSize2 * TimebinFactor[0]);
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = SumEndChunkOdd / TimebinFactor[0];
+                    }
+                }
+                if(PMT1_pane2&&PMT2_pane2)
+                {
+                    if (SumVsAv.Checked == false)
+                    {
+                        Average2 = (SumEndChunkOdd + SumEndChunkEven) / (AverageChunkSize2 * TimebinFactor[0]);
+                        Console.WriteLine("Goes into 'both' if");
+                    }
+                    else if (SumVsAv.Checked == true)
+                    {
+                        Average2 = (100) / TimebinFactor[0];
+                    }
                 }
                 if (!IsScrolling)
                 {
@@ -1491,20 +1635,46 @@ namespace Graph_practice_2_Rolling_data
                 zgc.Invalidate();
                 
                 time2 += 1;//TimebinFactor[0] * AverageChunkSize;
-                SumEndChunk = 0;
+                SumEndChunkEven = 0;
+                SumEndChunkOdd = 0;
                 AverageIndex2++;
             }
 
-                for (int i = (AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2; i < ScreenBuffer.Length; i++) // For loop to sum remaining bytes in ScreenBuffer
+                for (int i = ((AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2); i < ScreenBuffer.Length; i++) // For loop to sum remaining bytes in ScreenBuffer
                 {
-                    SumScreenRemainder += Convert.ToInt32(ScreenBuffer[i]);
-                }
-                PreviousScreenRemainder2 = ScreenBuffer.Length - ((AverageIndex2-1) * AverageChunkSize2 - PreviousScreenRemainder2); // Index to acount for how many 'new' bytes need to be added to the sum of the remainder to make up 'AverageChunkSize'
-               
-            
+                    if (i % 2 == 0)
+                    {
+                        SumProcessedBytesEven += Convert.ToInt32(ScreenBuffer[i]);
+                        PreviousScreenRemainderEven++;
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumProcessedBytesOdd += Convert.ToInt32(ScreenBuffer[i]);
+                        PreviousScreenRemainderOdd++;
+                    }
 
-            SumProcessedBytes2 = SumScreenRemainder;  // Carries over remainder bytes' sum 
-            SumScreenRemainder = 0;
+                    if (PMT1_pane2)
+                    {
+                        SumProcessedBytes2 = SumProcessedBytesEven;
+                        PreviousScreenRemainder2 = PreviousScreenRemainderEven;
+                    }
+                    if (PMT2_pane2)
+                    {
+                        SumProcessedBytes2 = SumProcessedBytesOdd;
+                        PreviousScreenRemainder2=PreviousScreenRemainderOdd;
+                    }
+                    if(PMT1_pane2&&PMT2_pane2)
+                    {
+                        SumProcessedBytes2 = SumProcessedBytesOdd + SumProcessedBytesEven;
+                        Console.WriteLine("Goes into 'both' if");
+                        PreviousScreenRemainder2 = PreviousScreenRemainderOdd + PreviousScreenRemainderEven;
+                    }
+                }
+                
+
+               // Carries over remainder bytes' sum 
+            SumProcessedBytesOdd = 0;
+            SumProcessedBytesEven = 0;
 
         }
 
@@ -1545,6 +1715,46 @@ namespace Graph_practice_2_Rolling_data
 
         }
 
+        private void PMTSelectLHS_ValueChanged(object sender, EventArgs e)
+        {
+            if (PMTSelectLHS.Text=="PMT1")
+            {
+                PMT1_pane1 = true;
+                PMT2_pane1 = false;
+            }
+            else if (PMTSelectLHS.Text == "PMT2")
+            {
+                PMT1_pane1 = false;
+                PMT2_pane1 = true;
+            }
+            else if (PMTSelectLHS.Text == "Both")
+            {
+                PMT1_pane1 = true;
+                PMT2_pane1 = true;
+            }
+            FreshScreen();
+
+        }
+        private void PMTSelectRHS_ValueChanged(object sender, EventArgs e)
+        {
+            if (PMTSelectRHS.Text == "PMT1")
+            {
+                PMT1_pane2 = true;
+                PMT2_pane2 = false;
+            }
+            else if (PMTSelectRHS.Text == "PMT2")
+            {
+                PMT1_pane2 = false;
+                PMT2_pane2 = true;
+            }
+            else if (PMTSelectRHS.Text == "Both")
+            {
+                PMT1_pane2 = true;
+                PMT2_pane2 = true;
+            }
+            FreshScreen();
+
+        }
 
 
     }       

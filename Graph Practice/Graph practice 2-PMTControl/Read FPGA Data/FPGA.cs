@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Graph_practice_2_Rolling_data
+namespace Read_FPGA_Data
 {
     /// <summary>
     /// Class that provides access to FPGA through USB port. Uses methods within FPGAController.dll library.
@@ -51,7 +51,7 @@ namespace Graph_practice_2_Rolling_data
                 return false;
             }
 
-            S = USBPort.SetBaudRate(230400);
+            S = USBPort.SetBaudRate(9600);
             if (S != FTDI.FT_STATUS.FT_OK)
             {
                 Console.WriteLine("Baud Rate Not Ok");
@@ -79,12 +79,9 @@ namespace Graph_practice_2_Rolling_data
                 return false;
             }
 
-           bUSBPortIsOpen = true; 
+            bUSBPortIsOpen = true;
             
-           if(bUSBPortIsOpen)
-           {
-               Console.WriteLine("Device Open");
-           }
+            //ResetDevice(0);
 
             return true;
         }

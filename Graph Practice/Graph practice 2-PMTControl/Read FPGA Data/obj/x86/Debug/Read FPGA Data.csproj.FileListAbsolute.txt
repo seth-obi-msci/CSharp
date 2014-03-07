@@ -1,0 +1,4 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Read FPGA Data\Read FPGA Data\bin\Debug\Read FPGA Data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Read FPGA Data\Read FPGA Data\bin\Debug\Read FPGA Data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Read FPGA Data\Read FPGA Data\obj\x86\Debug\Read FPGA Data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Read FPGA Data\Read FPGA Data\obj\x86\Debug\Read FPGA Data.pdb

@@ -72,6 +72,8 @@ namespace Graph_practice_2_Rolling_data
         bool PMT1_pane2=true;
         bool PMT2_pane2=true;
 
+        int SaveListIndex1 = 0;
+
         byte[] TimebinFactor =new byte[1]; 
         
 
@@ -86,6 +88,8 @@ namespace Graph_practice_2_Rolling_data
         PointPairList list2 = new PointPairList();
         PointPairList RecentPoint1 = new PointPairList();
         PointPairList RecentPoint2 = new PointPairList();
+
+        PointPairList PlotList1 = new PointPairList();
 
         //byte arrays
         byte[] SimulatedBytes = new byte [10];
@@ -156,7 +160,7 @@ namespace Graph_practice_2_Rolling_data
             RecentBar2.Bar.Border = new Border(Color.Red, 10.0F);
 
 
-            BarItem curve = myPane1.AddBar("Average Counts", list1, Color.White);
+            BarItem curve = myPane1.AddBar("Average Counts", PlotList1, Color.White);
             curve.Bar.Border = new Border(Color.White, 1.0F);
 
             BarItem curve2 = myPane2.AddBar("Counts (Avg ten)", list2, Color.White);
@@ -200,7 +204,7 @@ namespace Graph_practice_2_Rolling_data
         {
            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
-
+           
            zgc.AxisChange();
            SetSize();
 
@@ -387,13 +391,13 @@ namespace Graph_practice_2_Rolling_data
                     
                 }
             }
-            if (list1.LongCount() > 30000)
+            if (list1.LongCount() > 2500)
             {
-                list1.RemoveRange(0, Convert.ToInt32(list1.LongCount() - 30000));
+                list1.RemoveRange(0, Convert.ToInt32(list1.LongCount() - 2500));
             }
-            if (list2.LongCount() > 30000)
+            if (list2.LongCount() > 2500)
             {
-                list2.RemoveRange(0, Convert.ToInt32(list2.LongCount() - 30000));
+                list2.RemoveRange(0, Convert.ToInt32(list2.LongCount() - 2500));
             }
             if (savelist1.LongCount() > 30000)
             {
@@ -554,7 +558,7 @@ namespace Graph_practice_2_Rolling_data
             File.AppendAllText(FileLocation, MetaData(1)[4] + "\r\n");
 
             double[] SaveArray = list.Select(P => P.Y).ToArray();
-            Console.WriteLine("Size of SvarArray {0}", SaveArray.Length);
+            Console.WriteLine("Size of SaveArray {0}", SaveArray.Length);
 
           
             //  Stop = true;
@@ -829,20 +833,22 @@ namespace Graph_practice_2_Rolling_data
         }
         private void FreshScreen()
         {
-            SumProcessedBytes1 = 0;
+           /* SumProcessedBytes1 = 0;
             SumProcessedBytes2 = 0;
             PreviousScreenRemainder1 = 0;
             PreviousScreenRemainder2 = 0;
             AverageIndex1 = 1;
-            AverageIndex2 = 1;
+            AverageIndex2 = 1;*/
+            PlotList1.Clear();
             list1.Clear();
             list2.Clear();
             templist1.Clear();
             templist2.Clear();
-            Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
-            COPY_POS = 0;
+            //Array.Clear(ScreenBuffer, 0, ScreenBuffer.Length);
+            //COPY_POS = 0;
             PastOneScreen1 = false;
             PastOneScreen2 = false;
+            //SaveListIndex1 = 0;
             CreateGraph(zgc);
         }
         
@@ -902,29 +908,58 @@ namespace Graph_practice_2_Rolling_data
         {
             if (ZoomIn.Checked)
             {
-                XScale1.Maximum = 100;
                 XScaleValue1 =Convert.ToDouble( 1 / XScale1.Value);
+                SetXAxis1(); 
                 BarItem curve = zgc.MasterPane.PaneList[0].CurveList[1] as BarItem;
                 curve.Bar.Border.Width = (float)(XScale1.Value);
                 BarItem RecentBar1 = zgc.MasterPane.PaneList[0].CurveList[0] as BarItem;
                 RecentBar1.Bar.Border.Width = (float)(XScale1.Value);
+            }
+            else if (!ZoomIn.Checked&&IsScrolling)
+            {
+                XScaleValue1 =Convert.ToDouble(XScale1.Value);
+                SetXAxis1(); 
+                PlotList1.Clear();
+                //savelist1.LongCount();
+                //savelist1.LongCount() - (XMax1 - XMin1)+XMax1/10;
+                //Console.WriteLine("if sensitivity = {0}", Convert.ToInt32(savelist1.LongCount() - XMax1 + XMax1 / 10));
+                for (int i = Math.Max(0,Convert.ToInt32(savelist1.LongCount() - XMax1 + XMax1/10)); i < Convert.ToInt32(savelist1.LongCount()); i++)
+                {
+                    if (i % XScaleValue1 == XScaleValue1 - 1)
+                    {
+                        PlotList1.Add(savelist1.ElementAt(i));
+                    }
+                }
             }
             else if (!ZoomIn.Checked && !IsScrolling)
             {
-                XScale1.Maximum = 100;
                 XScaleValue1 =Convert.ToDouble(XScale1.Value);
-            }
-            else if (!ZoomIn.Checked && IsScrolling)
-            {
-                XScale1.Maximum = 1;
-                XScaleValue1 = Convert.ToDouble(XScale1.Value);
-                BarItem curve = zgc.MasterPane.PaneList[0].CurveList[1] as BarItem;
-                curve.Bar.Border.Width = (float)(XScale1.Value);
-                BarItem RecentBar1 = zgc.MasterPane.PaneList[0].CurveList[0] as BarItem;
-                RecentBar1.Bar.Border.Width = (float)(XScale1.Value);
+                SetXAxis1(); 
+                PlotList1.Clear();
+                for (int i = Math.Max(0, Convert.ToInt32(savelist1.LongCount() - XMax1)); i < Convert.ToInt32(savelist1.LongCount()); i++)
+                {
+                    if (i % XScaleValue1 == XScaleValue1 - 1)
+                    {
+                        //Point NotScrolAdd = new Point (
+                        PlotList1.Add(savelist1.ElementAt(i));
+                        PlotList1.ElementAt(Convert.ToInt32(PlotList1.LongCount()-1)).X = i % XMax1;
+                    }
+                }
+                /*if (PlotList1.LongCount() > XMax1)
+                {
+                    list1.RemoveRange(0, Convert.ToInt32(PlotList1.LongCount() - XMax1));
+                }*/
+                Console.WriteLine("PlotList1 LongCOUNT before IS {0}", PlotList1.LongCount());
+                Console.WriteLine("XMax1 is {0}", XMax1);
+                while(PlotList1.LongCount() > XMax1/XScaleValue1)
+                {
+                    PlotList1.RemoveAt(0);
+                }
+                time1 = Convert.ToInt32(PlotList1.ElementAt(Convert.ToInt32(PlotList1.LongCount()) - 1).X);
+                Console.WriteLine("PlotList1 LongCOUNT after IS {0}", PlotList1.LongCount());
             }
 
-            SetXAxis1(); 
+           
         }
 
         // Used to alter X Axis range myPane2
@@ -1019,22 +1054,23 @@ namespace Graph_practice_2_Rolling_data
                         SumChunkOdd += Convert.ToInt16(ScreenBuffer[i]);
                     }
                 }
-                if (PMT1_pane1)
+                if (PMT1_pane1==true&&PMT2_pane1==false)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average1 = (SumChunkEven +SumProcessedBytes1)/ (AverageChunkSize1 * TimebinFactor[0]);
+                        Average1 = 2*(SumChunkEven +SumProcessedBytes1)/ (AverageChunkSize1 * TimebinFactor[0]);
+                       
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average1 = (SumChunkEven +SumProcessedBytes1)/ TimebinFactor[0];
                     }
                 }
-                if (PMT2_pane1)
+                if (PMT2_pane1==true && PMT1_pane1==false)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average1 = (SumChunkOdd+SumProcessedBytes1) / (AverageChunkSize1 * TimebinFactor[0]);
+                        Average1 = 2*(SumChunkOdd+SumProcessedBytes1) / (AverageChunkSize1 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1052,34 +1088,41 @@ namespace Graph_practice_2_Rolling_data
                         Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist1.Add(time1, Average1);
-                    if (time1 > XMax1)
-                    {
-                        time1 = 0;
-                        PastOneScreen1 = true;
-                    }
+                savelist1.Add(time1, Average1);
+                SaveListIndex1++;
 
-                     if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
+                if (SaveListIndex1 % XScaleValue1 == XScaleValue1 - 1)
+                {
+                    PlotList1.Add(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - 1)));
+
+                    if (!IsScrolling)
                     {
-                        if (list1.ElementAt(0).X >= XMax1)
+                        if (time1 > XMax1)
                         {
-                            int i = 0;
-                            while (list1.ElementAt(i).X >= XMax1)
-                            {
-                                list1.RemoveAt(0);
-                            }
+                            time1 = 0;
+                            PastOneScreen1 = true;
                         }
-                        if(list1.ElementAt(0).X < XMax1)
+
+                        if (PastOneScreen1 && time1 <= PlotList1.ElementAt(0).X)
                         {
-                            list1.RemoveAt(0);
+                          
+                                while (PlotList1.ElementAt(0).X >= XMax1)
+                                {
+                                    PlotList1.RemoveAt(0);
+                                }
+                            
+                            if (PlotList1.ElementAt(0).X < XMax1)
+                            {
+                                PlotList1.RemoveAt(0);
+                            }
                         }
                     }
                 }
-                
-                list1.Add(time1, Average1);
+
                
+                
+                //list1.Add(time1, Average1)
+
 
                 RecentPoint1.Add(time1,Average1);
                  if (RecentPoint1.LongCount() > 1)
@@ -1110,22 +1153,23 @@ namespace Graph_practice_2_Rolling_data
                         SumChunkOdd += Convert.ToInt16(ScreenBuffer[i]);
                     }
                 }
-                if (PMT1_pane1)
+                if (PMT1_pane1==true&&PMT2_pane1==false)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average1 = SumChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
+                        Average1 = 2*SumChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
+
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average1 = SumChunkEven / TimebinFactor[0];
                     }
                 }
-                if (PMT2_pane1)
+                if (PMT2_pane1==true&&PMT1_pane1==false)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average1 = SumChunkOdd / (AverageChunkSize1 * TimebinFactor[0]);
+                        Average1 = 2*SumChunkOdd / (AverageChunkSize1 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1143,33 +1187,68 @@ namespace Graph_practice_2_Rolling_data
                         Average1 = (SumChunkEven + SumChunkOdd) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist1.Add(time1, Average1);
-                    if (time1 > XMax1)
-                    {
-                        time1 = 0;
-                        PastOneScreen1 = true;
-                    }
+                savelist1.Add(time1, Average1);
+                SaveListIndex1++;
 
-                    if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
+                if (ZoomIn.Checked)
+                {
+
+                    PlotList1.Add(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - 1)));
+
+                    if (!IsScrolling)
                     {
-                        if (list1.ElementAt(0).X >= XMax1)
+                        if (time1 > XMax1)
                         {
-                            int i = 0;
-                            while (list1.ElementAt(i).X >= XMax1)
-                            {
-                                list1.RemoveAt(0);
-                            }
+                            time1 = 0;
+                            PastOneScreen1 = true;
                         }
-                        if (list1.ElementAt(0).X < XMax1)
+
+                        if (PastOneScreen1 && time1 <= PlotList1.ElementAt(0).X)
                         {
-                            list1.RemoveAt(0);
+
+                            while (PlotList1.ElementAt(0).X >= XMax1)
+                            {
+                                PlotList1.RemoveAt(0);
+                            }
+
+                            if (PlotList1.ElementAt(0).X < XMax1)
+                            {
+                                PlotList1.RemoveAt(0);
+                            }
                         }
                     }
                 }
 
-                list1.Add(time1, Average1);
+                if (SaveListIndex1 % XScaleValue1 == XScaleValue1 - 1 && !ZoomIn.Checked)
+                {
+          
+                        PlotList1.Add(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - 1)));
+                   
+                    if (!IsScrolling)
+                    {
+                        if (time1 > XMax1)
+                        {
+                            time1 = 0;
+                            PastOneScreen1 = true;
+                        }
+
+                        if (PastOneScreen1 && time1 <= PlotList1.ElementAt(0).X)
+                        {
+
+                                while (PlotList1.ElementAt(0).X >= XMax1)
+                                {
+                                    PlotList1.RemoveAt(0);
+                                }
+                            
+                            if (PlotList1.ElementAt(0).X < XMax1)
+                            {
+                                PlotList1.RemoveAt(0);
+                            }
+                        }
+                    }
+                }
+
+                //list1.Add(time1, Average1);
 
                 RecentPoint1.Add(time1, Average1);
                 if (RecentPoint1.LongCount() > 1)
@@ -1222,22 +1301,23 @@ namespace Graph_practice_2_Rolling_data
                         SumEndChunkOdd += Convert.ToInt16(ScreenBuffer[i]);
                     }
                 }
-                if (PMT1_pane1)
+                if (PMT1_pane1==true&&PMT2_pane1==false)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average1 = SumEndChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
+                        Average1 = 2*SumEndChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
+
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average1 = SumEndChunkEven / TimebinFactor[0];
                     }
                 }
-                if (PMT2_pane1)
+                if (PMT2_pane1==true&&PMT1_pane1==false)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average1 = SumEndChunkOdd / (AverageChunkSize1 * TimebinFactor[0]);
+                        Average1 = 2*SumEndChunkOdd / (AverageChunkSize1 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1255,33 +1335,35 @@ namespace Graph_practice_2_Rolling_data
                         Average1 = (SumEndChunkEven + SumEndChunkOdd) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
+                savelist1.Add(time1, Average1);
+                SaveListIndex1++;
+                if (SaveListIndex1 % XScaleValue1 == XScaleValue1 - 1)
                 {
-                    savelist1.Add(time1, Average1);
-                    if (time1 > XMax1)
-                    {
-                        time1 = 0;
-                        PastOneScreen1 = true;
-                    }
+                    PlotList1.Add(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - 1)));
 
-                    if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
+                    if (!IsScrolling)
                     {
-                        if (list1.ElementAt(0).X >= XMax1)
+                        if (time1 > XMax1)
                         {
-                            int i = 0;
-                            while (list1.ElementAt(i).X >= XMax1)
-                            {
-                                list1.RemoveAt(0);
-                            }
+                            time1 = 0;
+                            PastOneScreen1 = true;
                         }
-                        if (list1.ElementAt(0).X < XMax1)
+
+                        if (PastOneScreen1 && time1 <= PlotList1.ElementAt(0).X)
                         {
-                            list1.RemoveAt(0);
+
+                                while (PlotList1.ElementAt(0).X >= XMax1)
+                                {
+                                    PlotList1.RemoveAt(0);
+                                }
+                          
+                            if (PlotList1.ElementAt(0).X < XMax1)
+                            {
+                                PlotList1.RemoveAt(0);
+                            }
                         }
                     }
                 }
-               
-                list1.Add(time1, Average1);
                
                 RecentPoint1.Add(time1, Average1);
 
@@ -1305,30 +1387,31 @@ namespace Graph_practice_2_Rolling_data
                 if (i % 2 == 0)
                 {
                     SumProcessedBytesEven += Convert.ToInt32(ScreenBuffer[i]);
-                    PreviousScreenRemainderEven++;
+                    PreviousScreenRemainderEven+=1;
                 }
                 if (i % 2 == 1)
                 {
                     SumProcessedBytesOdd += Convert.ToInt32(ScreenBuffer[i]);
-                    PreviousScreenRemainderOdd++;
+                    PreviousScreenRemainderOdd+=1;
                 }
-                if (PMT1_pane1)
+            }
+                if (PMT1_pane1==true&&PMT2_pane1==false)
                 {
                     SumProcessedBytes1 = SumProcessedBytesEven;
                     PreviousScreenRemainder1 = PreviousScreenRemainderEven;
                     
                 }
-                else if (PMT2_pane1)
+                if (PMT2_pane1==true&&PMT1_pane1==false)
                 {
                     SumProcessedBytes1 = SumProcessedBytesEven;
                     PreviousScreenRemainder1=PreviousScreenRemainderOdd;
                 }
-                else if (PMT1_pane1 && PMT2_pane1)
+                if (PMT1_pane1 && PMT2_pane1)
                 {
                     SumProcessedBytes1 = SumProcessedBytesEven + SumProcessedBytesOdd;
                     PreviousScreenRemainder1 = PreviousScreenRemainderOdd + PreviousScreenRemainderEven;
                 }
-            }
+            
            // PreviousScreenRemainder1 = ScreenBuffer.Length - ((AverageIndex1 - 1) * AverageChunkSize1 - PreviousScreenRemainder1); // Index to acount for how many 'new' bytes need to be added to the sum of the remainder to make up 'AverageChunkSize'
 
 
@@ -1360,34 +1443,34 @@ namespace Graph_practice_2_Rolling_data
                         SumChunkOdd += Convert.ToInt32(ScreenBuffer[i]);
                     }
                 }
-                if (PMT1_pane2)
+                if (PMT1_pane2&&!PMT2_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average2 = (SumChunkEven+SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
+                        Average2 = 2*(SumChunkEven+SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average2 = (SumChunkEven + SumProcessedBytes2) / TimebinFactor[0];
                     }
                 }
-                if (PMT2_pane2)
+                else if (PMT2_pane2&&!PMT1_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average2 = (SumChunkOdd + SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
+                        Average2 = 2*(SumChunkOdd + SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average2 = (SumChunkOdd + SumProcessedBytes2) / TimebinFactor[0];
                     }
                 }
-                if(PMT1_pane2&&PMT2_pane2)
+                else if(PMT1_pane2&&PMT2_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
                         Average2 = (SumChunkOdd + SumChunkEven+SumProcessedBytes2) / (AverageChunkSize2 * TimebinFactor[0]);
-                        Console.WriteLine("Goes into 'both' if");
+                       
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1452,34 +1535,34 @@ namespace Graph_practice_2_Rolling_data
                     }
 
                 }
-                if (PMT1_pane2)
+                if (PMT1_pane2&&!PMT2_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average2 = SumChunkEven / (AverageChunkSize2 * TimebinFactor[0]);
+                        Average2 = 2*SumChunkEven / (AverageChunkSize2 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average2 = SumChunkEven / TimebinFactor[0];
                     }
                 }
-                if (PMT2_pane2)
+                else if (PMT2_pane2&&!PMT1_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average2 = SumChunkOdd / (AverageChunkSize2 * TimebinFactor[0]);
+                        Average2 = 2*SumChunkOdd / (AverageChunkSize2 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average2 = SumChunkOdd / TimebinFactor[0];
                     }
                 }
-                if(PMT1_pane2&&PMT2_pane2)
+                else if(PMT1_pane2&&PMT2_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
                         Average2 = (SumChunkOdd + SumChunkEven) / (AverageChunkSize2 * TimebinFactor[0]);
-                        Console.WriteLine("Goes into 'both' if");
+                        
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1563,38 +1646,38 @@ namespace Graph_practice_2_Rolling_data
                         SumEndChunkOdd += Convert.ToInt32(ScreenBuffer[i]);
                     }
                 }
-                if (PMT1_pane2)
+                if (PMT1_pane2&&!PMT2_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average2 = SumEndChunkEven / (AverageChunkSize2 * TimebinFactor[0]);
+                        Average2 = 2*SumEndChunkEven / (AverageChunkSize2 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average2 = SumEndChunkEven / TimebinFactor[0];
                     }
                 }
-                if (PMT2_pane2)
+                else if (PMT2_pane2&&!PMT1_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
-                        Average2 = SumEndChunkOdd / (AverageChunkSize2 * TimebinFactor[0]);
+                        Average2 = 2*SumEndChunkOdd / (AverageChunkSize2 * TimebinFactor[0]);
                     }
                     else if (SumVsAv.Checked == true)
                     {
                         Average2 = SumEndChunkOdd / TimebinFactor[0];
                     }
                 }
-                if(PMT1_pane2&&PMT2_pane2)
+                else if(PMT1_pane2&&PMT2_pane2)
                 {
                     if (SumVsAv.Checked == false)
                     {
                         Average2 = (SumEndChunkOdd + SumEndChunkEven) / (AverageChunkSize2 * TimebinFactor[0]);
-                        Console.WriteLine("Goes into 'both' if");
+                        
                     }
                     else if (SumVsAv.Checked == true)
                     {
-                        Average2 = (100) / TimebinFactor[0];
+                        Average2 = (SumEndChunkOdd + SumEndChunkEven) / TimebinFactor[0];
                     }
                 }
                 if (!IsScrolling)
@@ -1652,24 +1735,25 @@ namespace Graph_practice_2_Rolling_data
                         SumProcessedBytesOdd += Convert.ToInt32(ScreenBuffer[i]);
                         PreviousScreenRemainderOdd++;
                     }
+                }
 
-                    if (PMT1_pane2)
+                    if (PMT1_pane2&&!PMT2_pane2)
                     {
                         SumProcessedBytes2 = SumProcessedBytesEven;
                         PreviousScreenRemainder2 = PreviousScreenRemainderEven;
                     }
-                    if (PMT2_pane2)
+                    else if (PMT2_pane2 && !PMT1_pane2)
                     {
                         SumProcessedBytes2 = SumProcessedBytesOdd;
                         PreviousScreenRemainder2=PreviousScreenRemainderOdd;
                     }
-                    if(PMT1_pane2&&PMT2_pane2)
+                    else if(PMT1_pane2&&PMT2_pane2)
                     {
                         SumProcessedBytes2 = SumProcessedBytesOdd + SumProcessedBytesEven;
-                        Console.WriteLine("Goes into 'both' if");
+                        
                         PreviousScreenRemainder2 = PreviousScreenRemainderOdd + PreviousScreenRemainderEven;
                     }
-                }
+                
                 
 
                // Carries over remainder bytes' sum 
@@ -1715,7 +1799,7 @@ namespace Graph_practice_2_Rolling_data
 
         }
 
-        private void PMTSelectLHS_ValueChanged(object sender, EventArgs e)
+        /*private void PMTSelectLHS_ValueChanged(object sender, EventArgs e)
         {
             if (PMTSelectLHS.Text=="PMT1")
             {
@@ -1734,8 +1818,8 @@ namespace Graph_practice_2_Rolling_data
             }
             FreshScreen();
 
-        }
-        private void PMTSelectRHS_ValueChanged(object sender, EventArgs e)
+        }*/
+        /*private void PMTSelectRHS_SelectedValueChanged(object sender, EventArgs e)
         {
             if (PMTSelectRHS.Text == "PMT1")
             {
@@ -1754,8 +1838,46 @@ namespace Graph_practice_2_Rolling_data
             }
             FreshScreen();
 
+        }*/
+        private void PMTSelectLHS_TextChanged(object sender, EventArgs e)
+        {
+            if (PMTLHS.Text=="PMT1")
+            {
+                PMT1_pane1 = true;
+                PMT2_pane1 = false;
+            }
+
+            else if (PMTLHS.Text == "PMT2")
+            {
+                PMT1_pane1 = false;
+                PMT2_pane1 = true;
+            }
+            else if (PMTLHS.Text == "Both")
+            {
+                PMT1_pane1 = true;
+                PMT2_pane1 = true;
+            }
+            
+            FreshScreen();
         }
-
-
+        private void PMTSelectRHS_TextChanged(object sender, EventArgs e)
+        {
+            if (PMTRHS.Text=="PMT1")
+            {
+                PMT1_pane2 = true;
+                PMT2_pane2 = false;
+            }
+            if (PMTRHS.Text=="PMT2")
+            {
+                PMT1_pane2 = false;
+                PMT2_pane2 = true;
+            }
+            if (PMTRHS.Text == "Both")
+            {
+                PMT1_pane2 = true;
+                PMT2_pane2 = true;
+            }
+            FreshScreen();
+        }
     }       
 }

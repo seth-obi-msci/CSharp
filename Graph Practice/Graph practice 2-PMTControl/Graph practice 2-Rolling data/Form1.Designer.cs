@@ -72,6 +72,8 @@ namespace Graph_practice_2_Rolling_data
             this.label12 = new System.Windows.Forms.Label();
             this.PMTSelectLHS = new System.Windows.Forms.ComboBox();
             this.PMTSelectRHS = new System.Windows.Forms.ComboBox();
+            this.PMTLHS = new System.Windows.Forms.ComboBox();
+            this.PMTRHS = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum1)).BeginInit();
@@ -405,7 +407,7 @@ namespace Graph_practice_2_Rolling_data
             // 
             // Timebinfactorvalue
             // 
-            this.Timebinfactorvalue.Location = new System.Drawing.Point(1044, 40);
+            this.Timebinfactorvalue.Location = new System.Drawing.Point(1000, 38);
             this.Timebinfactorvalue.Maximum = new decimal(new int[] {
             255,
             0,
@@ -419,7 +421,7 @@ namespace Graph_practice_2_Rolling_data
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(964, 42);
+            this.label8.Location = new System.Drawing.Point(920, 43);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(74, 13);
             this.label8.TabIndex = 39;
@@ -549,39 +551,53 @@ namespace Graph_practice_2_Rolling_data
             // 
             // PMTSelectLHS
             // 
-            this.PMTSelectLHS.DisplayMember = "none";
-            this.PMTSelectLHS.FormattingEnabled = true;
-            this.PMTSelectLHS.Items.AddRange(new object[] {
-            "PMT1",
-            "PMT2",
-            "Both"});
-            this.PMTSelectLHS.Location = new System.Drawing.Point(797, 39);
+            this.PMTSelectLHS.Location = new System.Drawing.Point(0, 0);
             this.PMTSelectLHS.Name = "PMTSelectLHS";
-            this.PMTSelectLHS.Size = new System.Drawing.Size(76, 21);
-            this.PMTSelectLHS.TabIndex = 50;
-            this.PMTSelectLHS.Text = "Both";
-            this.PMTSelectLHS.SelectedValueChanged += new System.EventHandler(this.PMTSelectLHS_ValueChanged);
+            this.PMTSelectLHS.Size = new System.Drawing.Size(121, 21);
+            this.PMTSelectLHS.TabIndex = 65;
             // 
             // PMTSelectRHS
             // 
-            this.PMTSelectRHS.DisplayMember = "none";
-            this.PMTSelectRHS.FormattingEnabled = true;
-            this.PMTSelectRHS.Items.AddRange(new object[] {
+            this.PMTSelectRHS.Location = new System.Drawing.Point(0, 0);
+            this.PMTSelectRHS.Name = "PMTSelectRHS";
+            this.PMTSelectRHS.Size = new System.Drawing.Size(121, 21);
+            this.PMTSelectRHS.TabIndex = 64;
+            // 
+            // PMTLHS
+            // 
+            this.PMTLHS.FormattingEnabled = true;
+            this.PMTLHS.Items.AddRange(new object[] {
             "PMT1",
             "PMT2",
             "Both"});
-            this.PMTSelectRHS.Location = new System.Drawing.Point(1101, 36);
-            this.PMTSelectRHS.Name = "PMTSelectRHS";
-            this.PMTSelectRHS.Size = new System.Drawing.Size(76, 21);
-            this.PMTSelectRHS.TabIndex = 51;
-            this.PMTSelectRHS.Text = "Both";
-            this.PMTSelectRHS.SelectedValueChanged += new System.EventHandler(this.PMTSelectRHS_ValueChanged);
+            this.PMTLHS.Location = new System.Drawing.Point(816, 38);
+            this.PMTLHS.Name = "PMTLHS";
+            this.PMTLHS.Size = new System.Drawing.Size(57, 21);
+            this.PMTLHS.TabIndex = 60;
+            this.PMTLHS.Text = "Both";
+            this.PMTLHS.TextChanged += new System.EventHandler(this.PMTSelectLHS_TextChanged);
+            // 
+            // PMTRHS
+            // 
+            this.PMTRHS.FormattingEnabled = true;
+            this.PMTRHS.Items.AddRange(new object[] {
+            "PMT1",
+            "PMT2",
+            "Both"});
+            this.PMTRHS.Location = new System.Drawing.Point(1120, 35);
+            this.PMTRHS.Name = "PMTRHS";
+            this.PMTRHS.Size = new System.Drawing.Size(57, 21);
+            this.PMTRHS.TabIndex = 63;
+            this.PMTRHS.Text = "Both";
+            this.PMTRHS.TextChanged += new System.EventHandler(this.PMTSelectRHS_TextChanged);
             // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);
+            this.Controls.Add(this.PMTRHS);
+            this.Controls.Add(this.PMTLHS);
             this.Controls.Add(this.PMTSelectRHS);
             this.Controls.Add(this.PMTSelectLHS);
             this.Controls.Add(this.label12);
@@ -689,5 +705,7 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox PMTSelectLHS;
         private System.Windows.Forms.ComboBox PMTSelectRHS;
+        private System.Windows.Forms.ComboBox PMTLHS;
+        private System.Windows.Forms.ComboBox PMTRHS;
     }
 }

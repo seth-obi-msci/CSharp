@@ -10,6 +10,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ZedGraph;
+using System.Drawing.Drawing2D;
+using System.Threading;
 
 namespace Graph_practice_2_Rolling_data
 {
@@ -85,7 +87,7 @@ namespace Graph_practice_2_Rolling_data
         PointPairList RecentPoint2 = new PointPairList();
         double[] X;
         double[] Y;
-
+        
         //byte arrays
         byte[] SimulatedBytes = new byte [10];
         byte[] ScreenBuffer = new byte[30000];
@@ -145,7 +147,8 @@ namespace Graph_practice_2_Rolling_data
             {
                 //zgc.IsAntiAlias = true;
             }
-
+            list1.Add(0, 0);
+         
             //Make a new curve
             BarItem RecentBar1 = myPane1.AddBar("RecentBar", RecentPoint1, Color.Red);
             RecentBar1.Bar.Fill = new Fill(Color.Red);
@@ -157,8 +160,12 @@ namespace Graph_practice_2_Rolling_data
 
 
 
-            LineItem curve = myPane1.AddCurve("Average Counts", list1, Color.White, SymbolType.None);
-            curve.Line.Fill = new Fill (Color.White);
+            BarItem curve = myPane1.AddBar("Average Counts", list1, Color.White);
+            curve.Bar.Border = new Border(Color.White, 1.0F);
+            //curve.Line.Fill = new Fill (Color.White);
+          //  curve.Line.IsVisible = false;
+          
+
 
             BarItem curve2 = myPane2.AddBar("Counts (Avg ten)", list2, Color.White);
             curve2.Bar.Border = new Border(Color.White, 1.0F);
@@ -199,15 +206,15 @@ namespace Graph_practice_2_Rolling_data
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
-          
-           GraphPane myPane1 = zgc.MasterPane.PaneList[0];
-           GraphPane myPane2 = zgc.MasterPane.PaneList[1];
 
-           zgc.AxisChange();
-           //Console.WriteLine("Length of X{0}", X.Length);
+            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
+            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
+
+            zgc.AxisChange();
+            //Console.WriteLine("Length of X{0}", X.Length);
 
 
-           if (LHSPane.Checked && !RHSPane.Checked)
+            if (LHSPane.Checked && !RHSPane.Checked)
             {
                 RectangleF zero_rect2 = new RectangleF(Convert.ToInt16(XMax2), 0F, 0F, 0F);
                 myPane2.ReSize(this.CreateGraphics(), zero_rect2);
@@ -226,7 +233,7 @@ namespace Graph_practice_2_Rolling_data
                 myPane2.XAxis.Scale.FontSpec.Size = 5.0F;
                 myPane2.YAxis.Scale.FontSpec.Size = 5.0F;
                 myPane2.Title.FontSpec.Size = 6.0F;
-               
+
             }
             else
             {
@@ -248,41 +255,41 @@ namespace Graph_practice_2_Rolling_data
             SetSize();
             SetXAxis1();
             SetXAxis2();
-            
-            
-           /* Point XMax_Pane = new Point(1, 0);
-            Point origin = new Point(0, 0);
-            Point endchart = new Point(1, 0);*/
+
+
+            /* Point XMax_Pane = new Point(1, 0);
+             Point origin = new Point(0, 0);
+             Point endchart = new Point(1, 0);*/
             //Console.WriteLine("*origin point is {0}", myPane1.GeneralTransform(origin, CoordType.ChartFraction).X);
-           // Console.WriteLine("*XMax point is {0}", myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
+            // Console.WriteLine("*XMax point is {0}", myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
 
             int t = (Environment.TickCount - tickStart);
-           
+
             if (Pause) //Ensures points only plotted if stop button NOT pressed on form
             {
-                
+
             }
             else
             {
                 //l++;
-               // SimulatedBytes[l % 10] = Convert.ToByte(slider);
+                // SimulatedBytes[l % 10] = Convert.ToByte(slider);
 
 
-               // if (l % 10 == 9) //Only reads and plots once every 10 ticks
+                // if (l % 10 == 9) //Only reads and plots once every 10 ticks
                 {
 
                     UART_Buffer = FPGA.ReadBytes();
 
-                   
 
 
-                    
+
+
                     // Ensures there's at least one curve in GraphPane
                     if (zgc.GraphPane.CurveList.Count <= 0)
                         return;
 
                     //BarItem curve = myPane1.CurveList[0] as LineItem;
-                   // LineItem curve2 = myPane2.CurveList[0] as LineItem;
+                    // LineItem curve2 = myPane2.CurveList[0] as LineItem;
                     /*if (curve1 == null || curve2==null)
                         return;*/
 
@@ -296,7 +303,7 @@ namespace Graph_practice_2_Rolling_data
 
                     if (templist2 == null || templist1 == null)
                     {
-                        
+
                         return;
                     }
 
@@ -304,7 +311,7 @@ namespace Graph_practice_2_Rolling_data
                     double time = (Environment.TickCount - tickStart) / 1000.0;
 
 
-                   
+
                     Scale xScale = myPane1.XAxis.Scale;
                     Scale xScale2 = myPane2.XAxis.Scale;
 
@@ -331,16 +338,16 @@ namespace Graph_practice_2_Rolling_data
                     {
                         zgc.AxisChange();
                     }
-                    
-                   
+
+
                     //Remaining spaces in ScreenBuffer
                     int Diff = ScreenBuffer.Length - COPY_POS;
 
 
                     // if condition satisfied when there's enough room for a UART_Buffer array to be
                     // copied into the Screen array. 
-                    if (Diff>UART_Buffer.Length)
-                    { 
+                    if (Diff > UART_Buffer.Length)
+                    {
 
                         Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, UART_Buffer.Length); // Copies UART_Buffer (FPGA.ReadBytes into Screen array, overwriting oldest values
                         COPY_POS = COPY_POS + UART_Buffer.Length; //COPY_POS shifted by UART buffer size
@@ -350,33 +357,33 @@ namespace Graph_practice_2_Rolling_data
                         // should only be called when an 'AverageChunkSize' worth of new values have been copied into ScreenBuffer
                         if (COPY_POS >= AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2)
                         {
-                            AverageScreenUnfilled2();              
-                            
+                            AverageScreenUnfilled2();
+
                             SumProcessedBytes2 = 0;  //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2 loop 
-                            
+
                         }
 
                         if (COPY_POS >= AverageIndex1 * AverageChunkSize1 - PreviousScreenRemainder1)
                         {
-                            
+
                             AverageScreenUnfilled1();
 
                             SumProcessedBytes1 = 0;  //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - PreviousScreenRemainder2 loop
-                            
+
                         }
-                        
+
                     }
 
                     //Not enough room at end of ScreenBuffer for whole UART bufferload
-                    else 
+                    else
                     {
-                        
+
                         // Fills remaining ScreenBuffer spaces with portion of UART buffer load
                         // UART_Buffer values that don't get copied in due to not enough space are placed 
                         // at the begining of the ScreenBuffer next 'tick'
                         Array.Copy(UART_Buffer, 0, ScreenBuffer, COPY_POS, ScreenBuffer.Length - COPY_POS);
 
-                      
+
 
                         // Different averaging function, 'AverageScreenFilled', used when ScreenBuffer is filled so that no values 
                         // are left out of averaging. i.e. those at end of ScreenBuffer that don't make up an entire AverageChunkSize
@@ -390,15 +397,15 @@ namespace Graph_practice_2_Rolling_data
                         AverageIndex2 = 1;
                         AverageIndex1 = 1;
 
-                        
+
                         //Remaining of UART bufferload copied to first spaces in ScreenBuffer and COPY_POS shifted accordingly
                         Array.Copy(UART_Buffer, ScreenBuffer.Length - COPY_POS, ScreenBuffer, 0, UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS));
                         COPY_POS = UART_Buffer.Length - (ScreenBuffer.Length - COPY_POS);
-                       
-                       
-                       
+
+
+
                     }
-                    
+
                 }
             }
             if (list1.LongCount() > 30000)
@@ -421,7 +428,8 @@ namespace Graph_practice_2_Rolling_data
             Console.WriteLine("Size of buffer = {0}", UART_Buffer.Length);
 
         }
-
+        
+       
 //Below are functions which have been outsourced for clarity in main code (above)
 
 
@@ -1066,6 +1074,7 @@ namespace Graph_practice_2_Rolling_data
                 }
                 
                 list1.Add(time1, Average1);
+                
               /*  if (time1 == Convert.ToInt32(XMax1 - 1))
                 {
                     FilterIndex1 = 0;

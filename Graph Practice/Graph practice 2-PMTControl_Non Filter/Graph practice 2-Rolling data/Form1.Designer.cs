@@ -70,10 +70,10 @@ namespace Graph_practice_2_Rolling_data
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.PMTSelectLHS = new System.Windows.Forms.ComboBox();
-            this.PMTSelectRHS = new System.Windows.Forms.ComboBox();
             this.PMTLHS = new System.Windows.Forms.ComboBox();
             this.PMTRHS = new System.Windows.Forms.ComboBox();
+            this.TimeControl1 = new System.Windows.Forms.CheckBox();
+            this.TimeControl2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum1)).BeginInit();
@@ -577,15 +577,37 @@ namespace Graph_practice_2_Rolling_data
             this.PMTRHS.Text = "Both";
             this.PMTRHS.TextChanged += new System.EventHandler(this.PMTSelectRHS_TextChanged);
             // 
+            // TimeControl1
+            // 
+            this.TimeControl1.AutoSize = true;
+            this.TimeControl1.Location = new System.Drawing.Point(232, 42);
+            this.TimeControl1.Name = "TimeControl1";
+            this.TimeControl1.Size = new System.Drawing.Size(127, 17);
+            this.TimeControl1.TabIndex = 64;
+            this.TimeControl1.Text = "Display true time LHS";
+            this.TimeControl1.UseVisualStyleBackColor = true;
+            this.TimeControl1.Click += new System.EventHandler(this.TimeControl1_CheckedChanged);
+            // 
+            // TimeControl2
+            // 
+            this.TimeControl2.AutoSize = true;
+            this.TimeControl2.Location = new System.Drawing.Point(232, 24);
+            this.TimeControl2.Name = "TimeControl2";
+            this.TimeControl2.Size = new System.Drawing.Size(129, 17);
+            this.TimeControl2.TabIndex = 65;
+            this.TimeControl2.Text = "Display true time RHS\r\n";
+            this.TimeControl2.UseVisualStyleBackColor = true;
+            this.TimeControl2.CheckedChanged += new System.EventHandler(this.TimeControl2_CheckedChanged);
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);
+            this.Controls.Add(this.TimeControl2);
+            this.Controls.Add(this.TimeControl1);
             this.Controls.Add(this.PMTRHS);
             this.Controls.Add(this.PMTLHS);
-            this.Controls.Add(this.PMTSelectRHS);
-            this.Controls.Add(this.PMTSelectLHS);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -624,7 +646,6 @@ namespace Graph_practice_2_Rolling_data
             this.Controls.Add(this.button1);
             this.Controls.Add(this.zgc);
             this.Name = "RollingGraph";
-            this.Text = "RollingGraph";
             this.Load += new System.EventHandler(this.RollingGraph_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).EndInit();
@@ -640,6 +661,8 @@ namespace Graph_practice_2_Rolling_data
             this.PerformLayout();
 
         }
+
+
 
       
         
@@ -689,9 +712,9 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox PMTSelectLHS;
-        private System.Windows.Forms.ComboBox PMTSelectRHS;
         private System.Windows.Forms.ComboBox PMTLHS;
         private System.Windows.Forms.ComboBox PMTRHS;
+        private System.Windows.Forms.CheckBox TimeControl1;
+        private System.Windows.Forms.CheckBox TimeControl2;
     }
 }

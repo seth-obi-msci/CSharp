@@ -197,3 +197,26 @@ C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PM
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csprojResolveAssemblyReference.cache
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\ZedGraph.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\ZedGraph.xml
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\ru\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\sk\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csprojResolveAssemblyReference.cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-PMTControl_Non Filter\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csproj.GenerateResource.Cache

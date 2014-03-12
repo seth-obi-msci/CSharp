@@ -72,6 +72,9 @@ namespace Graph_practice_2_Rolling_data
         bool PMT1_pane2=true;
         bool PMT2_pane2=true;
 
+        bool TrueTime1 = false;
+        bool TrueTime2 = false;
+
         int SaveListIndex1 = 0;
 
         byte[] TimebinFactor =new byte[1]; 
@@ -436,9 +439,16 @@ namespace Graph_practice_2_Rolling_data
             Point XMax_Pane = new Point(1, 0);
             Point origin = new Point(0, 0);
             Point endchart = new Point(1, 0);
-            if (LHSPane.Checked||(!LHSPane.Checked && !RHSPane.Checked))
+            if (LHSPane.Checked||(!LHSPane.Checked && !RHSPane.Checked)) // Ensures Axis not change to zero size if pane is resized to zero (ie de-selected)
             {
-                myPane1.XAxis.Scale.Max = Convert.ToDouble((myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane1.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                if (TrueTime1)
+                {  
+                    myPane1.XAxis.Scale.Max = AverageChunkSize1 * Convert.ToDouble((myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane1.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                }
+                if (!TrueTime1)
+                {
+                    myPane1.XAxis.Scale.Max = Convert.ToDouble((myPane1.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane1.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                }
             }
 
             myPane1.XAxis.Scale.Min = XMin1;
@@ -461,7 +471,14 @@ namespace Graph_practice_2_Rolling_data
                 // Console.WriteLine("*XMax point is {0}", myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X);
                 if (RHSPane.Checked||(!LHSPane.Checked && !RHSPane.Checked))
                 {
-                    myPane2.XAxis.Scale.Max = Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue2);
+                    if (TrueTime2)
+                    {
+                        myPane2.XAxis.Scale.Max = AverageChunkSize2 * Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                    }
+                    if (!TrueTime2)
+                    {
+                        myPane2.XAxis.Scale.Max = Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                    }
                 }
                 myPane2.XAxis.Scale.Min = XMin2;
                 XMax2 = myPane2.XAxis.Scale.Max;
@@ -1028,10 +1045,6 @@ namespace Graph_practice_2_Rolling_data
                     if (SumVsAv.Checked == false)
                     {
                         Average1 = 2*(SumChunkEven +SumProcessedBytes1)/ (AverageChunkSize1 * TimebinFactor[0]);
-                        if (Average1 > 145)
-                        {
-                            Console.WriteLine("Glitch: unfilled index=1");
-                        }
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1060,49 +1073,20 @@ namespace Graph_practice_2_Rolling_data
                         Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1) / TimebinFactor[0];
                     }
                 }
-                savelist1.Add(time1, Average1);
-                SaveListIndex1++;
-                if (!IsScrolling)
-                {
-                    if (time1 > XMax1)
-                    {
-                        time1 = 0;
-                        PastOneScreen1 = true;
-                    }
 
-                     if (PastOneScreen1 && time1 <= PlotList.ElementAt(0).X)
-                    {
-                        if (PlotList1.ElementAt(0).X >= XMax1)
-                        {
-                            int i = 0;
-                            while (PlotList1.ElementAt(i).X >= XMax1)
-                            {
-                                list1.RemoveAt(0);
-                            }
-                        }
-                        if(list1.ElementAt(0).X < XMax1)
-                        {
-                            list1.RemoveAt(0);
-                        }
-                    }
-                }
-                
-                //list1.Add(time1, Average1
-                if(SaveListIndex1%XScaleValue1 == XScaleValue1-1)
-                {
-                    PlotList1.Add(savelist1.ElementAt(SaveListIndex1));
-                }
-
-                RecentPoint1.Add(time1,Average1);
-                 if (RecentPoint1.LongCount() > 1)
-                 {
-                     RecentPoint1.RemoveAt(0);
-                 }
+                PlotPoint(1);
 
                 zgc.Invalidate();
 
-                time1 += 1;// TimebinFactor[0] * AverageChunkSize1;
-    
+                if (TrueTime1)
+                {
+                    time1 += TimebinFactor[0] * AverageChunkSize1;
+                }
+                else if (!TrueTime1)
+                {
+                    time1++;
+                }
+
                 AverageIndex1++;
                 SumChunkEven = 0;
                 SumChunkOdd = 0;
@@ -1127,10 +1111,6 @@ namespace Graph_practice_2_Rolling_data
                     if (SumVsAv.Checked == false)
                     {
                         Average1 = 2*SumChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
-                        if (Average1 > 145)
-                        {
-                            Console.WriteLine("Glitch: unfilled");
-                        }
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1159,44 +1139,20 @@ namespace Graph_practice_2_Rolling_data
                         Average1 = (SumChunkEven + SumChunkOdd) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist1.Add(time1, Average1);
-                    if (time1 > XMax1)
-                    {
-                        time1 = 0;
-                        PastOneScreen1 = true;
-                    }
 
-                    if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
-                    {
-                        if (list1.ElementAt(0).X >= XMax1)
-                        {
-                            int i = 0;
-                            while (list1.ElementAt(i).X >= XMax1)
-                            {
-                                list1.RemoveAt(0);
-                            }
-                        }
-                        if (list1.ElementAt(0).X < XMax1)
-                        {
-                            list1.RemoveAt(0);
-                        }
-                    }
-                }
-
-                list1.Add(time1, Average1);
-
-                RecentPoint1.Add(time1, Average1);
-                if (RecentPoint1.LongCount() > 1)
-                {
-                    RecentPoint1.RemoveAt(0);
-                }
+                PlotPoint(1);
 
                 zgc.Invalidate();
 
 
-                time1 += 1;// TimebinFactor[0] * AverageChunkSize1;
+                if (TrueTime1)
+                {
+                    time1 += TimebinFactor[0] * AverageChunkSize1;
+                }
+                else if (!TrueTime1)
+                {
+                    time1++;
+                }
                 AverageIndex1++; // Average index hold placed of where to start averaging from. 
                 SumChunkEven = 0;
                 SumChunkOdd = 0;
@@ -1243,10 +1199,6 @@ namespace Graph_practice_2_Rolling_data
                     if (SumVsAv.Checked == false)
                     {
                         Average1 = 2*SumEndChunkEven / (AverageChunkSize1 * TimebinFactor[0]);
-                        if (Average1 > 145)
-                        {
-                            Console.WriteLine("Glitch: filled");
-                        }
                     }
                     else if (SumVsAv.Checked == true)
                     {
@@ -1275,45 +1227,19 @@ namespace Graph_practice_2_Rolling_data
                         Average1 = (SumEndChunkEven + SumEndChunkOdd) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist1.Add(time1, Average1);
-                    if (time1 > XMax1)
-                    {
-                        time1 = 0;
-                        PastOneScreen1 = true;
-                    }
-
-                    if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
-                    {
-                        if (list1.ElementAt(0).X >= XMax1)
-                        {
-                            int i = 0;
-                            while (list1.ElementAt(i).X >= XMax1)
-                            {
-                                list1.RemoveAt(0);
-                            }
-                        }
-                        if (list1.ElementAt(0).X < XMax1)
-                        {
-                            list1.RemoveAt(0);
-                        }
-                    }
-                }
-               
-                list1.Add(time1, Average1);
-               
-                RecentPoint1.Add(time1, Average1);
-
-                if (RecentPoint1.LongCount() > 1)
-                {
-                    RecentPoint1.RemoveAt(0);
-                }
+                PlotPoint(1);
 
                 zgc.Invalidate();
 
 
-                time1 += 1;// TimebinFactor[0] * AverageChunkSize1;
+                if (TrueTime1)
+                {
+                    time1 += TimebinFactor[0] * AverageChunkSize1;
+                }
+                else if (!TrueTime1)
+                {
+                    time1++;
+                }
                 SumEndChunkEven = 0;
                 SumEndChunkOdd = 0;
                 AverageIndex1++;
@@ -1415,43 +1341,19 @@ namespace Graph_practice_2_Rolling_data
                         Average2 = (SumChunkOdd + SumChunkEven+SumProcessedBytes2) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist2.Add(time2,Average2);
-                    if (time2 >= XMax2)
-                    {
-                        time2 = 0;
-                        PastOneScreen2 = true;
-                    }
-                    if (PastOneScreen2 && time2 <= list2.ElementAt(0).X)
-                    {
-                        if (list2.ElementAt(0).X >= XMax2)
-                        {
-                            int i = 0;
-                            while (list2.ElementAt(i).X >= XMax2)
-                            {
-                                list2.RemoveAt(0);
-                            }
-                        }
-                        if (list2.ElementAt(0).X < XMax2)
-                        {
-                            list2.RemoveAt(0);
-                        }
 
-                    }
-
-                }
-                list2.Add(time2, Average2);
-
-                RecentPoint2.Add(time2, Average2);
-                if (RecentPoint2.LongCount() > 1)
-                {
-                    RecentPoint2.RemoveAt(0);
-                }
+                PlotPoint(2);
 
                 zgc.Invalidate();
-               
-                time2 += 1;// TimebinFactor[0] * AverageChunkSize;
+
+                if (TrueTime2)
+                {
+                    time2 += TimebinFactor[0] * AverageChunkSize2;
+                }
+                else if (!TrueTime2)
+                {
+                    time2++;
+                }
 
                 AverageIndex2++;
                 SumChunkEven = 0;
@@ -1507,44 +1409,19 @@ namespace Graph_practice_2_Rolling_data
                         Average2 = (100) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist2.Add(time2, Average2);
-                    if (time2 >= XMax2)
-                    {
-                        time2 = 0;
-                        PastOneScreen2 = true;
-                    }
-                    if (PastOneScreen2 && time2 <= list2.ElementAt(0).X)
-                    {
-                        if (list2.ElementAt(0).X >= XMax2)
-                        {
-                            int i = 0;
-                            while (list2.ElementAt(i).X >= XMax2)
-                            {
-                                list2.RemoveAt(0);
-                            }
-                        }
-                        if (list2.ElementAt(0).X < XMax2)
-                        {
-                            list2.RemoveAt(0);
-                        }
-
-                    }
-
-                }
-                list2.Add(time2, Average2);
-
-                RecentPoint2.Add(time2, Average2);
-
-                if (RecentPoint2.LongCount() > 1)
-                {
-                    RecentPoint2.RemoveAt(0);
-                }
+                PlotPoint(2);
 
                 zgc.Invalidate();
 
-                time2 += 1;// TimebinFactor[0] * AverageChunkSize;
+                if (TrueTime2)
+                {
+                    time2 += TimebinFactor[0] * AverageChunkSize2;
+                }
+                else if (!TrueTime2)
+                {
+                    time2++;
+                }
+
                 AverageIndex2++; // Average index hold placed of where to start averaging from. 
                 SumChunkEven = 0;
                 SumChunkOdd = 0;
@@ -1618,44 +1495,19 @@ namespace Graph_practice_2_Rolling_data
                         Average2 = (SumEndChunkOdd + SumEndChunkEven) / TimebinFactor[0];
                     }
                 }
-                if (!IsScrolling)
-                {
-                    savelist2.Add(time2, Average2);
-                    if (time2 >= XMax2)
-                    {
-                        time2 = 0;
-                        PastOneScreen2 = true;
-                    }
-                    if (PastOneScreen2 && time2 <= list2.ElementAt(0).X)
-                    {
-                        if (list2.ElementAt(0).X >= XMax2)
-                        {
-                            int i = 0;
-                            while (list2.ElementAt(i).X >= XMax2)
-                            {
-                                list2.RemoveAt(0);
-                            }
-                        }
-                        if (list2.ElementAt(0).X < XMax2)
-                        {
-                            list2.RemoveAt(0);
-                        }
-
-                    }
-
-                }
-
-                list2.Add(time2, Average2);
-
-                RecentPoint2.Add(time2, Average2);
-                if (RecentPoint2.LongCount() > 1)
-                {
-                    RecentPoint2.RemoveAt(0);
-                }
+                PlotPoint(2);
 
                 zgc.Invalidate();
-                
-                time2 += 1;//TimebinFactor[0] * AverageChunkSize;
+
+                if (TrueTime2)
+                {
+                    time2 += TimebinFactor[0] * AverageChunkSize2;
+                }
+                else if (!TrueTime2)
+                {
+                    time2++;
+                }
+
                 SumEndChunkEven = 0;
                 SumEndChunkOdd = 0;
                 AverageIndex2++;
@@ -1819,6 +1671,129 @@ namespace Graph_practice_2_Rolling_data
                 PMT2_pane2 = true;
             }
             FreshScreen();
+        }
+
+        private void TimeControl1_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (TimeControl1.Checked)
+            {
+                TrueTime1 = true;
+                for (int i = 0; i < list1.LongCount(); i++)
+                {
+                    list1.ElementAt(i).X = (list1.ElementAt(i).X) * AverageChunkSize1;
+                }
+                time1 = time1 * AverageChunkSize1;
+            }
+            if (!TimeControl1.Checked)
+            {
+                TrueTime1 = false;
+                for (int i = 0; i < list1.LongCount(); i++)
+                {
+                    list1.ElementAt(i).X = list1.ElementAt(i).X / AverageChunkSize1;
+                }
+                time1 = time1 / AverageChunkSize1;
+            }
+            SetXAxis1();
+            Console.WriteLine("TrueTime1 = {0}", TrueTime1);
+        }
+        private void TimeControl2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TimeControl2.Checked)
+            {
+                TrueTime2 = true;
+                for (int i = 0; i < list2.LongCount(); i++)
+                {
+                    list2.ElementAt(i).X = (list2.ElementAt(i).X) * AverageChunkSize2;
+                }
+                time2 = time2 * AverageChunkSize2;
+            }
+            if (!TimeControl2.Checked)
+            {
+                TrueTime2 = false;
+                for (int i = 0; i < list2.LongCount(); i++)
+                {
+                    list2.ElementAt(i).X = (list2.ElementAt(i).X) /AverageChunkSize2;
+                }
+                time2 = time2 /AverageChunkSize2;
+            }
+            SetXAxis2();
+            Console.WriteLine("TrueTime2 = {0}", TrueTime2);
+        }
+
+        private void PlotPoint(int Pane)
+        {
+            if (Pane == 1)
+            {
+                list1.Add(time1, Average1);
+                if (!IsScrolling)
+                {
+                    savelist1.Add(time1, Average1);
+                    if (time1 > Convert.ToInt32(XMax1))
+                    {
+                        time1 = 0;
+                        PastOneScreen1 = true;
+                    }
+
+                    
+                    
+                    if (PastOneScreen1 && list1.ElementAt(Convert.ToInt32(list1.LongCount() - 1)).X >= list1.ElementAt(0).X)
+                    {
+
+                        list1.RemoveAt(0);
+
+                    }
+
+                    
+
+                    while (list1.ElementAt(0).X >= XMax1)
+                    {
+                        list1.RemoveAt(0);
+                    }
+                   /* if(PastOneScreen1 && list1.ElementAt(Convert.ToInt16(list1.LongCount()-1)).X==XMax1)
+                    {
+                        list1.RemoveRange(0,2);
+                    }
+                    */
+                }
+                
+                RecentPoint1.Add(time1, Average1);
+                if (RecentPoint1.LongCount() > 1)
+                {
+                    RecentPoint1.RemoveAt(0);
+                }
+            }
+
+            if (Pane == 2)
+            {
+                list2.Add(time2, Average2);
+                if (!IsScrolling)
+                {
+                    savelist2.Add(time2, Average2);
+                    if (time2 > XMax2)
+                    {
+                        time2 = 0;
+                        PastOneScreen2 = true;
+                    }
+                    
+
+                    if (PastOneScreen2 && list2.ElementAt(Convert.ToInt16(list2.LongCount() - 1)).X >= list2.ElementAt(0).X)
+                    {
+                        list2.RemoveAt(0);
+                    }
+
+                    while (list2.ElementAt(0).X >= XMax2)
+                    {
+                        list2.RemoveAt(0);
+                    }
+                }
+                RecentPoint2.Add(time2, Average2);
+                if (RecentPoint2.LongCount() > 1)
+                {
+                    RecentPoint2.RemoveAt(0);
+                }
+            }
+
+
         }
     }       
 }

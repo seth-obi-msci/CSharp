@@ -473,11 +473,11 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (TrueTime2)
                     {
-                        myPane2.XAxis.Scale.Max = AverageChunkSize2 * Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                        myPane2.XAxis.Scale.Max = AverageChunkSize2 * Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue2);
                     }
                     if (!TrueTime2)
                     {
-                        myPane2.XAxis.Scale.Max = Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue1);
+                        myPane2.XAxis.Scale.Max = Convert.ToDouble((myPane2.GeneralTransform(XMax_Pane, CoordType.ChartFraction).X - myPane2.GeneralTransform(origin, CoordType.ChartFraction).X) * XScaleValue2);
                     }
                 }
                 myPane2.XAxis.Scale.Min = XMin2;
@@ -923,12 +923,12 @@ namespace Graph_practice_2_Rolling_data
         {
             if (ZoomIn.Checked)
             {
-                XScale1.Maximum = 100;
+                //XScale1.Maximum = 100;
                 XScaleValue1 =Convert.ToDouble( 1 / XScale1.Value);
                 BarItem curve = zgc.MasterPane.PaneList[0].CurveList[1] as BarItem;
                 curve.Bar.Border.Width = (float)(XScale1.Value);
-                BarItem RecentBar1 = zgc.MasterPane.PaneList[0].CurveList[0] as BarItem;
-                RecentBar1.Bar.Border.Width = (float)(XScale1.Value);
+                /*BarItem RecentBar1 = zgc.MasterPane.PaneList[0].CurveList[0] as BarItem;
+                RecentBar1.Bar.Border.Width = (float)(XScale1.Value);*/
             }
             else if (!ZoomIn.Checked && !IsScrolling)
             {
@@ -937,12 +937,12 @@ namespace Graph_practice_2_Rolling_data
             }
             else if (!ZoomIn.Checked && IsScrolling)
             {
-                XScale1.Maximum = 1;
+               // XScale1.Maximum = 1;
                 XScaleValue1 = Convert.ToDouble(XScale1.Value);
-                BarItem curve = zgc.MasterPane.PaneList[0].CurveList[1] as BarItem;
+                /*BarItem curve = zgc.MasterPane.PaneList[0].CurveList[1] as BarItem;
                 curve.Bar.Border.Width = (float)(XScale1.Value);
                 BarItem RecentBar1 = zgc.MasterPane.PaneList[0].CurveList[0] as BarItem;
-                RecentBar1.Bar.Border.Width = (float)(XScale1.Value);
+                RecentBar1.Bar.Border.Width = (float)(XScale1.Value);*/
             }
 
             SetXAxis1(); 
@@ -951,14 +951,15 @@ namespace Graph_practice_2_Rolling_data
         // Used to alter X Axis range myPane2
         void XScale2_ValueChanged(object sender, System.EventArgs e)
         {
+            Console.WriteLine("Into XScale2 Value Changed");
             if (ZoomIn.Checked)
             {
-                XScale2.Maximum = 100;
+                //XScale2.Maximum = 100;
                 XScaleValue2 = Convert.ToDouble(1 / XScale2.Value);
                 BarItem curve2 = zgc.MasterPane.PaneList[1].CurveList[1] as BarItem;
                 curve2.Bar.Border.Width = (float)(XScale2.Value);
-                BarItem RecentBar2 = zgc.MasterPane.PaneList[1].CurveList[0] as BarItem;
-                RecentBar2.Bar.Border.Width = (float)(XScale2.Value);
+                /*BarItem RecentBar2 = zgc.MasterPane.PaneList[1].CurveList[0] as BarItem;
+                RecentBar2.Bar.Border.Width = (float)(XScale2.Value);*/
             }
             else if (!ZoomIn.Checked && !IsScrolling)
             {
@@ -967,12 +968,9 @@ namespace Graph_practice_2_Rolling_data
             }
             else if (!ZoomIn.Checked && IsScrolling)
             {
-                XScale2.Maximum = 1;
+               // XScale2.Maximum = 1;
                 XScaleValue2 = Convert.ToDouble(XScale2.Value);
-                BarItem curve2 = zgc.MasterPane.PaneList[1].CurveList[1] as BarItem;
-                curve2.Bar.Border.Width = (float)(XScale2.Value);
-                BarItem RecentBar2 = zgc.MasterPane.PaneList[1].CurveList[0] as BarItem;
-                RecentBar2.Bar.Border.Width = (float)(XScale2.Value);
+
             }
             SetXAxis2();
         }
@@ -1736,7 +1734,7 @@ namespace Graph_practice_2_Rolling_data
 
                     
                     
-                    if (PastOneScreen1 && list1.ElementAt(Convert.ToInt32(list1.LongCount() - 1)).X >= list1.ElementAt(0).X)
+                    if (PastOneScreen1 && time1 <= list1.ElementAt(0).X)
                     {
 
                         list1.RemoveAt(0);
@@ -1749,11 +1747,6 @@ namespace Graph_practice_2_Rolling_data
                     {
                         list1.RemoveAt(0);
                     }
-                   /* if(PastOneScreen1 && list1.ElementAt(Convert.ToInt16(list1.LongCount()-1)).X==XMax1)
-                    {
-                        list1.RemoveRange(0,2);
-                    }
-                    */
                 }
                 
                 RecentPoint1.Add(time1, Average1);
@@ -1776,7 +1769,7 @@ namespace Graph_practice_2_Rolling_data
                     }
                     
 
-                    if (PastOneScreen2 && list2.ElementAt(Convert.ToInt16(list2.LongCount() - 1)).X >= list2.ElementAt(0).X)
+                    if (PastOneScreen2 && time2 <= list2.ElementAt(0).X)
                     {
                         list2.RemoveAt(0);
                     }

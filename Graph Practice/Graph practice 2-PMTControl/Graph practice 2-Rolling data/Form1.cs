@@ -967,7 +967,6 @@ namespace Graph_practice_2_Rolling_data
         {
             if (ZoomIn.Checked)
             {
-                XScale2.Maximum = 100;
                 XScaleValue2 = Convert.ToDouble(1 / XScale2.Value);
                 BarItem curve2 = zgc.MasterPane.PaneList[1].CurveList[1] as BarItem;
                 curve2.Bar.Border.Width = (float)(XScale2.Value);
@@ -976,17 +975,12 @@ namespace Graph_practice_2_Rolling_data
             }
             else if (!ZoomIn.Checked && !IsScrolling)
             {
-                XScale2.Maximum = 100;
+
                 XScaleValue2 = Convert.ToDouble(XScale2.Value);
             }
             else if (!ZoomIn.Checked && IsScrolling)
             {
-                XScale2.Maximum = 1;
                 XScaleValue2 = Convert.ToDouble(XScale2.Value);
-                BarItem curve2 = zgc.MasterPane.PaneList[1].CurveList[1] as BarItem;
-                curve2.Bar.Border.Width = (float)(XScale2.Value);
-                BarItem RecentBar2 = zgc.MasterPane.PaneList[1].CurveList[0] as BarItem;
-                RecentBar2.Bar.Border.Width = (float)(XScale2.Value);
             }
             SetXAxis2();
         }

@@ -79,6 +79,8 @@ namespace Graph_practice_2_Rolling_data
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.filedescription = new System.Windows.Forms.RichTextBox();
+            this.ThresholdScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.ThresholdScrollBar2 = new System.Windows.Forms.VScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkBox1)).BeginInit();
@@ -232,7 +234,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox1.DecimalPlaces = 1;
             this.AvChunkBox1.Location = new System.Drawing.Point(551, 29);
             this.AvChunkBox1.Maximum = new decimal(new int[] {
-            5000,
+            50000,
             0,
             0,
             0});
@@ -245,7 +247,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox1.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox1.TabIndex = 24;
             this.AvChunkBox1.Value = new decimal(new int[] {
-            5,
+            1,
             0,
             0,
             0});
@@ -325,7 +327,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox2.DecimalPlaces = 1;
             this.AvChunkBox2.Location = new System.Drawing.Point(551, 51);
             this.AvChunkBox2.Maximum = new decimal(new int[] {
-            5000,
+            50000,
             0,
             0,
             0});
@@ -338,7 +340,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox2.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox2.TabIndex = 30;
             this.AvChunkBox2.Value = new decimal(new int[] {
-            10,
+            1,
             0,
             0,
             0});
@@ -694,11 +696,32 @@ namespace Graph_practice_2_Rolling_data
             this.filedescription.TabIndex = 74;
             this.filedescription.Text = "";
             // 
+            // ThresholdScrollBar1
+            // 
+            this.ThresholdScrollBar1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.ThresholdScrollBar1.Location = new System.Drawing.Point(72, 152);
+            this.ThresholdScrollBar1.Name = "ThresholdScrollBar1";
+            this.ThresholdScrollBar1.Size = new System.Drawing.Size(10, 277);
+            this.ThresholdScrollBar1.TabIndex = 79;
+            this.ThresholdScrollBar1.Value = 100;
+            this.ThresholdScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ThresholdScrollBar1_Scroll);
+            // 
+            // ThresholdScrollBar2
+            // 
+            this.ThresholdScrollBar2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ThresholdScrollBar2.Location = new System.Drawing.Point(630, 152);
+            this.ThresholdScrollBar2.Name = "ThresholdScrollBar2";
+            this.ThresholdScrollBar2.Size = new System.Drawing.Size(10, 277);
+            this.ThresholdScrollBar2.TabIndex = 83;
+            this.ThresholdScrollBar2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ThresholdScrollBar2_Scroll);
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);
+            this.Controls.Add(this.ThresholdScrollBar2);
+            this.Controls.Add(this.ThresholdScrollBar1);
             this.Controls.Add(this.filedescription);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
@@ -820,5 +843,7 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.RichTextBox filedescription;
+        private System.Windows.Forms.VScrollBar ThresholdScrollBar1;
+        private System.Windows.Forms.VScrollBar ThresholdScrollBar2;
     }
 }

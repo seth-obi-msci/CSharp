@@ -31,12 +31,14 @@ namespace Graph_practice_2_Rolling_data
         int AdjustIndex1 = 0;
         int AverageIndex1 = 1;
         int AverageChunkSize1;
+        double ThresholdCounts1;
 
         double Average2;
         int SumProcessedBytes2=0;
         int AdjustIndex2 = 0;
         int AverageIndex2 = 1;
         int AverageChunkSize2;
+        double ThresholdCounts2;
 
         int[] AverageArray2 = new int[3];
         int[] AverageArray1 = new int[3];
@@ -53,6 +55,8 @@ namespace Graph_practice_2_Rolling_data
         int YMax1=300;
         int YMin2;
         int YMax2 = 300;
+        double ThresholdLineValue1;
+        double ThresholdLineValue2;
 
         //int NumValuesToScreen = 300; //Number of Values in point pair list and number of elements in DataBuffer array
         
@@ -92,6 +96,9 @@ namespace Graph_practice_2_Rolling_data
         PointPairList RecentPoint1 = new PointPairList();
         PointPairList RecentPoint2 = new PointPairList();
 
+        PointPairList ThresholdList1 = new PointPairList();
+        PointPairList ThresholdList2 = new PointPairList();
+
 
         //byte arrays
         byte[] SimulatedBytes = new byte [10];
@@ -122,12 +129,14 @@ namespace Graph_practice_2_Rolling_data
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
+            Console.WriteLine("Threshold line 2 is {0}", ThresholdLineValue2);
            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
            
            zgc.AxisChange();
            SetSize();
 
+           
             //Set X axis each timer.tick 
             SetXAxis1();
             SetXAxis2();
@@ -140,16 +149,22 @@ namespace Graph_practice_2_Rolling_data
             }
             else
             {
-               /* l++;
-                if (l % 2 == 0)
+               l++;
+                /*if (l % 2 == 0)
                 {
-                    SimulatedBytes[l % 10] = Convert.ToByte(slider);
+                    SimulatedBytes[l%10] = Convert.ToByte(trackBar1.Value);
                 }
                 else if (l % 2 == 1)
                 {
-                    SimulatedBytes[l % 10] = Convert.ToByte(0);
+                    SimulatedBytes[l%10] = Convert.ToByte(0);
                 }
                 if (l % 10 == 9) //Only reads and plots once every 10 ticks*/
+                    /*
+               if (l % 100 == 99)
+               {
+                   
+                   PMTCompare();
+               }*/
                 {
 
                     //UART_Buffer = FPGA.ReadBytes();
@@ -182,41 +197,42 @@ namespace Graph_practice_2_Rolling_data
                     zgc.Invalidate();
                    
                     //Remaining spaces in DataBuffer
+                    UART_Buffer = FPGA.ReadBytes();
                     int Diff = DataBuffer.Length - COPY_POS;
 
                     // Checks number of bytes in next UART Buffer. 
-                    uint BytesInQueue = FPGA.CheckQueue();
+                    
                     // Refresh when backlog of bytes is large (slows plotting)
-                    if (BytesInQueue > 4500)
+                    /*if (BytesInQueue > 4500)
                     {
                         Refresh();
-                    }
+                    }*/
                     // condition satisfied when there's enough room for a UART_Buffer array to be
                     // copied into the Screen array. 
-                    if (Diff>BytesInQueue)
+                    if (Diff>UART_Buffer.Length)
                     {
                         // Copies UART_Buffer=FPGA.ReadBytes into Screen array, overwriting oldest values
-                        Array.Copy(FPGA.ReadBytes(), 0, DataBuffer, COPY_POS, BytesInQueue); 
+                        Array.Copy(UART_Buffer, 0, DataBuffer, COPY_POS, UART_Buffer.Length); 
 
                         //COPY_POS shifted by UART buffer size, so new values are copied into correct position.
-                        COPY_POS = COPY_POS + Convert.ToInt32(BytesInQueue); 
+                        COPY_POS = COPY_POS + Convert.ToInt32(UART_Buffer.Length); 
 
                         
                         
                         AverageScreenUnfilled2();
                         
-                        SumProcessedBytes2 = 0;  //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - AdjustIndex2 loop 
+                        //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - AdjustIndex2 loop 
 
                         AverageScreenUnfilled1();
-                        SumProcessedBytes1 = 0;  //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - AdjustIndex2 loop
-                        
+                        //Sets total carried over from previous step to zero once first time through COPY_POS >= AverageIndex2 * AverageChunkSize2 - AdjustIndex2 loop
 
+                        CheckIonTrapped();
                     }
 
                     //Not enough room at end of DataBuffer for whole UART bufferload
                     else 
                     {
-                        byte[] UART_Buffer=FPGA.ReadBytes();
+                        //byte[] UART_Buffer=FPGA.ReadBytes();
                         // Fills remaining DataBuffer spaces with portion of UART buffer load.
                         // UART_Buffer values that don't get copied in due to not enough space are placed 
                         // at the begining of the DataBuffer once final values averaged. 
@@ -224,6 +240,7 @@ namespace Graph_practice_2_Rolling_data
 
                         // AverageScreenFilled used when DataBuffer is filled so that no values 
                         // are left out of averaging. i.e. those at end of DataBuffer that don't make up an entire AverageChunkSize
+                        
                         AverageScreenFilled2();
                         AverageScreenFilled1();
 
@@ -234,10 +251,15 @@ namespace Graph_practice_2_Rolling_data
                         //Remaining of UART bufferload copied to first spaces in DataBuffer and COPY_POS shifted accordingly
                         Array.Copy(UART_Buffer, DataBuffer.Length - COPY_POS, DataBuffer, 0, UART_Buffer.Length - (DataBuffer.Length - COPY_POS));
                         COPY_POS = UART_Buffer.Length - (DataBuffer.Length - COPY_POS);
+                        
                     }
                 }
             }
+            ThresholdList1.Add(XMin1, ThresholdLineValue1);
+            ThresholdList1.Add(XMax1, ThresholdLineValue1);
 
+            ThresholdList2.Add(XMin2, ThresholdLineValue2);
+            ThresholdList2.Add(XMax2, ThresholdLineValue2);
             // Controlling length of lists
             if (list1.LongCount() > 10000)
             {
@@ -254,6 +276,14 @@ namespace Graph_practice_2_Rolling_data
             if (savelist2.LongCount() > 2000)
             {
                 savelist2.RemoveRange(0, Convert.ToInt32(savelist2.LongCount() - 2000));
+            }
+            if (ThresholdList1.LongCount() > 2)
+            {
+                ThresholdList1.RemoveRange(0, 2);
+            }
+            if (ThresholdList2.LongCount() > 2)
+            {
+                ThresholdList2.RemoveRange(0, 2);
             }
 
         }
@@ -286,9 +316,14 @@ namespace Graph_practice_2_Rolling_data
             myPane1.Title.Text = "myPane1";
             myPane2.Title.Text = "myPane2";
 
+            LineItem ThresholdLine1 = zgc.MasterPane.PaneList[0].AddCurve("Threshold1", ThresholdList1, Color.Aquamarine, SymbolType.None);
+            LineItem ThresholdLine2 = zgc.MasterPane.PaneList[1].AddCurve("Threshold2", ThresholdList2, Color.DarkGoldenrod, SymbolType.None);
+
             SetBarProperties(1, Color.White, 1.0F, Color.Red, 10.0F);
             SetBarProperties(2, Color.White, 1.0F, Color.Red, 10.0F);
 
+            
+           
 
             //Timer fort the X axis, defined later
             timer1.Interval = 1;
@@ -306,6 +341,10 @@ namespace Graph_practice_2_Rolling_data
             SetXAxis1();
             SetXAxis2();
 
+            /*Point ThresholdLineYIntercept = new Point(0, Convert.ToInt32(ThresholdLineValue1));
+            Point XMax = new Point(1,0);
+            Rectangle ThresholdLine = new Rectangle(Convert.ToInt32(myPane1.GeneralTransform(ThresholdLineYIntercept, CoordType.AxisXYScale).X), Convert.ToInt32(myPane1.GeneralTransform(ThresholdLineYIntercept, CoordType.AxisXYScale).Y),  Convert.ToInt32(myPane1.GeneralTransform(XMax, CoordType.ChartFraction).X), 5);
+            */
             //Sets Y-axis if auto-scale is not selected (fixed Y axes)
             if (AutoScale.Checked == false)
             {
@@ -313,6 +352,8 @@ namespace Graph_practice_2_Rolling_data
                 SetYAxis2();
             }
 
+            ThresholdScrollBar1.Value = YMax1;
+            ThresholdScrollBar2.Value = YMax2;
 
             //Save begging time for reference
             tickStart = Environment.TickCount;
@@ -375,7 +416,7 @@ namespace Graph_practice_2_Rolling_data
         {
             if (WindowState == FormWindowState.Minimized)
             {
-                // Pause = true;
+               
             }
             else
             {
@@ -402,6 +443,7 @@ namespace Graph_practice_2_Rolling_data
                     myPane1.XAxis.Scale.FontSpec.Size = 9.0F;
                     myPane1.YAxis.Scale.FontSpec.Size = 9.0F;
                     myPane1.Title.FontSpec.Size = 9.0F;
+                    ThresholdScrollBar2.Height = 0;
                 }
                 else if (!LHSPane.Checked && RHSPane.Checked)
                 {
@@ -411,6 +453,12 @@ namespace Graph_practice_2_Rolling_data
                     myPane2.XAxis.Scale.FontSpec.Size = 9.0F;
                     myPane2.YAxis.Scale.FontSpec.Size = 9.0F;
                     myPane2.Title.FontSpec.Size = 9.0F;
+                    ThresholdScrollBar1.Height = 0;
+
+                    Point YMax = new Point(0, 1);
+                    Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMax, CoordType.ChartFraction).X))-10, Convert.ToInt32(myPane1.GeneralTransform(YMax, CoordType.ChartFraction).Y)+130);
+                    ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
+                    ThresholdScrollBar2.Location = LocationPoint2;
 
                 }
                 else
@@ -426,6 +474,17 @@ namespace Graph_practice_2_Rolling_data
 
                     myPane1.ReSize(this.CreateGraphics(), panerect1);
                     myPane2.ReSize(this.CreateGraphics(), panerect2);
+
+                    Point YMax = new Point(0, 1);
+                    Point LocationPoint1 = new Point(Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).X)-20, Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y)-270);
+                    ThresholdScrollBar1.Height = Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y);
+                    ThresholdScrollBar1.Location = LocationPoint1;
+
+                    Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMax, CoordType.ChartFraction).X)) -10, Convert.ToInt32(myPane1.GeneralTransform(YMax, CoordType.ChartFraction).Y) - 270);
+                    ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
+                    ThresholdScrollBar2.Location = LocationPoint2;
+
+                    
 
                 }
             }
@@ -494,7 +553,9 @@ namespace Graph_practice_2_Rolling_data
         public void SetYAxis1()
         {
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
-           
+
+                
+                ThresholdScrollBar1.Maximum = YMax1;
 
                 myPane1.YAxis.Scale.Min = YMin1;
                 myPane1.YAxis.Scale.Max = YMax1;
@@ -507,7 +568,7 @@ namespace Graph_practice_2_Rolling_data
         public void SetYAxis2()
         {
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
-
+            ThresholdScrollBar2.Maximum = YMax2;
 
             myPane2.YAxis.Scale.Min = YMin2;
             myPane2.YAxis.Scale.Max = YMax2;
@@ -761,12 +822,14 @@ namespace Graph_practice_2_Rolling_data
                         SumChunkOdd += Convert.ToInt16(DataBuffer[i]);
                         NumOfValues++;
                     }
+                    //Console.WriteLine("iis{0}", i);
                 }
                 if (PMT1_pane1 == true && PMT2_pane1 == false)
                 {
                     if (Average.Checked == true)
                     {
                         Average1 =  (SumChunkEven + SumProcessedBytes1) / (AverageChunkSize1);
+
                     }
                     else if (Average.Checked == false)
                     {
@@ -789,13 +852,22 @@ namespace Graph_practice_2_Rolling_data
                     if (Average.Checked == true)
                     {
                         Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1) / (2*AverageChunkSize1);
+                        if (Average1 < 100 )
+                        {
+                            Console.WriteLine(AverageIndex1);
+                            Console.WriteLine(SumChunkEven);
+                            Console.WriteLine(SumChunkOdd);
+                            Console.WriteLine("AverageChunk {0}", AverageChunkSize1);
+                            Console.WriteLine("Adjustindex {0}", AdjustIndex1);
+                            Console.WriteLine("COPY POS {0}", COPY_POS);
+                        }
                     }
                     else if (Average.Checked == false)
                     {
                         Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1);
                     }
                 }
-
+               
                 PlotPoint(1);
 
                 zgc.Invalidate();
@@ -847,13 +919,15 @@ namespace Graph_practice_2_Rolling_data
                 // If loops control which PMT's data is selected
                 if (PMT1_pane1 == true && PMT2_pane1 == false)
                 {
-                    if (Average.Checked == false)
+                    if (Average.Checked == true)
                     {
                         Average1 = SumEndChunkEven / (AverageChunkSize1);
+
                     }
-                    else if (Average.Checked == true)
+                    else if (Average.Checked == false)
                     {
                         Average1 = SumEndChunkEven;
+ 
                     }
                 }
                 if (PMT2_pane1 == true && PMT1_pane1 == false)
@@ -877,7 +951,9 @@ namespace Graph_practice_2_Rolling_data
                     {
                         Average1 = (SumEndChunkEven + SumEndChunkOdd);
                     }
+                   
                 }
+                
                 PlotPoint(1);
 
                 zgc.Invalidate();
@@ -897,7 +973,7 @@ namespace Graph_practice_2_Rolling_data
             }
 
             // For loop to sum remaining bytes in DataBuffer that dont make up whole average chunk size
-            for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1; i < DataBuffer.Length; i++) 
+            for (int i = (AverageIndex1) * AverageChunkSize1 - AdjustIndex1; i < DataBuffer.Length; i++) 
             {
                 if (i % 2 == 0)
                 {
@@ -912,21 +988,21 @@ namespace Graph_practice_2_Rolling_data
             if (PMT1_pane1 == true && PMT2_pane1 == false)
             {
                 SumProcessedBytes1 = SumProcessedBytesEven;
-                AdjustIndex1 = NumProcessedBytes;
-
             }
+
             if (PMT2_pane1 == true && PMT1_pane1 == false)
             {
                 SumProcessedBytes1 = SumProcessedBytesOdd;
-                AdjustIndex1 = NumProcessedBytes;
             }
+
             if (PMT1_pane1 && PMT2_pane1)
             {
                 SumProcessedBytes1 = SumProcessedBytesEven + SumProcessedBytesOdd;
-                AdjustIndex1 = NumProcessedBytes*2;
             }
+
             SumProcessedBytesEven = 0;
             SumProcessedBytesOdd = 0;
+            AdjustIndex1 = NumProcessedBytes;
 
         }
 
@@ -978,13 +1054,14 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 = (SumChunkOdd + SumChunkEven + SumProcessedBytes2) / (2*AverageChunkSize2 );
+                        Average2 = (SumChunkOdd + SumChunkEven + SumProcessedBytes2) / (2*AverageChunkSize2);
                     }
                     else if (Average.Checked == false)
                     {
                         Average2 = (SumChunkOdd + SumChunkEven + SumProcessedBytes2);
                     }
                 }
+
                 PlotPoint(2);
 
                 zgc.Invalidate();
@@ -1054,7 +1131,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 =  SumEndChunkOdd / (AverageChunkSize2 );
+                        Average2 =  SumEndChunkOdd / (AverageChunkSize2);
                     }
                     else if (Average.Checked == false)
                     {
@@ -1091,38 +1168,38 @@ namespace Graph_practice_2_Rolling_data
                 AverageIndex2+=2;
             }
 
-            for (int i = ((AverageIndex2 - 1) * AverageChunkSize2 - AdjustIndex2); i < DataBuffer.Length; i++) // For loop to sum remaining bytes in DataBuffer
+            for (int i = ((AverageIndex2-2) * AverageChunkSize2 - AdjustIndex2); i < DataBuffer.Length; i++) // For loop to sum remaining bytes in DataBuffer
             {
                 if (i % 2 == 0)
                 {
                     SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
-                    NumProcessedBytes++;
                 }
                 else if (i % 2 == 1)
                 {
                     SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
-                    NumProcessedBytes++;
                 }
+                NumProcessedBytes++;
             }
 
             if (PMT1_pane2 && !PMT2_pane2)
             {
                 SumProcessedBytes2 = SumProcessedBytesEven;
-                AdjustIndex2 = NumProcessedBytes;
             }
+
             else if (PMT2_pane2 && !PMT1_pane2)
             {
                 SumProcessedBytes2 = SumProcessedBytesOdd;
-                AdjustIndex2 = NumProcessedBytes;
             }
+
             else if (PMT1_pane2 && PMT2_pane2)
             {
                 SumProcessedBytes2 = SumProcessedBytesOdd + SumProcessedBytesEven;
-                AdjustIndex2 = NumProcessedBytes*2;
+                
             }
+
             SumProcessedBytesOdd = 0;
             SumProcessedBytesEven = 0;
-
+            AdjustIndex2 = NumProcessedBytes;
         }
 
         //Deletes point that are plotted but keeps data in savelists, the raw data, and time coordinate. 
@@ -1254,6 +1331,36 @@ namespace Graph_practice_2_Rolling_data
             }
         }
 
+        private void PMTCompare()
+        {
+            int PMT1Check = 0;
+            int PMT2Check = 0;
+            for (int i = 0; i < 1000; i++)
+            {
+                
+                if (i % 2 == 0)
+                {
+                    PMT1Check += DataBuffer[i];
+                }
+                if (i % 2 == 1)
+                {
+                    PMT2Check += DataBuffer[i];
+                }
+            }
+            double FracDiff = Math.Abs(PMT1Check - PMT2Check) / ((PMT1Check + PMT2Check) / 2);
+            if (FracDiff >= 0.5)
+            {
+                /*Form WarningForm = new Form();
+                WarningForm.Text = "Warning";
+                
+                WarningForm.Show();*/
+
+                //Console.WriteLine("PMT ERROR!!!");
+                //Pause=true;
+                
+            }
+        }
+
         /*Functions below use buttons/sliders on the form itself*/
 
         //Wipes both average and running pointpairlists and resets x axis to 0 for new screen, effectively restarts program
@@ -1267,7 +1374,29 @@ namespace Graph_practice_2_Rolling_data
             return;
         }
 
-        
+        private void CheckIonTrapped()
+        {
+            int CheckIonSum1=0;
+            int CheckIonSum2 = 0;
+            for (int i = 1; i < (AverageChunkSize1); i++)
+            {
+                CheckIonSum1 += Convert.ToInt16(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - i)).Y);
+            }
+            double CheckIonAverage1 = CheckIonSum1 / (AverageChunkSize1);
+
+            for (int i = 1; i < Convert.ToInt32(AverageChunkSize2); i++)
+            {
+                CheckIonSum2 += Convert.ToInt16(savelist2.ElementAt(Convert.ToInt32(savelist2.LongCount() - i)).Y);
+                //Console.WriteLine("Element just added = {0}", 
+            }
+            double CheckIonAverage2 = CheckIonSum2 / (AverageChunkSize2);
+            if ((CheckIonAverage2 < ThresholdLineValue2) && (CheckIonAverage1 < ThresholdLineValue1))
+            {
+                Pause = true;
+                Console.WriteLine("CheckIonSum 1 and 2 are {0}, {1}", CheckIonSum1, CheckIonSum2);
+            }
+
+        }
         // Triggers autosave function, which saves DataBuffer everytime all values are replaced
         public void AutoSave(object sender, EventArgs e)
         {
@@ -1287,6 +1416,7 @@ namespace Graph_practice_2_Rolling_data
             else if (!PauseCheck.Checked)
             {
                 Pause = false;
+                FPGA.EmptyBuffer();
             }
 
         }
@@ -1305,7 +1435,7 @@ namespace Graph_practice_2_Rolling_data
         {
             slider = trackBar1.Value;
         }*/
-  
+ 
 
         // Used to alter X Axis range myPane1
         void XScale1_ValueChanged(object sender, System.EventArgs e)
@@ -1314,7 +1444,7 @@ namespace Graph_practice_2_Rolling_data
             {
                 //XScale1.Maximum = 100;
                 XScaleValue1 =Convert.ToDouble( 1 / XScale1.Value);
-                BarItem curve = zgc.MasterPane.PaneList[0].CurveList[1] as BarItem;
+                BarItem curve = zgc.MasterPane.PaneList[0].CurveList[2] as BarItem;
                 curve.Bar.Border.Width = (float)(XScale1.Value);
                 /*BarItem RecentBar1 = zgc.MasterPane.PaneList[0].CurveList[0] as BarItem;
                 RecentBar1.Bar.Border.Width = (float)(XScale1.Value);*/
@@ -1345,7 +1475,7 @@ namespace Graph_practice_2_Rolling_data
             {
                 //XScale2.Maximum = 100;
                 XScaleValue2 = Convert.ToDouble(1 / XScale2.Value);
-                BarItem curve2 = zgc.MasterPane.PaneList[1].CurveList[1] as BarItem;
+                BarItem curve2 = zgc.MasterPane.PaneList[1].CurveList[2] as BarItem;
                 curve2.Bar.Border.Width = (float)(XScale2.Value);
                 /*BarItem RecentBar2 = zgc.MasterPane.PaneList[1].CurveList[0] as BarItem;
                 RecentBar2.Bar.Border.Width = (float)(XScale2.Value);*/
@@ -1622,6 +1752,22 @@ namespace Graph_practice_2_Rolling_data
         {
             Reset();
         }
+
+
+        private void ThresholdScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            ThresholdLineValue1=YMax1-ThresholdScrollBar1.Value;
+        }
+
+        private void ThresholdScrollBar2_Scroll(object sender, ScrollEventArgs e)
+        {
+            ThresholdLineValue2 = YMax2 - ThresholdScrollBar2.Value;
+        }
+
+
+
+
+
 
 
  

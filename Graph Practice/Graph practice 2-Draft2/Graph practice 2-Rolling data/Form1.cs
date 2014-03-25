@@ -77,6 +77,7 @@ namespace Graph_practice_2_Rolling_data
         bool PMT2_pane1=true;
         bool PMT1_pane2=true;
         bool PMT2_pane2=true;
+        bool ThresholdBool = true;
 
         bool TrueTime1 = false;
         bool TrueTime2 = false;
@@ -129,7 +130,7 @@ namespace Graph_practice_2_Rolling_data
         //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
         public void timer1_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine("Threshold line 2 is {0}", ThresholdLineValue2);
+           
            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
            
@@ -198,6 +199,7 @@ namespace Graph_practice_2_Rolling_data
                    
                     //Remaining spaces in DataBuffer
                     UART_Buffer = FPGA.ReadBytes();
+                    Console.WriteLine("Bytes in buffer = {0}", UART_Buffer.Length);
                     int Diff = DataBuffer.Length - COPY_POS;
 
                     // Checks number of bytes in next UART Buffer. 
@@ -316,8 +318,12 @@ namespace Graph_practice_2_Rolling_data
             myPane1.Title.Text = "myPane1";
             myPane2.Title.Text = "myPane2";
 
-            LineItem ThresholdLine1 = zgc.MasterPane.PaneList[0].AddCurve("Threshold1", ThresholdList1, Color.Aquamarine, SymbolType.None);
-            LineItem ThresholdLine2 = zgc.MasterPane.PaneList[1].AddCurve("Threshold2", ThresholdList2, Color.DarkGoldenrod, SymbolType.None);
+
+                LineItem ThresholdLine1 = zgc.MasterPane.PaneList[0].AddCurve("Threshold1", ThresholdList1, Color.DarkOliveGreen, SymbolType.None);
+                ThresholdLine1.Line.Width = 2.0F;
+                LineItem ThresholdLine2 = zgc.MasterPane.PaneList[1].AddCurve("Threshold2", ThresholdList2, Color.DarkGoldenrod, SymbolType.None);
+                ThresholdLine2.Line.Width = 2.0F;
+
 
             SetBarProperties(1, Color.White, 1.0F, Color.Red, 10.0F);
             SetBarProperties(2, Color.White, 1.0F, Color.Red, 10.0F);
@@ -352,8 +358,15 @@ namespace Graph_practice_2_Rolling_data
                 SetYAxis2();
             }
 
+            
+
             ThresholdScrollBar1.Value = YMax1;
             ThresholdScrollBar2.Value = YMax2;
+
+            //ThresholdScrollBar1.Hide();
+            //ThresholdScrollBar2.Hide();
+
+
 
             //Save begging time for reference
             tickStart = Environment.TickCount;
@@ -423,11 +436,132 @@ namespace Graph_practice_2_Rolling_data
                 GraphPane myPane1 = zgc.MasterPane.PaneList[0] as GraphPane;
                 GraphPane myPane2 = zgc.MasterPane.PaneList[1] as GraphPane;
 
+                Point YMin = new Point(0, 0);
+                Point YMax = new Point(0, 1);
+
                 Rectangle formRect = this.ClientRectangle;
                 Rectangle GraphRect = new Rectangle(this.ClientRectangle.Location.X, this.ClientRectangle.Location.Y + 37, this.ClientRectangle.Size.Width - 1, this.ClientRectangle.Size.Height - 1);
-                GraphRect.Inflate(0, -40);
+                if (ButtonsVisible.Checked)
+                {
+                    GraphRect.Inflate(0, -40);
+                    if (LHSPane.Checked && !RHSPane.Checked)
+                    {
+                        RectangleF zero_rect2 = new RectangleF(Convert.ToInt32(XMax2), 0F, 0F, 0F);
+                        myPane2.ReSize(this.CreateGraphics(), zero_rect2);
+                        myPane1.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
+                        myPane1.XAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane1.YAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane1.Title.FontSpec.Size = 9.0F;
+                        ThresholdScrollBar2.Height = 0;
+
+                        Point LocationPoint1 = new Point(Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).X) - 10, Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).Y) + 70);
+                        ThresholdScrollBar1.Height = Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y);
+                        ThresholdScrollBar1.Location = LocationPoint1;
+                    }
+                    else if (!LHSPane.Checked && RHSPane.Checked)
+                    {
+                        RectangleF zero_rect1 = new RectangleF(0F, 0F, 0F, 0F);
+                        myPane1.ReSize(this.CreateGraphics(), zero_rect1);
+                        myPane2.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
+                        myPane2.XAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane2.YAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane2.Title.FontSpec.Size = 9.0F;
+                        ThresholdScrollBar1.Height = 0;
+
+                        // Point YMax = new Point(0, 1);
+                        Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMin, CoordType.ChartFraction).X)) - 10, Convert.ToInt32(myPane1.GeneralTransform(YMin, CoordType.ChartFraction).Y) + 70);
+                        ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
+                        ThresholdScrollBar2.Location = LocationPoint2;
 
 
+                    }
+                    else
+                    {
+                        RectangleF panerect1 = new RectangleF(0F, 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
+                        RectangleF panerect2 = new RectangleF((zgc.ClientSize.Width / 2), 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
+                        myPane2.XAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane2.YAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane2.Title.FontSpec.Size = 12.0F;
+                        myPane1.XAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane1.YAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane1.Title.FontSpec.Size = 12.0F;
+
+                        myPane1.ReSize(this.CreateGraphics(), panerect1);
+                        myPane2.ReSize(this.CreateGraphics(), panerect2);
+
+
+                        Point LocationPoint1 = new Point(Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).X) - 10, Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).Y) + 70);
+                        ThresholdScrollBar1.Height = Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y);
+                        ThresholdScrollBar1.Location = LocationPoint1;
+
+                        Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMin, CoordType.ChartFraction).X)) - 10, Convert.ToInt32(myPane1.GeneralTransform(YMin, CoordType.ChartFraction).Y) + 70);
+                        ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
+                        ThresholdScrollBar2.Location = LocationPoint2;
+
+                    }
+                }
+
+
+                else if (!ButtonsVisible.Checked)
+                {
+                    GraphRect.Inflate(0, 0);
+                    GraphRect = new Rectangle(this.ClientRectangle.Location.X, this.ClientRectangle.Location.Y, this.ClientRectangle.Size.Width - 1, this.ClientRectangle.Size.Height - 1);
+                    if (LHSPane.Checked && !RHSPane.Checked)
+                    {
+                        RectangleF zero_rect2 = new RectangleF(Convert.ToInt32(XMax2), 0F, 0F, 0F);
+                        myPane2.ReSize(this.CreateGraphics(), zero_rect2);
+                        myPane1.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
+                        myPane1.XAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane1.YAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane1.Title.FontSpec.Size = 9.0F;
+                        ThresholdScrollBar2.Height = 0;
+
+                        Point LocationPoint1 = new Point(Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).X) - 10, Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).Y)+7 );
+                        ThresholdScrollBar1.Height = Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y);
+                        ThresholdScrollBar1.Location = LocationPoint1;
+                    }
+                    else if (!LHSPane.Checked && RHSPane.Checked)
+                    {
+                        RectangleF zero_rect1 = new RectangleF(0F, 0F, 0F, 0F);
+                        myPane1.ReSize(this.CreateGraphics(), zero_rect1);
+                        myPane2.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
+                        myPane2.XAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane2.YAxis.Scale.FontSpec.Size = 9.0F;
+                        myPane2.Title.FontSpec.Size = 9.0F;
+                        ThresholdScrollBar1.Height = 0;
+
+                        // Point YMax = new Point(0, 1);
+                        Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMin, CoordType.ChartFraction).X)) - 10, Convert.ToInt32(myPane1.GeneralTransform(YMin, CoordType.ChartFraction).Y)+7 );
+                        ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
+                        ThresholdScrollBar2.Location = LocationPoint2;
+
+
+                    }
+                    else
+                    {
+                        RectangleF panerect1 = new RectangleF(0F, 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
+                        RectangleF panerect2 = new RectangleF((zgc.ClientSize.Width / 2), 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
+                        myPane2.XAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane2.YAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane2.Title.FontSpec.Size = 12.0F;
+                        myPane1.XAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane1.YAxis.Scale.FontSpec.Size = 10.0F;
+                        myPane1.Title.FontSpec.Size = 12.0F;
+
+                        myPane1.ReSize(this.CreateGraphics(), panerect1);
+                        myPane2.ReSize(this.CreateGraphics(), panerect2);
+
+
+                        Point LocationPoint1 = new Point(Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).X) - 10, Convert.ToInt32((myPane1.GeneralTransform(YMin, CoordType.ChartFraction)).Y));
+                        ThresholdScrollBar1.Height = Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y-20);
+                        ThresholdScrollBar1.Location = LocationPoint1;
+
+                        Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMin, CoordType.ChartFraction).X)) - 10, Convert.ToInt32(myPane1.GeneralTransform(YMin, CoordType.ChartFraction).Y));
+                        ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y-20);
+                        ThresholdScrollBar2.Location = LocationPoint2;
+
+                    }
+                }
                 if (zgc.Size != formRect.Size)
                 {
                     zgc.Location = GraphRect.Location;
@@ -435,58 +569,7 @@ namespace Graph_practice_2_Rolling_data
                 }
 
                 // if/else statements control whether one or both graphs are displayed
-                if (LHSPane.Checked && !RHSPane.Checked)
-                {
-                    RectangleF zero_rect2 = new RectangleF(Convert.ToInt32(XMax2), 0F, 0F, 0F);
-                    myPane2.ReSize(this.CreateGraphics(), zero_rect2);
-                    myPane1.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
-                    myPane1.XAxis.Scale.FontSpec.Size = 9.0F;
-                    myPane1.YAxis.Scale.FontSpec.Size = 9.0F;
-                    myPane1.Title.FontSpec.Size = 9.0F;
-                    ThresholdScrollBar2.Height = 0;
-                }
-                else if (!LHSPane.Checked && RHSPane.Checked)
-                {
-                    RectangleF zero_rect1 = new RectangleF(0F, 0F, 0F, 0F);
-                    myPane1.ReSize(this.CreateGraphics(), zero_rect1);
-                    myPane2.ReSize(this.CreateGraphics(), zgc.MasterPane.Rect);
-                    myPane2.XAxis.Scale.FontSpec.Size = 9.0F;
-                    myPane2.YAxis.Scale.FontSpec.Size = 9.0F;
-                    myPane2.Title.FontSpec.Size = 9.0F;
-                    ThresholdScrollBar1.Height = 0;
-
-                    Point YMax = new Point(0, 1);
-                    Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMax, CoordType.ChartFraction).X))-10, Convert.ToInt32(myPane1.GeneralTransform(YMax, CoordType.ChartFraction).Y)+130);
-                    ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
-                    ThresholdScrollBar2.Location = LocationPoint2;
-
-                }
-                else
-                {
-                    RectangleF panerect1 = new RectangleF(0F, 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
-                    RectangleF panerect2 = new RectangleF((zgc.ClientSize.Width / 2), 0F, (zgc.ClientSize.Width / 2), (zgc.ClientSize.Height));
-                    myPane2.XAxis.Scale.FontSpec.Size = 10.0F;
-                    myPane2.YAxis.Scale.FontSpec.Size = 10.0F;
-                    myPane2.Title.FontSpec.Size = 12.0F;
-                    myPane1.XAxis.Scale.FontSpec.Size = 10.0F;
-                    myPane1.YAxis.Scale.FontSpec.Size = 10.0F;
-                    myPane1.Title.FontSpec.Size = 12.0F;
-
-                    myPane1.ReSize(this.CreateGraphics(), panerect1);
-                    myPane2.ReSize(this.CreateGraphics(), panerect2);
-
-                    Point YMax = new Point(0, 1);
-                    Point LocationPoint1 = new Point(Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).X)-20, Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y)-270);
-                    ThresholdScrollBar1.Height = Convert.ToInt32((myPane1.GeneralTransform(YMax, CoordType.ChartFraction)).Y);
-                    ThresholdScrollBar1.Location = LocationPoint1;
-
-                    Point LocationPoint2 = new Point(Convert.ToInt32((myPane2.GeneralTransform(YMax, CoordType.ChartFraction).X)) -10, Convert.ToInt32(myPane1.GeneralTransform(YMax, CoordType.ChartFraction).Y) - 270);
-                    ThresholdScrollBar2.Height = Convert.ToInt32(myPane2.GeneralTransform(YMax, CoordType.ChartFraction).Y);
-                    ThresholdScrollBar2.Location = LocationPoint2;
-
-                    
-
-                }
+                
             }
             
         }
@@ -554,8 +637,8 @@ namespace Graph_practice_2_Rolling_data
         {
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
 
-                
-                ThresholdScrollBar1.Maximum = YMax1;
+                ThresholdScrollBar1.Maximum = YMax1+9;
+                ThresholdScrollBar1.Minimum = YMin1;
 
                 myPane1.YAxis.Scale.Min = YMin1;
                 myPane1.YAxis.Scale.Max = YMax1;
@@ -568,7 +651,8 @@ namespace Graph_practice_2_Rolling_data
         public void SetYAxis2()
         {
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
-            ThresholdScrollBar2.Maximum = YMax2;
+            ThresholdScrollBar2.Maximum = YMax2+9;
+            ThresholdScrollBar2.Minimum = YMin2;
 
             myPane2.YAxis.Scale.Min = YMin2;
             myPane2.YAxis.Scale.Max = YMax2;
@@ -828,7 +912,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 =  (SumChunkEven + SumProcessedBytes1) / (AverageChunkSize1);
+                        Average1 = (SumChunkEven + SumProcessedBytes1) / (AverageChunkSize1) * 10;
 
                     }
                     else if (Average.Checked == false)
@@ -840,7 +924,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 =  (SumChunkOdd + SumProcessedBytes1) / (AverageChunkSize1);
+                        Average1 = (SumChunkOdd + SumProcessedBytes1) / (AverageChunkSize1) * 10;
                     }
                     else if (Average.Checked == false)
                     {
@@ -851,16 +935,8 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1) / (2*AverageChunkSize1);
-                        if (Average1 < 100 )
-                        {
-                            Console.WriteLine(AverageIndex1);
-                            Console.WriteLine(SumChunkEven);
-                            Console.WriteLine(SumChunkOdd);
-                            Console.WriteLine("AverageChunk {0}", AverageChunkSize1);
-                            Console.WriteLine("Adjustindex {0}", AdjustIndex1);
-                            Console.WriteLine("COPY POS {0}", COPY_POS);
-                        }
+                        Average1 = (SumChunkEven + SumChunkOdd + SumProcessedBytes1) / (2 * AverageChunkSize1) * 10;
+                        
                     }
                     else if (Average.Checked == false)
                     {
@@ -921,7 +997,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 = SumEndChunkEven / (AverageChunkSize1);
+                        Average1 = SumEndChunkEven / (AverageChunkSize1) * 10;
 
                     }
                     else if (Average.Checked == false)
@@ -934,7 +1010,8 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 = SumEndChunkOdd / (AverageChunkSize1);
+                        Average1 = SumEndChunkOdd / (AverageChunkSize1) * 10;
+
                     }
                     else if (Average.Checked == false)
                     {
@@ -945,7 +1022,8 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 = (SumEndChunkEven + SumEndChunkOdd) / (2 * AverageChunkSize1);
+                        Average1 = (SumEndChunkEven + SumEndChunkOdd) / (2 * AverageChunkSize1) * 10;
+
                     }
                     else if (Average.Checked == false)
                     {
@@ -1032,7 +1110,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 = (SumChunkEven + SumProcessedBytes2) / (AverageChunkSize2);
+                        Average2 = (SumChunkEven + SumProcessedBytes2) / (AverageChunkSize2) * 10;
                     }
                     else if (Average.Checked == false)
                     {
@@ -1043,7 +1121,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 = (SumChunkOdd + SumProcessedBytes2) / (AverageChunkSize2);
+                        Average2 = (SumChunkOdd + SumProcessedBytes2) / (AverageChunkSize2) * 10;
                     }
                     else if (Average.Checked == false)
                     {
@@ -1054,7 +1132,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 = (SumChunkOdd + SumChunkEven + SumProcessedBytes2) / (2*AverageChunkSize2);
+                        Average2 = (SumChunkOdd + SumChunkEven + SumProcessedBytes2) / (2 * AverageChunkSize2) * 10;
                     }
                     else if (Average.Checked == false)
                     {
@@ -1120,7 +1198,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 = SumEndChunkEven / (AverageChunkSize2);
+                        Average2 = SumEndChunkEven / (AverageChunkSize2) * 10;
                     }
                     else if (Average.Checked == false)
                     {
@@ -1131,7 +1209,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 =  SumEndChunkOdd / (AverageChunkSize2);
+                        Average2 = SumEndChunkOdd / (AverageChunkSize2) * 10;
                     }
                     else if (Average.Checked == false)
                     {
@@ -1142,7 +1220,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average2 = (SumEndChunkOdd + SumEndChunkEven) / (2*AverageChunkSize2);
+                        Average2 = (SumEndChunkOdd + SumEndChunkEven) / (2 * AverageChunkSize2) * 10;
 
                     }
                     else if (Average.Checked == false)
@@ -1364,7 +1442,7 @@ namespace Graph_practice_2_Rolling_data
         /*Functions below use buttons/sliders on the form itself*/
 
         //Wipes both average and running pointpairlists and resets x axis to 0 for new screen, effectively restarts program
-        private void FreshScreenButton(object sender, EventArgs e)
+        private void FreshScreenButton_Click(object sender, EventArgs e)
         {
             if (sender == null) return;
             if (sender != null)
@@ -1374,26 +1452,49 @@ namespace Graph_practice_2_Rolling_data
             return;
         }
 
+
         private void CheckIonTrapped()
         {
             int CheckIonSum1=0;
             int CheckIonSum2 = 0;
-            for (int i = 1; i < (AverageChunkSize1); i++)
+            if(savelist1.LongCount()!=0)
             {
-                CheckIonSum1 += Convert.ToInt16(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - i)).Y);
+                CheckIonSum1 += Convert.ToInt32(savelist1.ElementAt(Convert.ToInt32(savelist1.LongCount() - 1)).Y); //Should these be savelist or DataBuffer
             }
-            double CheckIonAverage1 = CheckIonSum1 / (AverageChunkSize1);
+            double CheckIonAverage1 = CheckIonSum1;// / (AverageChunkSize1);
 
-            for (int i = 1; i < Convert.ToInt32(AverageChunkSize2); i++)
+            if(savelist2.LongCount()!=0)
             {
-                CheckIonSum2 += Convert.ToInt16(savelist2.ElementAt(Convert.ToInt32(savelist2.LongCount() - i)).Y);
+                CheckIonSum2 += Convert.ToInt32(savelist2.ElementAt(Convert.ToInt32(savelist2.LongCount() - 1)).Y);
                 //Console.WriteLine("Element just added = {0}", 
             }
-            double CheckIonAverage2 = CheckIonSum2 / (AverageChunkSize2);
-            if ((CheckIonAverage2 < ThresholdLineValue2) && (CheckIonAverage1 < ThresholdLineValue1))
+            double CheckIonAverage2 = CheckIonSum2;// / (AverageChunkSize2);
+            if (RHSPane.Checked && LHSPane.Checked)
             {
-                Pause = true;
-                Console.WriteLine("CheckIonSum 1 and 2 are {0}, {1}", CheckIonSum1, CheckIonSum2);
+                if ((CheckIonAverage2 < ThresholdLineValue2) && (CheckIonAverage1 < ThresholdLineValue1))
+                {
+                    Pause = true;
+                    PauseCheck.Checked=true;
+                    Console.WriteLine("CheckIonSum 1 and 2 are {0}, {1}", CheckIonSum1, CheckIonSum2);
+                }
+            }
+            
+            else if (!LHSPane.Checked && RHSPane.Checked)
+            {
+                if (CheckIonAverage2 < ThresholdLineValue2)
+                {
+                    Pause = true;
+                    PauseCheck.Checked = true;
+                }
+            }
+
+            else if (LHSPane.Checked && !RHSPane.Checked)
+            {
+                if (CheckIonAverage1 < ThresholdLineValue1)
+                {
+                    Pause = true;
+                    PauseCheck.Checked = true;
+                }
             }
 
         }
@@ -1764,13 +1865,142 @@ namespace Graph_practice_2_Rolling_data
             ThresholdLineValue2 = YMax2 - ThresholdScrollBar2.Value;
         }
 
+        private void ThresholdCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ThresholdCheckBox.Checked)
+            {
+                ThresholdBool = true;
+                ThresholdScrollBar1.Visible = true;
+                ThresholdScrollBar2.Visible = true;
+                zgc.MasterPane.PaneList[0].CurveList[0].IsVisible = true;
+                zgc.MasterPane.PaneList[1].CurveList[0].IsVisible = true;
+            }
+            else if (!ThresholdCheckBox.Checked)
+            {
+                ThresholdBool = false;
+                ThresholdScrollBar1.Visible = false;
+                ThresholdScrollBar2.Visible = false;
+                zgc.MasterPane.PaneList[0].CurveList[0].IsVisible = false;
+                zgc.MasterPane.PaneList[1].CurveList[0].IsVisible = false;
+                ThresholdLineValue1 = 0;
+                ThresholdLineValue2 = 0;
+            }
+        
+            }
+
+        private void filedescription_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void ButtonsVisible_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ButtonsVisible.Checked)
+            {
+                ThresholdCheckBox.Visible = true;
+                TimeControl1.Visible = true;
+                TimeControl2.Visible = true;
+                ResetButton.Visible = true;
+                FreshScreenButton.Visible = true;
+                YMaxNum1.Visible = true;
+                YMaxNum2.Visible = true;
+                YMinNum1.Visible = true;
+                YMinNum2.Visible = true;
+                PMTLHS.Visible = true;
+                PMTRHS.Visible = true;
+                ScrollingCheckBox.Visible = true;
+                AvChunkBox1.Visible = true;
+                AvChunkBox2.Visible = true;
+                SaveBytesButton.Visible = true;
+                XScale1.Visible = true;
+                XScale2.Visible = true;
+                ZoomIn.Visible = true;
+                PauseCheck.Visible = true;
+                filedescription.Visible = true;
+                AutoScale.Visible = true;
+                SaveRaw.Visible = true;
+                RHSSave.Visible = true;
+                LHSSave.Visible = true;
+                RHSPane.Visible = true;
+                LHSPane.Visible = true;
+                label1.Visible = true;
+                label2.Visible = true;
+                label3.Visible = true;
+                label4.Visible = true;
+                label5.Visible = true;
+                label6.Visible = true;
+                label7.Visible = true;
+                label8.Visible = true;
+                label9.Visible = true;
+                label10.Visible = true;
+                label11.Visible = true;
+                label12.Visible = true;
+                label13.Visible = true;
+                label14.Visible = true;
+                label15.Visible = true; 
+                label16.Visible = true;
+                label17.Visible = true;
+                Average.Visible = true;
+                FPGATimebin.Visible = true;
+
+            }
+
+            else if (!ButtonsVisible.Checked)
+            {
+                ThresholdCheckBox.Visible = false;
+                ThresholdCheckBox.Visible = false;
+                TimeControl1.Visible = false;
+                TimeControl2.Visible = false;
+                ResetButton.Visible = false;
+                FreshScreenButton.Visible = false;
+                YMaxNum1.Visible = false;
+                YMaxNum2.Visible = false;
+                YMinNum1.Visible = false;
+                YMinNum2.Visible = false;
+                PMTLHS.Visible = false;
+                PMTRHS.Visible = false;
+                ScrollingCheckBox.Visible = false;
+                AvChunkBox1.Visible = false;
+                AvChunkBox2.Visible = false;
+                SaveBytesButton.Visible = false;
+                XScale1.Visible = false;
+                XScale2.Visible = false;
+                ZoomIn.Visible = false;
+                PauseCheck.Visible = false;
+                filedescription.Visible = false;
+                AutoScale.Visible = false;
+                SaveRaw.Visible = false;
+                RHSSave.Visible = false;
+                LHSSave.Visible = false;
+                RHSPane.Visible = false;
+                LHSPane.Visible = false;
+                label1.Visible = false;
+                label2.Visible = false;
+                label3.Visible = false;
+                label4.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                label7.Visible = false;
+                label8.Visible = false;
+                label9.Visible = false;
+                label10.Visible = false;
+                label11.Visible = false;
+                label12.Visible = false;
+                label13.Visible = false;
+                label14.Visible = false;
+                label15.Visible = false;
+                label16.Visible = false;
+                label17.Visible = false;
+                Average.Visible = false;
+                FPGATimebin.Visible = false;
+            }
+
+        }
 
 
 
 
 
 
- 
 
     }       
 }

@@ -34,9 +34,8 @@ namespace Graph_practice_2_Rolling_data
             this.zgc = new ZedGraph.ZedGraphControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.SaveBytesButton = new System.Windows.Forms.Button();
+            this.FreshScreenButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.YMaxNum1 = new System.Windows.Forms.NumericUpDown();
@@ -79,8 +78,10 @@ namespace Graph_practice_2_Rolling_data
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.filedescription = new System.Windows.Forms.RichTextBox();
-            this.ThresholdScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.ThresholdScrollBar2 = new System.Windows.Forms.VScrollBar();
+            this.ThresholdScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.ThresholdCheckBox = new System.Windows.Forms.CheckBox();
+            this.ButtonsVisible = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkBox1)).BeginInit();
@@ -115,39 +116,27 @@ namespace Graph_practice_2_Rolling_data
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // button1
+            // SaveBytesButton
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(1132, 7);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(69, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "SaveBytes";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.SaveBytesButton_Click);
+            this.SaveBytesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SaveBytesButton.AutoSize = true;
+            this.SaveBytesButton.Location = new System.Drawing.Point(1132, 7);
+            this.SaveBytesButton.Name = "SaveBytesButton";
+            this.SaveBytesButton.Size = new System.Drawing.Size(69, 23);
+            this.SaveBytesButton.TabIndex = 1;
+            this.SaveBytesButton.Text = "SaveBytes";
+            this.SaveBytesButton.UseVisualStyleBackColor = true;
+            this.SaveBytesButton.Click += new System.EventHandler(this.SaveBytesButton_Click);
             // 
-            // checkBox1
+            // FreshScreenButton
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(956, 11);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(73, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "AutoSave";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.AutoSave);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(252, 1);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 21);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "FreshScreen";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.FreshScreenButton);
+            this.FreshScreenButton.Location = new System.Drawing.Point(252, 1);
+            this.FreshScreenButton.Name = "FreshScreenButton";
+            this.FreshScreenButton.Size = new System.Drawing.Size(75, 21);
+            this.FreshScreenButton.TabIndex = 3;
+            this.FreshScreenButton.Text = "FreshScreen";
+            this.FreshScreenButton.UseVisualStyleBackColor = true;
+            this.FreshScreenButton.Click += new System.EventHandler(this.FreshScreenButton_Click);
             // 
             // label2
             // 
@@ -178,7 +167,7 @@ namespace Graph_practice_2_Rolling_data
             0});
             this.YMaxNum1.Location = new System.Drawing.Point(442, 29);
             this.YMaxNum1.Maximum = new decimal(new int[] {
-            5000,
+            30000000,
             0,
             0,
             0});
@@ -247,7 +236,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox1.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox1.TabIndex = 24;
             this.AvChunkBox1.Value = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
             0});
@@ -340,7 +329,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox2.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox2.TabIndex = 30;
             this.AvChunkBox2.Value = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
@@ -503,7 +492,7 @@ namespace Graph_practice_2_Rolling_data
             0});
             this.YMaxNum2.Location = new System.Drawing.Point(442, 51);
             this.YMaxNum2.Maximum = new decimal(new int[] {
-            5000,
+            30000000,
             0,
             0,
             0});
@@ -695,6 +684,16 @@ namespace Graph_practice_2_Rolling_data
             this.filedescription.Size = new System.Drawing.Size(100, 43);
             this.filedescription.TabIndex = 74;
             this.filedescription.Text = "";
+            this.filedescription.TextChanged += new System.EventHandler(this.filedescription_TextChanged);
+            // 
+            // ThresholdScrollBar2
+            // 
+            this.ThresholdScrollBar2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ThresholdScrollBar2.Location = new System.Drawing.Point(630, 152);
+            this.ThresholdScrollBar2.Name = "ThresholdScrollBar2";
+            this.ThresholdScrollBar2.Size = new System.Drawing.Size(10, 277);
+            this.ThresholdScrollBar2.TabIndex = 83;
+            this.ThresholdScrollBar2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ThresholdScrollBar2_Scroll);
             // 
             // ThresholdScrollBar1
             // 
@@ -706,20 +705,39 @@ namespace Graph_practice_2_Rolling_data
             this.ThresholdScrollBar1.Value = 100;
             this.ThresholdScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ThresholdScrollBar1_Scroll);
             // 
-            // ThresholdScrollBar2
+            // ThresholdCheckBox
             // 
-            this.ThresholdScrollBar2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ThresholdScrollBar2.Location = new System.Drawing.Point(630, 152);
-            this.ThresholdScrollBar2.Name = "ThresholdScrollBar2";
-            this.ThresholdScrollBar2.Size = new System.Drawing.Size(10, 277);
-            this.ThresholdScrollBar2.TabIndex = 83;
-            this.ThresholdScrollBar2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ThresholdScrollBar2_Scroll);
+            this.ThresholdCheckBox.AutoSize = true;
+            this.ThresholdCheckBox.Checked = true;
+            this.ThresholdCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ThresholdCheckBox.Location = new System.Drawing.Point(9, 71);
+            this.ThresholdCheckBox.Name = "ThresholdCheckBox";
+            this.ThresholdCheckBox.Size = new System.Drawing.Size(140, 17);
+            this.ThresholdCheckBox.TabIndex = 84;
+            this.ThresholdCheckBox.Text = "Threshold Fluorescence";
+            this.ThresholdCheckBox.UseVisualStyleBackColor = true;
+            this.ThresholdCheckBox.CheckedChanged += new System.EventHandler(this.ThresholdCheckBox_CheckedChanged);
+            // 
+            // ButtonsVisible
+            // 
+            this.ButtonsVisible.AutoSize = true;
+            this.ButtonsVisible.Checked = true;
+            this.ButtonsVisible.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ButtonsVisible.Location = new System.Drawing.Point(719, 4);
+            this.ButtonsVisible.Name = "ButtonsVisible";
+            this.ButtonsVisible.Size = new System.Drawing.Size(98, 17);
+            this.ButtonsVisible.TabIndex = 85;
+            this.ButtonsVisible.Text = "Set Parameters";
+            this.ButtonsVisible.UseVisualStyleBackColor = true;
+            this.ButtonsVisible.CheckedChanged += new System.EventHandler(this.ButtonsVisible_CheckedChanged);
             // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);
+            this.Controls.Add(this.ButtonsVisible);
+            this.Controls.Add(this.ThresholdCheckBox);
             this.Controls.Add(this.ThresholdScrollBar2);
             this.Controls.Add(this.ThresholdScrollBar1);
             this.Controls.Add(this.filedescription);
@@ -764,9 +782,8 @@ namespace Graph_practice_2_Rolling_data
             this.Controls.Add(this.YMaxNum1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.FreshScreenButton);
+            this.Controls.Add(this.SaveBytesButton);
             this.Controls.Add(this.zgc);
             this.Name = "RollingGraph";
             this.Load += new System.EventHandler(this.RollingGraph_Load);
@@ -798,9 +815,8 @@ namespace Graph_practice_2_Rolling_data
         private ZedGraph.ZedGraphControl zgc;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button SaveBytesButton;
+        private System.Windows.Forms.Button FreshScreenButton;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown YMaxNum1;
@@ -843,7 +859,9 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.RichTextBox filedescription;
-        private System.Windows.Forms.VScrollBar ThresholdScrollBar1;
         private System.Windows.Forms.VScrollBar ThresholdScrollBar2;
+        private System.Windows.Forms.VScrollBar ThresholdScrollBar1;
+        private System.Windows.Forms.CheckBox ThresholdCheckBox;
+        private System.Windows.Forms.CheckBox ButtonsVisible;
     }
 }

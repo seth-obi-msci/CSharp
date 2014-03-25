@@ -372,12 +372,15 @@ namespace Graph_practice_2_Rolling_data
             // AutoScale
             // 
             this.AutoScale.AutoSize = true;
+            this.AutoScale.Checked = true;
+            this.AutoScale.CheckState = System.Windows.Forms.CheckState.Checked;
             this.AutoScale.Location = new System.Drawing.Point(104, 48);
             this.AutoScale.Name = "AutoScale";
             this.AutoScale.Size = new System.Drawing.Size(85, 17);
             this.AutoScale.TabIndex = 36;
             this.AutoScale.Text = "Auto-rescale";
             this.AutoScale.UseVisualStyleBackColor = true;
+            this.AutoScale.CheckedChanged += new System.EventHandler(this.AutoScale_CheckedChanged);
             // 
             // FPGATimebin
             // 

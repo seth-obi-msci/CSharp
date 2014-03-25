@@ -60,6 +60,12 @@
     </Compile>
     <Compile Include="FPGA.cs" />
     <Compile Include="FTDI.cs" />
+    <Compile Include="PopUpWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PopUpWarning.Designer.cs">
+      <DependentUpon>PopUpWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +76,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PopUpWarning.resx">
+      <DependentUpon>PopUpWarning.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -78,6 +78,7 @@ namespace Graph_practice_2_Rolling_data
         bool PMT1_pane2=true;
         bool PMT2_pane2=true;
         bool ThresholdBool = true;
+        bool StopWarning = false;
 
         bool TrueTime1 = false;
         bool TrueTime2 = false;
@@ -133,8 +134,9 @@ namespace Graph_practice_2_Rolling_data
            
            GraphPane myPane1 = zgc.MasterPane.PaneList[0];
            GraphPane myPane2 = zgc.MasterPane.PaneList[1];
+
            
-           zgc.AxisChange();
+           //zgc.AxisChange();
            SetSize();
 
            
@@ -160,12 +162,12 @@ namespace Graph_practice_2_Rolling_data
                     SimulatedBytes[l%10] = Convert.ToByte(0);
                 }
                 if (l % 10 == 9) //Only reads and plots once every 10 ticks*/
-                    /*
-               if (l % 100 == 99)
+                    
+               if (l % 100 == 99 && !StopWarning)
                {
                    
                    PMTCompare();
-               }*/
+               }
                 {
 
                     //UART_Buffer = FPGA.ReadBytes();
@@ -202,13 +204,7 @@ namespace Graph_practice_2_Rolling_data
                     Console.WriteLine("Bytes in buffer = {0}", UART_Buffer.Length);
                     int Diff = DataBuffer.Length - COPY_POS;
 
-                    // Checks number of bytes in next UART Buffer. 
-                    
-                    // Refresh when backlog of bytes is large (slows plotting)
-                    /*if (BytesInQueue > 4500)
-                    {
-                        Refresh();
-                    }*/
+
                     // condition satisfied when there's enough room for a UART_Buffer array to be
                     // copied into the Screen array. 
                     if (Diff>UART_Buffer.Length)
@@ -234,7 +230,7 @@ namespace Graph_practice_2_Rolling_data
                     //Not enough room at end of DataBuffer for whole UART bufferload
                     else 
                     {
-                        //byte[] UART_Buffer=FPGA.ReadBytes();
+                       
                         // Fills remaining DataBuffer spaces with portion of UART buffer load.
                         // UART_Buffer values that don't get copied in due to not enough space are placed 
                         // at the begining of the DataBuffer once final values averaged. 
@@ -344,24 +340,23 @@ namespace Graph_practice_2_Rolling_data
 
 
             //Function to set axes of graph panes.
+            zgc.AxisChange();
             SetXAxis1();
             SetXAxis2();
-
-            /*Point ThresholdLineYIntercept = new Point(0, Convert.ToInt32(ThresholdLineValue1));
-            Point XMax = new Point(1,0);
-            Rectangle ThresholdLine = new Rectangle(Convert.ToInt32(myPane1.GeneralTransform(ThresholdLineYIntercept, CoordType.AxisXYScale).X), Convert.ToInt32(myPane1.GeneralTransform(ThresholdLineYIntercept, CoordType.AxisXYScale).Y),  Convert.ToInt32(myPane1.GeneralTransform(XMax, CoordType.ChartFraction).X), 5);
-            */
-            //Sets Y-axis if auto-scale is not selected (fixed Y axes)
             if (AutoScale.Checked == false)
             {
                 SetYAxis1();
                 SetYAxis2();
             }
+            zgc.AxisChange();
+
+            //Sets Y-axis if auto-scale is not selected (fixed Y axes)
+
 
             
 
-            ThresholdScrollBar1.Value = YMax1;
-            ThresholdScrollBar2.Value = YMax2;
+            //ThresholdScrollBar1.Value = YMax1;
+            //ThresholdScrollBar2.Value = YMax2;
 
             //ThresholdScrollBar1.Hide();
             //ThresholdScrollBar2.Hide();
@@ -580,7 +575,7 @@ namespace Graph_practice_2_Rolling_data
         private void SetXAxis1()
         {
             double Interval;
-            zgc.AxisChange();
+            //zgc.AxisChange();
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
             Point XMax_Pane = new Point(1, 0);
             Point origin = new Point(0, 0);
@@ -609,7 +604,7 @@ namespace Graph_practice_2_Rolling_data
         private void SetXAxis2()
         {
                 double Interval;
-                zgc.AxisChange();
+                //zgc.AxisChange();
                 GraphPane myPane2 = zgc.MasterPane.PaneList[1];
                 Point XMax_Pane = new Point(1, 0);
                 Point origin = new Point(0, 0);
@@ -645,11 +640,12 @@ namespace Graph_practice_2_Rolling_data
                 myPane1.YAxis.Scale.MinorStep = YMax1 / 100;
                 myPane1.YAxis.Scale.MajorStep = YMax1 / 10;
 
-                zgc.AxisChange();
+                //zgc.AxisChange();
         }
 
         public void SetYAxis2()
         {
+            //zgc.AxisChange();
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
             ThresholdScrollBar2.Maximum = YMax2+9;
             ThresholdScrollBar2.Minimum = YMin2;
@@ -659,7 +655,7 @@ namespace Graph_practice_2_Rolling_data
             myPane2.YAxis.Scale.MinorStep = YMax2 / 100;
             myPane2.YAxis.Scale.MajorStep = YMax2 / 10;
 
-            zgc.AxisChange();
+            
         }
         private void RollingGraph_Load_1(object sender, EventArgs e)
         {
@@ -1415,7 +1411,7 @@ namespace Graph_practice_2_Rolling_data
             int PMT2Check = 0;
             for (int i = 0; i < 1000; i++)
             {
-                
+
                 if (i % 2 == 0)
                 {
                     PMT1Check += DataBuffer[i];
@@ -1428,15 +1424,27 @@ namespace Graph_practice_2_Rolling_data
             double FracDiff = Math.Abs(PMT1Check - PMT2Check) / ((PMT1Check + PMT2Check) / 2);
             if (FracDiff >= 0.5)
             {
-                /*Form WarningForm = new Form();
-                WarningForm.Text = "Warning";
-                
-                WarningForm.Show();*/
+                Console.WriteLine("PMT ERROR!!!");
+                Pause = true;
+                PopUpWarning popup = new PopUpWarning();
 
-                //Console.WriteLine("PMT ERROR!!!");
-                //Pause=true;
-                
+                DialogResult dialogresult = popup.ShowDialog();
+                if (dialogresult == DialogResult.OK)
+                {
+                    if (popup.IsChecked() == true)
+                    {
+                        StopWarning = true;
+                    }
+                    else
+                    {
+                        StopWarning = false;
+                    }
+                    Console.WriteLine("OK");
+                    Pause = false;
+                }
+                popup.Dispose();
             }
+            FPGA.EmptyBuffer();
         }
 
         /*Functions below use buttons/sliders on the form itself*/
@@ -1994,6 +2002,11 @@ namespace Graph_practice_2_Rolling_data
                 FPGATimebin.Visible = false;
             }
 
+        }
+
+        private void AutoScale_CheckedChanged(object sender, EventArgs e)
+        {
+            CreateGraph(zgc);
         }
 
 

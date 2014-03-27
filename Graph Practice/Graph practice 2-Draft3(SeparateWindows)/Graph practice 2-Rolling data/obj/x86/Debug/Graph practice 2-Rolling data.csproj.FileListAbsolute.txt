@@ -372,5 +372,5 @@ C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Dr
 \\ic.ac.uk\homes\sdn09\Desktop\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
 \\ic.ac.uk\homes\sdn09\Desktop\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csproj.GenerateResource.Cache
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources
-C:\Users\localadmin\Downloads\CSharp-master\CSharp-master\Graph Practice\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.exe
-C:\Users\localadmin\Downloads\CSharp-master\CSharp-master\Graph Practice\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft3(SeparateWindows)\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft3(SeparateWindows)\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.pdb

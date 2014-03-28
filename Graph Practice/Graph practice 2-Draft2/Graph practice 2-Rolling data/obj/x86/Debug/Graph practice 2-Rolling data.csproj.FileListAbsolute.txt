@@ -374,3 +374,26 @@ C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Dr
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources
 C:\Users\localadmin\Downloads\CSharp-master\CSharp-master\Graph Practice\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.exe
 C:\Users\localadmin\Downloads\CSharp-master\CSharp-master\Graph Practice\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.exe
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\Graph practice 2-Rolling data.exe
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\Graph practice 2-Rolling data.pdb
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\ZedGraph.xml
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\de\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\es\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\fr\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\hu\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\it\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\ja\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\pt\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\ru\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\sk\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\sv\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\tr\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\zh-cn\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\bin\Debug\zh-tw\ZedGraph.resources.dll
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csprojResolveAssemblyReference.cache
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources
+D:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph practice 2-Rolling data.csproj.GenerateResource.Cache
+G:\Graph practice 2-Draft2\Graph practice 2-Rolling data\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources

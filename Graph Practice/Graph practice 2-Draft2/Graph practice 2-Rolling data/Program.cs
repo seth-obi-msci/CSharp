@@ -9,7 +9,7 @@ namespace Graph_practice_2_Rolling_data
 
 	static class Program
 	{
-        private static System.Timers.Timer aTimer;
+
         
 		/// <summary>
 		/// The main entry point for the application.

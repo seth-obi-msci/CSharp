@@ -54,9 +54,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.XScale2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // zgc2
-            //
+            // 
             this.zgc2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.zgc2.AutoSize = true;
             this.zgc2.EditButtons = System.Windows.Forms.MouseButtons.Left;
@@ -73,18 +73,18 @@
             this.zgc2.ScrollMinY2 = 0D;
             this.zgc2.Size = new System.Drawing.Size(1204, 373);
             this.zgc2.TabIndex = 0;
-            //
+            // 
             // FreshScreenButton2
-            //
+            // 
             this.FreshScreenButton2.Location = new System.Drawing.Point(252, 1);
             this.FreshScreenButton2.Name = "FreshScreenButton2";
             this.FreshScreenButton2.Size = new System.Drawing.Size(75, 21);
             this.FreshScreenButton2.TabIndex = 3;
             this.FreshScreenButton2.Text = "FreshScreen";
             this.FreshScreenButton2.UseVisualStyleBackColor = true;
-            //
+            // 
             // YMaxNum2
-            //
+            // 
             this.YMaxNum2.Increment = new decimal(new int[] {
             100,
             0,
@@ -100,13 +100,13 @@
             this.YMaxNum2.Size = new System.Drawing.Size(52, 20);
             this.YMaxNum2.TabIndex = 20;
             this.YMaxNum2.Value = new decimal(new int[] {
-            300,
+            3000,
             0,
             0,
             0});
-            //
+            // 
             // YMinNum2
-            //
+            // 
             this.YMinNum2.Increment = new decimal(new int[] {
             100,
             0,
@@ -121,9 +121,9 @@
             this.YMinNum2.Name = "YMinNum2";
             this.YMinNum2.Size = new System.Drawing.Size(47, 20);
             this.YMinNum2.TabIndex = 22;
-            //
+            // 
             // AvChunkBox2
-            //
+            // 
             this.AvChunkBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.AvChunkBox2.DecimalPlaces = 1;
             this.AvChunkBox2.Location = new System.Drawing.Point(527, 28);
@@ -145,9 +145,9 @@
             0,
             0,
             0});
-            //
+            // 
             // XScale2
-            //
+            // 
             this.XScale2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.XScale2.Location = new System.Drawing.Point(613, 28);
             this.XScale2.Minimum = new decimal(new int[] {
@@ -163,9 +163,9 @@
             0,
             0,
             0});
-            //
+            // 
             // AverageBox2
-            //
+            // 
             this.AverageBox2.AutoSize = true;
             this.AverageBox2.Location = new System.Drawing.Point(10, 2);
             this.AverageBox2.Name = "AverageBox2";
@@ -173,9 +173,9 @@
             this.AverageBox2.TabIndex = 35;
             this.AverageBox2.Text = "Average /ms";
             this.AverageBox2.UseVisualStyleBackColor = true;
-            //
+            // 
             // AutoScale2
-            //
+            // 
             this.AutoScale2.AutoSize = true;
             this.AutoScale2.Checked = true;
             this.AutoScale2.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -185,9 +185,9 @@
             this.AutoScale2.TabIndex = 36;
             this.AutoScale2.Text = "Auto-rescale";
             this.AutoScale2.UseVisualStyleBackColor = true;
-            //
+            // 
             // ScrollingCheckBox2
-            //
+            // 
             this.ScrollingCheckBox2.AutoSize = true;
             this.ScrollingCheckBox2.Location = new System.Drawing.Point(103, 4);
             this.ScrollingCheckBox2.Name = "ScrollingCheckBox2";
@@ -195,9 +195,9 @@
             this.ScrollingCheckBox2.TabIndex = 40;
             this.ScrollingCheckBox2.Text = "Scrolling";
             this.ScrollingCheckBox2.UseVisualStyleBackColor = true;
-            //
+            // 
             // ZoomIn2
-            //
+            // 
             this.ZoomIn2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ZoomIn2.AutoSize = true;
             this.ZoomIn2.Location = new System.Drawing.Point(719, 29);
@@ -206,27 +206,27 @@
             this.ZoomIn2.TabIndex = 41;
             this.ZoomIn2.Text = "Zoom In";
             this.ZoomIn2.UseVisualStyleBackColor = true;
-            //
+            // 
             // label10_2
-            //
+            // 
             this.label10_2.AutoSize = true;
             this.label10_2.Location = new System.Drawing.Point(447, 10);
             this.label10_2.Name = "label10_2";
             this.label10_2.Size = new System.Drawing.Size(34, 13);
             this.label10_2.TabIndex = 47;
             this.label10_2.Text = "YMax";
-            //
+            // 
             // label12_2
-            //
+            // 
             this.label12_2.AutoSize = true;
             this.label12_2.Location = new System.Drawing.Point(359, 6);
             this.label12_2.Name = "label12_2";
             this.label12_2.Size = new System.Drawing.Size(31, 13);
             this.label12_2.TabIndex = 49;
             this.label12_2.Text = "YMin";
-            //
+            // 
             // PMT2
-            //
+            // 
             this.PMT2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.PMT2.FormattingEnabled = true;
             this.PMT2.Items.AddRange(new object[] {
@@ -238,9 +238,9 @@
             this.PMT2.Size = new System.Drawing.Size(57, 21);
             this.PMT2.TabIndex = 60;
             this.PMT2.Text = "Both";
-            //
+            // 
             // TimeControl2
-            //
+            // 
             this.TimeControl2.AutoSize = true;
             this.TimeControl2.Location = new System.Drawing.Point(215, 29);
             this.TimeControl2.Name = "TimeControl2";
@@ -248,18 +248,18 @@
             this.TimeControl2.TabIndex = 64;
             this.TimeControl2.Text = "True time LHS";
             this.TimeControl2.UseVisualStyleBackColor = true;
-            //
+            // 
             // ResetButton2
-            //
+            // 
             this.ResetButton2.Location = new System.Drawing.Point(171, 1);
             this.ResetButton2.Name = "ResetButton2";
             this.ResetButton2.Size = new System.Drawing.Size(75, 23);
             this.ResetButton2.TabIndex = 68;
             this.ResetButton2.Text = "Reset";
             this.ResetButton2.UseVisualStyleBackColor = true;
-            //
+            // 
             // label13_2
-            //
+            // 
             this.label13_2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label13_2.AutoSize = true;
             this.label13_2.Location = new System.Drawing.Point(524, 10);
@@ -267,9 +267,9 @@
             this.label13_2.Size = new System.Drawing.Size(64, 13);
             this.label13_2.TabIndex = 69;
             this.label13_2.Text = "ms per point";
-            //
+            // 
             // label14_2
-            //
+            // 
             this.label14_2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label14_2.AutoSize = true;
             this.label14_2.Location = new System.Drawing.Point(610, 11);
@@ -277,9 +277,9 @@
             this.label14_2.Size = new System.Drawing.Size(77, 13);
             this.label14_2.TabIndex = 70;
             this.label14_2.Text = "X Scale Factor";
-            //
+            // 
             // label15_2
-            //
+            // 
             this.label15_2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label15_2.AutoSize = true;
             this.label15_2.Location = new System.Drawing.Point(833, 7);
@@ -287,18 +287,18 @@
             this.label15_2.Size = new System.Drawing.Size(63, 13);
             this.label15_2.TabIndex = 71;
             this.label15_2.Text = "PMT Select";
-            //
+            // 
             // ThresholdScrollBar2
-            //
+            // 
             this.ThresholdScrollBar2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.ThresholdScrollBar2.Location = new System.Drawing.Point(72, 152);
             this.ThresholdScrollBar2.Name = "ThresholdScrollBar2";
             this.ThresholdScrollBar2.Size = new System.Drawing.Size(10, 277);
             this.ThresholdScrollBar2.TabIndex = 79;
             this.ThresholdScrollBar2.Value = 100;
-            //
+            // 
             // ThresholdCheckBox2
-            //
+            // 
             this.ThresholdCheckBox2.AutoSize = true;
             this.ThresholdCheckBox2.Checked = true;
             this.ThresholdCheckBox2.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -309,9 +309,9 @@
             this.ThresholdCheckBox2.Text = "Threshold \r\nFluorescence";
             this.ThresholdCheckBox2.UseVisualStyleBackColor = true;
             this.ThresholdCheckBox2.CheckedChanged += new System.EventHandler(this.ThresholdCheckBox2_CheckedChanged);
-            //
+            // 
             // ButtonsVisible2
-            //
+            // 
             this.ButtonsVisible2.AutoSize = true;
             this.ButtonsVisible2.Checked = true;
             this.ButtonsVisible2.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -322,17 +322,17 @@
             this.ButtonsVisible2.Text = "Set Parameters";
             this.ButtonsVisible2.UseVisualStyleBackColor = true;
             this.ButtonsVisible2.CheckedChanged += new System.EventHandler(this.ButtonsVisible2_CheckedChanged);
-            //
+            // 
             // trackBar1
-            //
+            // 
             this.trackBar1.Location = new System.Drawing.Point(295, 440);
             this.trackBar1.Maximum = 255;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(104, 45);
             this.trackBar1.TabIndex = 86;
-            //
+            // 
             // NewWindow
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);

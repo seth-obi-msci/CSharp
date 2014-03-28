@@ -1,5 +1,4 @@
-﻿//New form to facilitate second graph being in a separate window.
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,10 +13,10 @@ using ZedGraph;
 
 namespace Graph_practice_2_Rolling_data
 {
-    public partial class NewWindow : Form
+    public partial class SecondWindow : Form
     {
         bool pause2;
-        public NewWindow()
+        public SecondWindow()
         {
             InitializeComponent();
         }
@@ -28,16 +27,14 @@ namespace Graph_practice_2_Rolling_data
         }
         //Console.WriteLine
 
-
-
-        public void ThresholdCheckBox2_CheckedChanged(object sender, EventArgs e)
+        public void Pause_CheckedChanged(object sender, EventArgs e)
         {
-            //RollingGraph.ThresholdCheckBox2_CheckedChanged();
+        if (Pause.Checked)
+        {
+            pause2=true;
         }
 
-        public void ButtonsVisible2_CheckedChanged(object sender, EventArgs e)
-        {
-             //RollingGraph.ButtonsVisible2_CheckedChanged();
         }
+        
     }
 }

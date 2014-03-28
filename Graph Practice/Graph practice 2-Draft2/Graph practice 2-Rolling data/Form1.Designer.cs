@@ -82,6 +82,7 @@ namespace Graph_practice_2_Rolling_data
             this.ThresholdScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.ThresholdCheckBox = new System.Windows.Forms.CheckBox();
             this.ButtonsVisible = new System.Windows.Forms.CheckBox();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkBox1)).BeginInit();
@@ -91,6 +92,7 @@ namespace Graph_practice_2_Rolling_data
             ((System.ComponentModel.ISupportInitialize)(this.FPGATimebin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // zgc
@@ -175,7 +177,7 @@ namespace Graph_practice_2_Rolling_data
             this.YMaxNum1.Size = new System.Drawing.Size(52, 20);
             this.YMaxNum1.TabIndex = 20;
             this.YMaxNum1.Value = new decimal(new int[] {
-            300,
+            3000,
             0,
             0,
             0});
@@ -503,7 +505,7 @@ namespace Graph_practice_2_Rolling_data
             this.YMaxNum2.Size = new System.Drawing.Size(52, 20);
             this.YMaxNum2.TabIndex = 45;
             this.YMaxNum2.Value = new decimal(new int[] {
-            300,
+            3000,
             0,
             0,
             0});
@@ -687,7 +689,6 @@ namespace Graph_practice_2_Rolling_data
             this.filedescription.Size = new System.Drawing.Size(100, 43);
             this.filedescription.TabIndex = 74;
             this.filedescription.Text = "";
-            this.filedescription.TextChanged += new System.EventHandler(this.filedescription_TextChanged);
             // 
             // ThresholdScrollBar2
             // 
@@ -734,11 +735,21 @@ namespace Graph_practice_2_Rolling_data
             this.ButtonsVisible.UseVisualStyleBackColor = true;
             this.ButtonsVisible.CheckedChanged += new System.EventHandler(this.ButtonsVisible_CheckedChanged);
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(153, 437);
+            this.trackBar1.Maximum = 255;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(104, 45);
+            this.trackBar1.TabIndex = 86;
+            this.trackBar1.Value = 1;
+            // 
             // RollingGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 494);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.ButtonsVisible);
             this.Controls.Add(this.ThresholdCheckBox);
             this.Controls.Add(this.ThresholdScrollBar2);
@@ -799,6 +810,7 @@ namespace Graph_practice_2_Rolling_data
             ((System.ComponentModel.ISupportInitialize)(this.FPGATimebin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -866,5 +878,6 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.VScrollBar ThresholdScrollBar1;
         private System.Windows.Forms.CheckBox ThresholdCheckBox;
         private System.Windows.Forms.CheckBox ButtonsVisible;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }

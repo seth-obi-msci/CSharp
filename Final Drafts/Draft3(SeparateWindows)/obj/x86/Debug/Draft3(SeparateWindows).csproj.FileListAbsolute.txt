@@ -1,0 +1,4 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.pdb

@@ -1,0 +1,23 @@
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\obj\x86\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\ZedGraph.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\ZedGraph.xml
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\ru\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\sk\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\obj\x86\Debug\Draft3(OneWindow).csprojResolveAssemblyReference.cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Graph practice 2-Draft2\obj\x86\Debug\Draft3(OneWindow).csproj.GenerateResource.Cache

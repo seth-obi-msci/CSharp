@@ -331,7 +331,7 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox2.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox2.TabIndex = 30;
             this.AvChunkBox2.Value = new decimal(new int[] {
-            10,
+            5,
             0,
             0,
             0});

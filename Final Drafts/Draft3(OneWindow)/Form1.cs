@@ -29,14 +29,14 @@ namespace Graph_practice_2_Rolling_data
         double Average1;
         int SumProcessedBytes1 = 0;
         int AdjustIndex1 = 0;
-        int AverageIndex1 = 1;
+        int AverageIndex1 = 2;
         int AverageChunkSize1;
 
 
         double Average2;
         int SumProcessedBytes2=0;
         int AdjustIndex2 = 0;
-        int AverageIndex2 = 1;
+        int AverageIndex2 = 2;
         int AverageChunkSize2;
 
 
@@ -116,7 +116,7 @@ namespace Graph_practice_2_Rolling_data
         private void RollingGraph_Load(object sender, EventArgs e)
         {
             CreateGraph(zgc);
-
+            trackBar1.Visible = false;
             //Timer to trigger timer1_Tick function
             timer1.Interval = 1;
             timer1.Enabled = true;
@@ -168,7 +168,15 @@ namespace Graph_practice_2_Rolling_data
 
 
                     UART_Buffer = FPGA.ReadBytes();
-                    Console.WriteLine("Bytes in buffer = {0}", UART_Buffer.Length);
+                   /* for (int i = 0; i < UART_Buffer.Length; i++)
+                    {
+                        if (UART_Buffer[i] == 0)
+                        {
+                            Console.WriteLine("Element that = 0 is {0}", i);
+                        }
+                    }*/
+
+                    //Console.WriteLine("Bytes in buffer = {0}", UART_Buffer.Length);
 
                     // Ensures there's at least one curve in GraphPane
                     if (zgc.GraphPane.CurveList.Count <= 0)
@@ -223,9 +231,29 @@ namespace Graph_practice_2_Rolling_data
                         //COPY_POS shifted by UART buffer size, so new values are copied into correct position.
                         COPY_POS = COPY_POS + Convert.ToInt32(UART_Buffer.Length);
 
-
+                        AverageDataUnfilled2();
                         AverageDataUnfilled1();
-                        AverageDataUnfilled2(); 
+                        
+
+                        /*if (time1 != time2)
+                        {
+                            Console.WriteLine("Time Misaligned after Unfilled");
+                            Console.WriteLine("time1={0}", time1);
+                            Console.WriteLine("time2={0}", time2);
+                            Console.WriteLine("list11={0}", list1.LongCount());
+                            Console.WriteLine("list2={0}", list2.LongCount());
+                            Console.WriteLine("COPYPOS = {0}", COPY_POS);
+                           // time1++;
+                            Pause = true;
+                        }
+                        if (list1.LongCount() != list2.LongCount())
+                        {
+                            Console.WriteLine("list Misaligned after Unfilled");
+                            Console.WriteLine("list11={0}", list1.LongCount());
+                            Console.WriteLine("list2={0}", list2.LongCount());
+                            // time1++;
+                             Pause = true;
+                        }*/
 
                         CheckIonTrapped();
                     }
@@ -240,8 +268,16 @@ namespace Graph_practice_2_Rolling_data
 
                         /// AverageDataFilled used to find averages of end values in DataBuffer
                         /// Must be able to make up average by looping round from end to beggining values of DataBuffer
-                        AverageDataFilled2();
                         AverageDataFilled1();
+                        AverageDataFilled2();
+                       /* if (time1 != time2)
+                        {
+                            Console.WriteLine("Time Misaligned after Filled");
+                            Console.WriteLine("time1={0}", time1);
+                            Console.WriteLine("time2={0}", time2);
+                            Pause = true;
+                        }*/
+                        
 
                         // Indexes set to beginning so that next timer tick averaging begins at start of DataBuffer (most recent values)
                         AverageIndex2 = 2;
@@ -576,7 +612,7 @@ namespace Graph_practice_2_Rolling_data
             }
 
             myPane1.XAxis.Scale.Min = XMin1;
-            myPane1.XAxis.Scale.Max=XMax1;
+            myPane1.XAxis.Scale.Max = XMax1;
             myPane1.XAxis.Scale.MinorStep = XMax1 / 100.0;
             myPane1.XAxis.Scale.MajorStep = XMax1 / 10.0;
         }
@@ -654,10 +690,35 @@ namespace Graph_practice_2_Rolling_data
             File.AppendAllText(BytesFileLocation, Convert.ToString(DateTime.Now) + "\r\n");
             File.AppendAllText(BytesFileLocation, Convert.ToString("Total time span of data (s) = " + TimebinFactor * DataBuffer.Length / 10000.0) + "\r\n");
             File.AppendAllText(BytesFileLocation, this.filedescription.Text + "\r\n");
-            File.AppendAllText(BytesFileLocation, "Time" + "\t" + "PMT1" + "\t" + "PMT2"+"\r\n");
+            if (COPY_POS % 2 == 0)
+            {
+                File.AppendAllText(BytesFileLocation, "Time" + "\t" + "PMT1" + "\t" + "PMT2" + "\r\n");
+                for (int i = COPY_POS; i < DataBuffer.Length-1; i = i+ 2)
+                {
+                    File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (i - COPY_POS)) / 2 + "\t" + Convert.ToString(DataBuffer[i]) + "\t" + Convert.ToString(DataBuffer[i + 1]) + "\r\n");
+                }
+                for (int i = 0; i < COPY_POS-1; i = i+ 2)
+                {
+                    File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (i + DataBuffer.Length - COPY_POS)) / 2 + "\t" + Convert.ToString(DataBuffer[i]) + "\t" + Convert.ToString(DataBuffer[i + 1]) + "\r\n");
+                }
+            }
+            else if (COPY_POS % 2 == 1)
+            {
+                File.AppendAllText(BytesFileLocation, "Time" + "\t" + "PMT1" + "\t" + "PMT2" + "\r\n");
+                File.AppendAllText(BytesFileLocation, 0 + "\t" + "\t" + Convert.ToString(DataBuffer[COPY_POS]) + "\r\n");
+                for (int i = COPY_POS + 1; i < DataBuffer.Length-1; i = i+ 2)
+                {
+                    File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (i+1 - COPY_POS)) / 2 + "\t" + Convert.ToString(DataBuffer[i]) + "\t" + Convert.ToString(DataBuffer[i + 1]) + "\r\n");
+                }
+                for (int i = 0; i < COPY_POS - 2; i = i+ 2)
+                {
+                    File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (i+1 + DataBuffer.Length - COPY_POS)) / 2 + "\t" + Convert.ToString(DataBuffer[i]) + "\t" + Convert.ToString(DataBuffer[i + 1]) + "\r\n");
+                }
+                File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (DataBuffer.Length - 2)) / 2 + "\t" + Convert.ToString(DataBuffer[COPY_POS - 1]) + "\t" + "\r\n");
+            }
 
             // Start saving from COPY_POS element as this is least recent value in DataBuffer
-            for(int i =COPY_POS;i<DataBuffer.Length; i++)
+            /*for(int i =COPY_POS;i<DataBuffer.Length; i++)
             {
                 if (i % 2 == 1)
                 {
@@ -679,14 +740,12 @@ namespace Graph_practice_2_Rolling_data
                     File.AppendAllText(BytesFileLocation,  Convert.ToString(DataBuffer[i]) + "\r\n");
                 }
               
-            }
+            }*/
         }
 
         // function to save a given list's values to file
         public void SaveListToFile(string FileLocation, PointPairList list, int Pane)
         {
-
-            MetaData(1)[4] = this.filedescription.Text;
 
             File.AppendAllText(FileLocation, MetaData(Pane)[0] + "\r\n");
             File.AppendAllText(FileLocation, MetaData(Pane)[1] + "\r\n");
@@ -709,7 +768,6 @@ namespace Graph_practice_2_Rolling_data
         // function to save both graphs' data 
         public void SaveBothListsToFile(string FileLocation, PointPairList listA, PointPairList listB)
         {
-            MetaData(1)[4] = this.filedescription.Text;
             string LHSfile = FileLocation+"LHS.txt";
             string RHSfile = FileLocation + "RHS.txt";
 
@@ -764,6 +822,11 @@ namespace Graph_practice_2_Rolling_data
             //sfd1.FileOk += new CancelEventHandler(sfd1_FileOk);
             if (sfd1.ShowDialog() == DialogResult.OK)
             {
+                if (SaveRaw.Checked)
+                {
+                    SaveBytesToFile(sfd1.FileName);
+                }
+
                 if (LHSSaveBool && RHSSaveBool)
                 {
                         SaveBothListsToFile(@sfd1.FileName, savelist1, savelist2);
@@ -780,27 +843,22 @@ namespace Graph_practice_2_Rolling_data
                 {
                         SaveListToFile(@sfd1.FileName + "RHS.txt", savelist2, 2);
                 }
-                else
-                {
-                    Console.WriteLine("Must select graph to save");
-                    return;
-                }
 
                 WriteBytesToScreen(DataBuffer);
-                if (SaveRaw.Checked)
-                {
-                    SaveBytesToFile(sfd1.FileName);
-                }
 
                 Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
                 Reset();
                 Pause = false;
+                sfd1.Dispose();
             }
             else if (sfd1.ShowDialog() == DialogResult.Cancel)
             {
+                Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
+                Reset();
                 Pause = false;
+                sfd1.Dispose();
             }
-            sfd1.Dispose();
+            
         }
 
         // Gets metadata for graphs
@@ -839,6 +897,7 @@ namespace Graph_practice_2_Rolling_data
                     MetaData[3] = "Total seconds recorded = " + Convert.ToString(TotalTime) ;
                 }
             }
+            MetaData[4] = this.filedescription.Text;
 
             return MetaData;
 
@@ -849,7 +908,6 @@ namespace Graph_practice_2_Rolling_data
         {
             int SumChunkEven = 0;
             int SumChunkOdd = 0;
-            int NumOfValues = 0;
 
             // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize', 
             while (AverageIndex1 * AverageChunkSize1 - AdjustIndex1 < COPY_POS) 
@@ -859,13 +917,11 @@ namespace Graph_practice_2_Rolling_data
                     // Separates bytes from each PMT
                     if (i % 2 == 0)
                     {
-                        SumChunkEven += Convert.ToInt16(DataBuffer[i]);
-                        NumOfValues++;
+                        SumChunkEven += Convert.ToInt16(DataBuffer[i]); 
                     }
                     else if (i % 2 == 1)
                     {
                         SumChunkOdd += Convert.ToInt16(DataBuffer[i]);
-                        NumOfValues++;
                     }
                 }
 
@@ -874,7 +930,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (Average.Checked == true)
                     {
-                        Average1 = (SumChunkEven + SumProcessedBytes1) / (AverageChunkSize1) * 10;
+                        Average1 = (SumChunkEven + SumProcessedBytes1) / (AverageChunkSize1) * 10; //*10 to give counts per ms
                     }
                     else if (Average.Checked == false)
                     {
@@ -1334,7 +1390,7 @@ namespace Graph_practice_2_Rolling_data
                 {
                     list1.Add(time1, Average1);
                     savelist1.Add(time1 + AdditionalTime1, Average1); 
-                    if (time1 > Convert.ToInt32(XMax1))
+                    if (time1 > XMax1)
                     {
                         AdditionalTime1 += Convert.ToInt32(XMax1);
                         time1 = 0;

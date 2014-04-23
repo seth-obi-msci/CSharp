@@ -74,7 +74,8 @@ namespace Graph_practice_2_Rolling_data
         bool PMT2_pane1 = true;
         bool PMT1_pane2 = true;
         bool PMT2_pane2 = true;
-        bool StopWarning = false; //Warns used if counts measured by PMTs varies by specified fraction
+        bool StopWarningPMT = false; //Warns used if counts measured by PMTs varies by specified fraction
+        bool StopWarningThreshold = false;
 
         // Various lists containing data to be plotted or saved
         PointPairList savelist1 = new PointPairList();
@@ -88,7 +89,7 @@ namespace Graph_practice_2_Rolling_data
 
         //Makes new instance of NewWindow, this is window to display second graph
         NewWindow Window2 = new NewWindow();
-
+        
         //byte arrays
         byte[] SimulatedBytes = new byte[10];
         byte[] DataBuffer = new byte[30000];
@@ -137,7 +138,7 @@ namespace Graph_practice_2_Rolling_data
             {
                 //l is clock divider index so 10 bytes can be built up before being read and plotted. Simulates bytes building up in UART buffer
                 l++;
-                if (l % 100 == 99 && !StopWarning) //Compares counts measured by PMTs every 100 timerticks
+                if (l % 100 == 99 && !StopWarningPMT) //Compares counts measured by PMTs every 100 timerticks
                 {
                     PMTCompare();
                 }
@@ -211,7 +212,10 @@ namespace Graph_practice_2_Rolling_data
                         AverageDataUnfilled2();
 
                         //Checks fluorescence above threshold value
-                        CheckIonTrapped();
+                        if (!StopWarningThreshold)
+                        {
+                            CheckIonTrapped();
+                        }
                     }
 
                     //Not enough room at end of DataBuffer for whole UART bufferload
@@ -1326,11 +1330,11 @@ namespace Graph_practice_2_Rolling_data
                 {
                     if (popup.IsChecked() == true)
                     {
-                        StopWarning = true;
+                        StopWarningPMT = true;
                     }
                     else
                     {
-                        StopWarning = false;
+                        StopWarningPMT = false;
                     }
                     Console.WriteLine("OK");
                     Pause = false;
@@ -1360,9 +1364,30 @@ namespace Graph_practice_2_Rolling_data
 
             if ((CheckIonAverage2 < ThresholdLineValue2) && (CheckIonAverage1 < ThresholdLineValue1))
             {
-                Pause = true;
-                PauseCheck1.Checked = true;
-                Console.WriteLine("CheckIonSum 1 and 2 are {0}, {1}", CheckIonSum1, CheckIonSum2);
+                StopWarningThreshold = true;
+                ThresholdWarning warning = new ThresholdWarning();
+
+                DialogResult dialog = warning.ShowDialog();
+                if (dialog == DialogResult.OK)
+                {
+                    if (warning.IsChecked() == true)
+                    {
+                        StopWarningThreshold = true;
+                    }
+                    else
+                    {
+                        StopWarningThreshold = false;
+                    }
+                    Console.WriteLine("OK");
+                    
+
+                }
+                warning.Dispose();
+                ThresholdScrollBar1.Value = ThresholdScrollBar1.Maximum;
+                Window2.ThresholdScrollBar2.Value = Window2.ThresholdScrollBar2.Maximum;
+                ThresholdLineValue1 = 0;
+                ThresholdLineValue2 = 0;
+                
             }
         }
 

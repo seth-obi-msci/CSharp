@@ -44,3 +44,4 @@ C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(OneWindow)\obj
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(OneWindow)\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(OneWindow)\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(OneWindow)\obj\x86\Debug\Draft3(OneWindow).csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(OneWindow)\obj\x86\Debug\Graph_practice_2_Rolling_data.ThresholdWarning.resources

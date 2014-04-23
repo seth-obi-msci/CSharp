@@ -83,6 +83,7 @@ namespace Graph_practice_2_Rolling_data
             this.ThresholdCheckBox = new System.Windows.Forms.CheckBox();
             this.ButtonsVisible = new System.Windows.Forms.CheckBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YMinNum1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AvChunkBox1)).BeginInit();
@@ -727,7 +728,7 @@ namespace Graph_practice_2_Rolling_data
             this.ButtonsVisible.AutoSize = true;
             this.ButtonsVisible.Checked = true;
             this.ButtonsVisible.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ButtonsVisible.Location = new System.Drawing.Point(719, 4);
+            this.ButtonsVisible.Location = new System.Drawing.Point(693, 4);
             this.ButtonsVisible.Name = "ButtonsVisible";
             this.ButtonsVisible.Size = new System.Drawing.Size(98, 17);
             this.ButtonsVisible.TabIndex = 85;
@@ -743,6 +744,14 @@ namespace Graph_practice_2_Rolling_data
             this.trackBar1.Size = new System.Drawing.Size(104, 45);
             this.trackBar1.TabIndex = 86;
             this.trackBar1.Value = 1;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1213, 24);
+            this.menuStrip1.TabIndex = 87;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // RollingGraph
             // 
@@ -799,6 +808,8 @@ namespace Graph_practice_2_Rolling_data
             this.Controls.Add(this.FreshScreenButton);
             this.Controls.Add(this.SaveBytesButton);
             this.Controls.Add(this.zgc);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "RollingGraph";
             this.Load += new System.EventHandler(this.RollingGraph_Load);
             ((System.ComponentModel.ISupportInitialize)(this.YMaxNum1)).EndInit();
@@ -879,5 +890,6 @@ namespace Graph_practice_2_Rolling_data
         private System.Windows.Forms.CheckBox ThresholdCheckBox;
         private System.Windows.Forms.CheckBox ButtonsVisible;
         private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
     }
 }

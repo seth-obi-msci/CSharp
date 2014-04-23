@@ -4,3 +4,26 @@ C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Draft3(SeparateWind
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Graph Practice\Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.pdb
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.exe
 C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\Graph practice 2-Rolling data.exe
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\Graph practice 2-Rolling data.pdb
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\ZedGraph.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\ZedGraph.xml
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\ru\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\sk\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Draft3(SeparateWindows).csprojResolveAssemblyReference.cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Graph_practice_2_Rolling_data.RollingGraph.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Graph_practice_2_Rolling_data.NewWindow.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Graph_practice_2_Rolling_data.PopUpWarning.resources
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Draft3(SeparateWindows).csproj.GenerateResource.Cache
+C:\Users\localadmin\Desktop\FPGANewVersion\C#\Final Drafts\Draft3(SeparateWindows)\obj\x86\Debug\Graph_practice_2_Rolling_data.ThresholdWarning.resources

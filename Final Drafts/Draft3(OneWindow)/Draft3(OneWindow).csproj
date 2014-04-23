@@ -58,6 +58,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ThresholdWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ThresholdWarning.Designer.cs">
+      <DependentUpon>ThresholdWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="FPGA.cs" />
     <Compile Include="FTDI.cs" />
     <Compile Include="PopUpWarning.cs">
@@ -79,6 +85,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PopUpWarning.resx">
       <DependentUpon>PopUpWarning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThresholdWarning.resx">
+      <DependentUpon>ThresholdWarning.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

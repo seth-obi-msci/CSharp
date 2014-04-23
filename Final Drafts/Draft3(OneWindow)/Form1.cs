@@ -77,7 +77,8 @@ namespace Graph_practice_2_Rolling_data
         bool PMT1_pane2=true;
         bool PMT2_pane2=true;
         bool ThresholdBool = true;
-        bool StopWarning = false;
+        bool StopWarningPMT = false;
+        bool StopWarningThreshold = false;
 
         bool TrueTime1 = false;
         bool TrueTime2 = false;
@@ -160,7 +161,7 @@ namespace Graph_practice_2_Rolling_data
                 }
                 if (l % 10 == 9) //Only reads and plots once every 10 ticks*/
                 {   
-               if (l % 100 == 99 && !StopWarning)
+               if (l % 100 == 99 && !StopWarningPMT)
                {
                    
                    PMTCompare();
@@ -254,8 +255,10 @@ namespace Graph_practice_2_Rolling_data
                             // time1++;
                              Pause = true;
                         }*/
-
-                        CheckIonTrapped();
+                        if (!StopWarningThreshold)
+                        {
+                            CheckIonTrapped();
+                        }
                     }
 
                     //Not enough room at end of DataBuffer for whole UART bufferload
@@ -648,7 +651,7 @@ namespace Graph_practice_2_Rolling_data
         {
             GraphPane myPane1 = zgc.MasterPane.PaneList[0];
 
-                ThresholdScrollBar1.Maximum = YMax1+9;
+                ThresholdScrollBar1.Maximum = YMax1;
                 ThresholdScrollBar1.Minimum = YMin1;
 
                 myPane1.YAxis.Scale.Min = YMin1;
@@ -660,7 +663,7 @@ namespace Graph_practice_2_Rolling_data
         public void SetYAxis2()
         {
             GraphPane myPane2 = zgc.MasterPane.PaneList[1];
-            ThresholdScrollBar2.Maximum = YMax2+9;
+            ThresholdScrollBar2.Maximum = YMax2;
             ThresholdScrollBar2.Minimum = YMin2;
 
             myPane2.YAxis.Scale.Min = YMin2;
@@ -716,31 +719,6 @@ namespace Graph_practice_2_Rolling_data
                 }
                 File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (DataBuffer.Length - 2)) / 2 + "\t" + Convert.ToString(DataBuffer[COPY_POS - 1]) + "\t" + "\r\n");
             }
-
-            // Start saving from COPY_POS element as this is least recent value in DataBuffer
-            /*for(int i =COPY_POS;i<DataBuffer.Length; i++)
-            {
-                if (i % 2 == 1)
-                {
-                    File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (i - COPY_POS))/2 + "\t" + Convert.ToString(DataBuffer[i]) + "\t");
-                }
-                else if (i % 2 == 0)
-                {
-                    File.AppendAllText(BytesFileLocation, Convert.ToString(DataBuffer[i]) + "\r\n");
-                }
-            }
-            for(int i=0;i<COPY_POS;i++)
-            {
-                 if (i % 2 == 1)
-                {
-                    File.AppendAllText(BytesFileLocation, (TimebinFactor * 0.1 * (i + DataBuffer.Length-COPY_POS))/2  + "\t" + Convert.ToString(DataBuffer[i]) + "\t");
-                }
-                else if (i % 2 == 0)
-                {
-                    File.AppendAllText(BytesFileLocation,  Convert.ToString(DataBuffer[i]) + "\r\n");
-                }
-              
-            }*/
         }
 
         // function to save a given list's values to file
@@ -846,7 +824,7 @@ namespace Graph_practice_2_Rolling_data
 
                 WriteBytesToScreen(DataBuffer);
 
-                Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
+                
                 Reset();
                 Pause = false;
                 sfd1.Dispose();
@@ -858,7 +836,7 @@ namespace Graph_practice_2_Rolling_data
                 Pause = false;
                 sfd1.Dispose();
             }
-            
+            Array.Clear(UART_Buffer, 0, UART_Buffer.Length);
         }
 
         // Gets metadata for graphs
@@ -1452,7 +1430,7 @@ namespace Graph_practice_2_Rolling_data
             }
         }
 
-        private void PMTCompare()
+        private void PMTCompare() 
         {
             int PMT1Check = 0;
             int PMT2Check = 0;
@@ -1475,17 +1453,17 @@ namespace Graph_practice_2_Rolling_data
                 Console.WriteLine("PMT ERROR!!!");
                 Pause = true;
                 PopUpWarning popup = new PopUpWarning();
-
+                
                 DialogResult dialogresult = popup.ShowDialog();
                 if (dialogresult == DialogResult.OK)
                 {
                     if (popup.IsChecked() == true)
                     {
-                        StopWarning = true;
+                        StopWarningPMT = true;
                     }
                     else
                     {
-                        StopWarning = false;
+                        StopWarningPMT = false;
                     }
                     Console.WriteLine("OK");
                     Pause = false;
@@ -1518,30 +1496,89 @@ namespace Graph_practice_2_Rolling_data
             {
                 if ((CheckIonAverage2 < ThresholdLineValue2) && (CheckIonAverage1 < ThresholdLineValue1))
                 {
-                    Pause = true;
-                    PauseCheck.Checked = true;
-                    Console.WriteLine("CheckIonSum 1 and 2 are {0}, {1}", CheckIonSum1, CheckIonSum2);
+                    StopWarningThreshold = true;
+
+                    ThresholdWarning warning = new ThresholdWarning();
+                    DialogResult dialogresult = warning.ShowDialog();
+                    if (dialogresult == DialogResult.OK)
+                    {
+                        if (warning.IsChecked() == true)
+                        {
+                            StopWarningThreshold = true;
+                        }
+                        else
+                        {
+                            StopWarningThreshold = false;
+                        }
+                        Console.WriteLine("OK");
+                        Pause = false;
+                    }
+                    warning.Dispose();
+                    ThresholdScrollBar1.Value = ThresholdScrollBar1.Maximum;
+                    ThresholdScrollBar2.Value = ThresholdScrollBar2.Maximum;
+                    ThresholdLineValue1 = 0;
+                    ThresholdLineValue2 = 0;
                 }
+                    
             }
+            
 
             else if (!LHSPane.Checked && RHSPane.Checked)
             {
                 if (CheckIonAverage2 < ThresholdLineValue2)
                 {
-                    Pause = true;
-                    PauseCheck.Checked = true;
+                    ThresholdWarning warning = new ThresholdWarning();
+
+                    DialogResult dialogresult = warning.ShowDialog();
+                    if (dialogresult == DialogResult.OK)
+                    {
+                        if (warning.IsChecked() == true)
+                        {
+                            StopWarningThreshold = true;
+                        }
+                        else
+                        {
+                            StopWarningThreshold = false;
+                        }
+                        Console.WriteLine("OK");
+                        Pause = false;
+                    }
+                    warning.Dispose();
+                    ThresholdScrollBar1.Value = ThresholdScrollBar1.Maximum;
+                    ThresholdScrollBar2.Value = ThresholdScrollBar2.Maximum;
+                    ThresholdLineValue1 = 0;
+                    ThresholdLineValue2 = 0;
                 }
+
             }
 
             else if (LHSPane.Checked && !RHSPane.Checked)
             {
                 if (CheckIonAverage1 < ThresholdLineValue1)
                 {
-                    Pause = true;
-                    PauseCheck.Checked = true;
+                    ThresholdWarning warning = new ThresholdWarning();
+
+                    DialogResult dialogresult = warning.ShowDialog();
+                    if (dialogresult == DialogResult.OK)
+                    {
+                        if (warning.IsChecked() == true)
+                        {
+                            StopWarningThreshold = true;
+                        }
+                        else
+                        {
+                            StopWarningThreshold = false;
+                        }
+                        Console.WriteLine("OK");
+                        Pause = false;
+                    }
+                    warning.Dispose();
+                    ThresholdScrollBar1.Value = ThresholdScrollBar1.Maximum;
+                    ThresholdScrollBar2.Value = ThresholdScrollBar2.Maximum;
+                    ThresholdLineValue1 = 0;
+                    ThresholdLineValue2 = 0;
                 }
             }
-
         }
 
 
@@ -1670,7 +1707,6 @@ namespace Graph_practice_2_Rolling_data
             // Reset used so no mixing of values averaged over different times in saved lists
             Reset(2);
         }
-
 
         private void LHSSave_CheckedChanged(object sender, EventArgs e)
         {
@@ -1848,12 +1884,14 @@ namespace Graph_practice_2_Rolling_data
 
         private void ThresholdScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            ThresholdLineValue1=YMax1-ThresholdScrollBar1.Value;
+
+                ThresholdLineValue1 = ThresholdScrollBar1.Maximum - ThresholdScrollBar1.Value-ThresholdScrollBar1.LargeChange;
         }
 
         private void ThresholdScrollBar2_Scroll(object sender, ScrollEventArgs e)
         {
-            ThresholdLineValue2 = YMax2 - ThresholdScrollBar2.Value;
+
+                ThresholdLineValue2 = ThresholdScrollBar2.Maximum - ThresholdScrollBar2.Value-ThresholdScrollBar2.LargeChange;
         }
 
         // Sets whether scrol bars to set ion escaped thresholds are visible or not (to set thresholds or leave them set)

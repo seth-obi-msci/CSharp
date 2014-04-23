@@ -367,9 +367,9 @@ namespace Graph_practice_2_Rolling_data
             this.Average.AutoSize = true;
             this.Average.Location = new System.Drawing.Point(10, 2);
             this.Average.Name = "Average";
-            this.Average.Size = new System.Drawing.Size(97, 30);
+            this.Average.Size = new System.Drawing.Size(87, 17);
             this.Average.TabIndex = 35;
-            this.Average.Text = "Average (over \r\nFPGA Timebin)\r\n";
+            this.Average.Text = "Average /ms\r\n";
             this.Average.UseVisualStyleBackColor = true;
             // 
             // AutoScale
@@ -452,7 +452,7 @@ namespace Graph_practice_2_Rolling_data
             this.LHSPane.AutoSize = true;
             this.LHSPane.Checked = true;
             this.LHSPane.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.LHSPane.Location = new System.Drawing.Point(10, 32);
+            this.LHSPane.Location = new System.Drawing.Point(10, 24);
             this.LHSPane.Name = "LHSPane";
             this.LHSPane.Size = new System.Drawing.Size(72, 17);
             this.LHSPane.TabIndex = 42;
@@ -464,7 +464,7 @@ namespace Graph_practice_2_Rolling_data
             this.RHSPane.AutoSize = true;
             this.RHSPane.Checked = true;
             this.RHSPane.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.RHSPane.Location = new System.Drawing.Point(10, 48);
+            this.RHSPane.Location = new System.Drawing.Point(10, 47);
             this.RHSPane.Name = "RHSPane";
             this.RHSPane.Size = new System.Drawing.Size(74, 17);
             this.RHSPane.TabIndex = 43;
@@ -715,7 +715,7 @@ namespace Graph_practice_2_Rolling_data
             this.ThresholdCheckBox.AutoSize = true;
             this.ThresholdCheckBox.Checked = true;
             this.ThresholdCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ThresholdCheckBox.Location = new System.Drawing.Point(9, 71);
+            this.ThresholdCheckBox.Location = new System.Drawing.Point(9, 70);
             this.ThresholdCheckBox.Name = "ThresholdCheckBox";
             this.ThresholdCheckBox.Size = new System.Drawing.Size(140, 17);
             this.ThresholdCheckBox.TabIndex = 84;

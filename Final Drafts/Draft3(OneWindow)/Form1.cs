@@ -945,7 +945,7 @@ namespace Graph_practice_2_Rolling_data
                 // if Truetime selected x axis values set to be time in microseconds
                 if (TrueTime1)
                 {
-                    time1 += TimebinFactor * AverageChunkSize1*TimebinFactor*100;
+                    time1 += AverageChunkSize1*TimebinFactor*100;
                 }
                 else if (!TrueTime1)
                 {
@@ -1030,7 +1030,7 @@ namespace Graph_practice_2_Rolling_data
                 // if Truetime selected x axis values set to be time in microseconds
                 if (TrueTime1)
                 {
-                    time1 += TimebinFactor * AverageChunkSize1*TimebinFactor*100;
+                    time1 += AverageChunkSize1*TimebinFactor*100;
                 }
                 else if (!TrueTime1)
                 {
@@ -1139,7 +1139,7 @@ namespace Graph_practice_2_Rolling_data
                 // if Truetime selected x axis values set to be time in microseconds
                 if (TrueTime2)
                 {
-                    time2 += TimebinFactor * AverageChunkSize2*TimebinFactor*100;
+                    time2 += AverageChunkSize2*TimebinFactor*100;
                 }
                 else if (!TrueTime2)
                 {
@@ -1228,7 +1228,7 @@ namespace Graph_practice_2_Rolling_data
                 // if Truetime selected x axis values set to be time in microseconds
                 if (TrueTime2)
                 {
-                    time2 += TimebinFactor * AverageChunkSize2*TimebinFactor*100;
+                    time2 += AverageChunkSize2*TimebinFactor*100;
                 }
                 else if (!TrueTime2)
                 {

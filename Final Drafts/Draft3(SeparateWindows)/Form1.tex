@@ -803,19 +803,21 @@ namespace Graph_practice_2_Rolling_data
             // while loop continues to average blocks of bytes until there aren't enough 'new' bytes to make up an 'AverageChunkSize',
             while (AverageIndex1 * AverageChunkSize1 - AdjustIndex1 < COPY_POS)
             {
-                for (int i = Math.Max(0, (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1); i < AverageIndex1 * AverageChunkSize1 - AdjustIndex1; i += 2)
+                //Sums a chunk from middle of array
+                for (int i = Math.Max(0, (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1); i < AverageIndex1 * AverageChunkSize1 - AdjustIndex1; i++) 
                 {
-                    // Separates bytes from each PMT
-
-                    SumChunkEven += Convert.ToInt32(DataBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumChunkEven += Convert.ToInt16(DataBuffer[i]);
+                        NumOfValues++;
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumChunkOdd += Convert.ToInt16(DataBuffer[i]);
+                        NumOfValues++;
+                    }
+                    //Console.WriteLine("iis{0}", i);
                 }
-                for (int i = Math.Max(1, (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1 + 1); i < AverageIndex1 * AverageChunkSize1 - AdjustIndex1; i += 2)
-                {
-                    // Separates bytes from each PMT
-
-                    SumChunkOdd += Convert.ToInt32(DataBuffer[i]);
-                }
-
                 if (PMT1_pane1 == true && PMT2_pane1 == false)
                 {
                     if (AverageBox1.Checked == true)
@@ -885,14 +887,16 @@ namespace Graph_practice_2_Rolling_data
             while (DataBuffer.Length - ((AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1) > 2 * AverageChunkSize1) // Same while loop as above function to average remaining bytes that can make up an 'AverageChunkSize'
             {
 
-                for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1; i < AverageChunkSize1 * AverageIndex1 - AdjustIndex1; i += 2)
+                for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1; i < AverageChunkSize1 * AverageIndex1 - AdjustIndex1; i++)
                 {
-                    SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
-                }
-
-                for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1 + 1; i < AverageChunkSize1 * AverageIndex1 - AdjustIndex1; i += 2)
-                {
-                    SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
+                    }
                 }
 
                 // If loops control which PMT's data is selected
@@ -951,20 +955,19 @@ namespace Graph_practice_2_Rolling_data
                 AverageIndex1 += 2;
             }
 
-            // For loop to sum remaining bytes in DataBuffer that dont make up whole average chunk size
-            for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1; i < DataBuffer.Length; i += 2)
+            // For loop to sum remaining bytes in DataBuffer that dont make up whole AverageChunkSize
+            for (int i = (AverageIndex1) * AverageChunkSize1 - AdjustIndex1; i < DataBuffer.Length; i++)
             {
-                SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
-
+                if (i % 2 == 0)
+                {
+                    SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
+                }
+                if (i % 2 == 1)
+                {
+                    SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
+                }
                 NumProcessedBytes += 1;
             }
-            for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1 + 1; i < DataBuffer.Length; i += 2)
-            {
-                SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
-
-                NumProcessedBytes += 1;
-            }
-
             if (PMT1_pane1 == true && PMT2_pane1 == false)
             {
                 SumProcessedBytes1 = SumProcessedBytesEven; //Sum to carry over for next time through AverageScreenUnfilled
@@ -996,19 +999,18 @@ namespace Graph_practice_2_Rolling_data
             // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize',
             while (AverageIndex2 * AverageChunkSize2 - AdjustIndex2 < COPY_POS)
             {
-                for (int i = Math.Max(0, (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2); i < AverageIndex2 * AverageChunkSize2 - AdjustIndex2; i += 2)
+                for (int i = Math.Max(0, ((AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2)); i < (AverageIndex2 * AverageChunkSize2 - AdjustIndex2); i++) //Sums a chunk from middle of array
                 {
-                    // Separates bytes from each PMT
+                    if (i % 2 == 0)
+                    {
+                        SumChunkEven += Convert.ToInt32(DataBuffer[i]); //Running total for PMT1 readings
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumChunkOdd += Convert.ToInt32(DataBuffer[i]); //Running total for PMT2 readings
+                    }
 
-                    SumChunkEven += Convert.ToInt32(DataBuffer[i]);
                 }
-                for (int i = Math.Max(1, (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2 + 1); i < AverageIndex2 * AverageChunkSize2 - AdjustIndex2; i += 2)
-                {
-                    // Separates bytes from each PMT
-
-                    SumChunkOdd += Convert.ToInt32(DataBuffer[i]);
-                }
-
                 if (PMT1_pane2 && !PMT2_pane2)
                 {
                     if (Window2.AverageBox2.Checked == true)
@@ -1082,14 +1084,16 @@ namespace Graph_practice_2_Rolling_data
             while (DataBuffer.Length - ((AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2) > 2 * AverageChunkSize2)
             {
 
-                for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2; i < AverageChunkSize2 * AverageIndex2 - AdjustIndex2; i += 2)
+                for (int i = ((AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2); i < (AverageChunkSize2 * AverageIndex2 - AdjustIndex2); i++)
                 {
-                    SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
-                }
-
-                for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2 + 1; i < AverageChunkSize2 * AverageIndex2 - AdjustIndex2; i += 2)
-                {
-                    SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
+                    if (i % 2 == 0)
+                    {
+                        SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);//PMT1 running total
+                    }
+                    else if (i % 2 == 1)
+                    {
+                        SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);//PMT2 running total
+                    }
                 }
 
                 // If loops control which PMT's data is displayed
@@ -1145,20 +1149,18 @@ namespace Graph_practice_2_Rolling_data
                 AverageIndex2 += 2;
             }
 
-            // For loop to sum remaining bytes in DataBuffer that dont make up whole average chunk size
-            for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2; i < DataBuffer.Length; i += 2)
+            for (int i = ((AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2); i < DataBuffer.Length; i++) // For loop to sum remaining bytes in DataBuffer
             {
-                SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
-
-                NumProcessedBytes += 1;
+                if (i % 2 == 0)
+                {
+                    SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
+                }
+                else if (i % 2 == 1)
+                {
+                    SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
+                }
+                NumProcessedBytes++;
             }
-            for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2 + 1; i < DataBuffer.Length; i += 2)
-            {
-                SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
-
-                NumProcessedBytes += 1;
-            }
-
 
             if (PMT1_pane2 && !PMT2_pane2)
             {

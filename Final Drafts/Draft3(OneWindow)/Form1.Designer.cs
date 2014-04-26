@@ -239,10 +239,10 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox1.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox1.TabIndex = 24;
             this.AvChunkBox1.Value = new decimal(new int[] {
-            5,
+            7,
             0,
             0,
-            0});
+            65536});
             this.AvChunkBox1.ValueChanged += new System.EventHandler(this.AvChunkBox1_ValueChanged);
             // 
             // label6
@@ -332,10 +332,10 @@ namespace Graph_practice_2_Rolling_data
             this.AvChunkBox2.Size = new System.Drawing.Size(46, 20);
             this.AvChunkBox2.TabIndex = 30;
             this.AvChunkBox2.Value = new decimal(new int[] {
-            5,
+            7,
             0,
             0,
-            0});
+            65536});
             this.AvChunkBox2.ValueChanged += new System.EventHandler(this.AvChunkBox2_ValueChanged);
             // 
             // RHSSave
@@ -656,7 +656,7 @@ namespace Graph_practice_2_Rolling_data
             // 
             this.label15.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(807, 7);
+            this.label15.Location = new System.Drawing.Point(830, 7);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(63, 13);
             this.label15.TabIndex = 71;
@@ -725,10 +725,11 @@ namespace Graph_practice_2_Rolling_data
             // 
             // ButtonsVisible
             // 
+            this.ButtonsVisible.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonsVisible.AutoSize = true;
             this.ButtonsVisible.Checked = true;
             this.ButtonsVisible.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ButtonsVisible.Location = new System.Drawing.Point(693, 4);
+            this.ButtonsVisible.Location = new System.Drawing.Point(695, 6);
             this.ButtonsVisible.Name = "ButtonsVisible";
             this.ButtonsVisible.Size = new System.Drawing.Size(98, 17);
             this.ButtonsVisible.TabIndex = 85;

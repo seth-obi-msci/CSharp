@@ -39,7 +39,6 @@ namespace Graph_practice_2_Rolling_data
         int AverageIndex2 = 2;
         int AverageChunkSize2;
 
-
         int[] AverageArray2 = new int[3];
         int[] AverageArray1 = new int[3];
     
@@ -118,6 +117,7 @@ namespace Graph_practice_2_Rolling_data
         {
             CreateGraph(zgc);
             trackBar1.Visible = false;
+
             //Timer to trigger timer1_Tick function
             timer1.Interval = 1;
             timer1.Enabled = true;
@@ -138,29 +138,17 @@ namespace Graph_practice_2_Rolling_data
            //zgc.AxisChange();
            SetSize();
 
-           
-
-
             int t = (Environment.TickCount - tickStart);
            
-            if (Pause) //Ensures points only plotted if stop button NOT pressed on form
+
+            if (Pause) //Ensures points only plotted if pause is unchecked on form
             {
                 
             }
             else
             {
-                l++;
-                // Simulated bytes used when working away from FPGA
-              /*  if (l % 2 == 0)
-                {
-                    SimulatedBytes[l%10] = Convert.ToByte(trackBar1.Value);
-                }
-                else if (l % 2 == 1)
-                {
-                    SimulatedBytes[l%10] = Convert.ToByte(0);
-                }
-                if (l % 10 == 9) //Only reads and plots once every 10 ticks*/
-                {   
+               l++;
+               // PMT comparison only made every 100 runs of timer_tick
                if (l % 100 == 99 && !StopWarningPMT)
                {
                    
@@ -168,16 +156,7 @@ namespace Graph_practice_2_Rolling_data
                }
 
 
-                    UART_Buffer = FPGA.ReadBytes();
-                   /* for (int i = 0; i < UART_Buffer.Length; i++)
-                    {
-                        if (UART_Buffer[i] == 0)
-                        {
-                            Console.WriteLine("Element that = 0 is {0}", i);
-                        }
-                    }*/
-
-                    //Console.WriteLine("Bytes in buffer = {0}", UART_Buffer.Length);
+               UART_Buffer = FPGA.ReadBytes();
 
                     // Ensures there's at least one curve in GraphPane
                     if (zgc.GraphPane.CurveList.Count <= 0)
@@ -222,8 +201,8 @@ namespace Graph_practice_2_Rolling_data
                     int Diff = DataBuffer.Length - COPY_POS;
 
 
-                    /// Condition satisfied when there's enough room for a UART_Buffer array to be
-                    ///  copied into the Screen array. 
+                    // Condition satisfied when there's enough room for a UART_Buffer array to be
+                    // copied into the Screen array. 
                     if (Diff>UART_Buffer.Length)
                     {
                         // Copies UART_Buffer=FPGA.ReadBytes into Screen array, overwriting oldest values
@@ -234,27 +213,8 @@ namespace Graph_practice_2_Rolling_data
 
                         AverageDataUnfilled2();
                         AverageDataUnfilled1();
-                        
 
-                        /*if (time1 != time2)
-                        {
-                            Console.WriteLine("Time Misaligned after Unfilled");
-                            Console.WriteLine("time1={0}", time1);
-                            Console.WriteLine("time2={0}", time2);
-                            Console.WriteLine("list11={0}", list1.LongCount());
-                            Console.WriteLine("list2={0}", list2.LongCount());
-                            Console.WriteLine("COPYPOS = {0}", COPY_POS);
-                           // time1++;
-                            Pause = true;
-                        }
-                        if (list1.LongCount() != list2.LongCount())
-                        {
-                            Console.WriteLine("list Misaligned after Unfilled");
-                            Console.WriteLine("list11={0}", list1.LongCount());
-                            Console.WriteLine("list2={0}", list2.LongCount());
-                            // time1++;
-                             Pause = true;
-                        }*/
+
                         if (!StopWarningThreshold)
                         {
                             CheckIonTrapped();
@@ -270,16 +230,9 @@ namespace Graph_practice_2_Rolling_data
                         Array.Copy(UART_Buffer, 0, DataBuffer, COPY_POS, DataBuffer.Length - COPY_POS);
 
                         /// AverageDataFilled used to find averages of end values in DataBuffer
-                        /// Must be able to make up average by looping round from end to beggining values of DataBuffer
+                        /// Must be able to make up average by looping round from end values to beggining values of DataBuffer
                         AverageDataFilled1();
                         AverageDataFilled2();
-                       /* if (time1 != time2)
-                        {
-                            Console.WriteLine("Time Misaligned after Filled");
-                            Console.WriteLine("time1={0}", time1);
-                            Console.WriteLine("time2={0}", time2);
-                            Pause = true;
-                        }*/
                         
 
                         // Indexes set to beginning so that next timer tick averaging begins at start of DataBuffer (most recent values)
@@ -291,7 +244,7 @@ namespace Graph_practice_2_Rolling_data
                         COPY_POS = UART_Buffer.Length - (DataBuffer.Length - COPY_POS);
                         
                     }
-                }
+                
             }
 
             // Lists for escaped ion detection thresholds
@@ -428,15 +381,15 @@ namespace Graph_practice_2_Rolling_data
             // if loops used to shift x axis for each graph
             if (IsScrolling)
             {
-                if (time1 > xScale1.Max - xScale1.MajorStep) // When the time values are within one 'MajorStep' of the max x value
+                if (time1 > xScale1.Max) // When the time values reach the end of the x axis
                 {
-                    xScale1.Max = time1 + xScale1.MajorStep; //Keep the end of x axis MajorStep away from end of curve
-                    xScale1.Min = xScale1.Max - XMax1;   //Increase min values of x axis acordingly
+                    xScale1.Max = time1;
+                    xScale1.Min = xScale1.Max - XMax1;   //Increase max and min values of x axis acordingly
                 }
 
-                if (time2 > xScale2.Max - xScale2.MajorStep)
+                if (time2 > xScale2.Max)
                 {
-                    xScale2.Max = time2 + xScale2.MajorStep;
+                    xScale2.Max = time2;
                     xScale2.Min = xScale2.Max - XMax2;
 
                 }
@@ -793,7 +746,7 @@ namespace Graph_practice_2_Rolling_data
             Pause = true;
             SaveFileDialog sfd1 = new SaveFileDialog();
             sfd1.InitialDirectory = @"C:\";
-            sfd1.Title = "SAVE BITCH";
+            sfd1.Title = "SAVE";
             //sfd1.CheckFileExists = true;
             sfd1.CheckPathExists = true;
             sfd1.ShowDialog();
@@ -890,17 +843,17 @@ namespace Graph_practice_2_Rolling_data
             // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize', 
             while (AverageIndex1 * AverageChunkSize1 - AdjustIndex1 < COPY_POS) 
             {
-                for (int i = Math.Max(0, (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1); i < AverageIndex1 * AverageChunkSize1 - AdjustIndex1; i++)
+                for (int i = Math.Max(0, (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1); i < AverageIndex1 * AverageChunkSize1 - AdjustIndex1; i+=2)
                 {
                     // Separates bytes from each PMT
-                    if (i % 2 == 0)
-                    {
-                        SumChunkEven += Convert.ToInt16(DataBuffer[i]); 
-                    }
-                    else if (i % 2 == 1)
-                    {
-                        SumChunkOdd += Convert.ToInt16(DataBuffer[i]);
-                    }
+
+                        SumChunkEven += Convert.ToInt32(DataBuffer[i]);
+                }
+                for (int i = Math.Max(1, (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1+1); i < AverageIndex1 * AverageChunkSize1 - AdjustIndex1; i += 2)
+                {
+                    // Separates bytes from each PMT
+
+                    SumChunkOdd += Convert.ToInt32(DataBuffer[i]);
                 }
 
                 // If loops control which PMT's data is displayed
@@ -975,16 +928,14 @@ namespace Graph_practice_2_Rolling_data
             while (DataBuffer.Length - ((AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1) > 2*AverageChunkSize1) 
             {
 
-                for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1; i < AverageChunkSize1 * AverageIndex1 - AdjustIndex1; i++)
+                for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1; i < AverageChunkSize1 * AverageIndex1 - AdjustIndex1; i+=2)
                 {
-                    if (i % 2 == 0)
-                    {
-                        SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
-                    }
-                    else if (i % 2 == 1)
-                    {
-                        SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
-                    }
+                    SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
+                }
+
+                for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1+1; i < AverageChunkSize1 * AverageIndex1 - AdjustIndex1; i += 2)
+                {
+                    SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
                 }
 
                 // If loops control which PMT's data is displayed
@@ -1042,18 +993,20 @@ namespace Graph_practice_2_Rolling_data
             }
 
             // For loop to sum remaining bytes in DataBuffer that dont make up whole average chunk size
-            for (int i = (AverageIndex1) * AverageChunkSize1 - AdjustIndex1; i < DataBuffer.Length; i++) 
+            for (int i = (AverageIndex1-2) * AverageChunkSize1 - AdjustIndex1; i < DataBuffer.Length; i+=2) 
             {
-                if (i % 2 == 0)
-                {
-                    SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
-                }
-                if (i % 2 == 1)
-                {
-                    SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
-                }
+                SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
+
                 NumProcessedBytes += 1;
             }
+            for (int i = (AverageIndex1 - 2) * AverageChunkSize1 - AdjustIndex1+1; i < DataBuffer.Length; i += 2)
+            {
+                SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
+
+                NumProcessedBytes += 1;
+            }
+
+
             if (PMT1_pane1 == true && PMT2_pane1 == false)
             {
                 SumProcessedBytes1 = SumProcessedBytesEven;
@@ -1085,17 +1038,19 @@ namespace Graph_practice_2_Rolling_data
             // while loop continues to average blocks of bytes untill there aren't enough 'new' bytes to make up an 'AverageChunkSize', 
             while (AverageIndex2 * AverageChunkSize2 - AdjustIndex2 < COPY_POS) 
             {
-                for (int i = Math.Max(0, ((AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2)); i < (AverageIndex2 * AverageChunkSize2 - AdjustIndex2); i++)
+                for (int i = Math.Max(0, (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2); i < AverageIndex2 * AverageChunkSize2 - AdjustIndex2; i += 2)
                 {
-                    if (i % 2 == 0)
-                    {
-                        SumChunkEven += Convert.ToInt32(DataBuffer[i]);
-                    }
-                    else if (i % 2 == 1)
-                    {
-                        SumChunkOdd += Convert.ToInt32(DataBuffer[i]);
-                    }
+                    // Separates bytes from each PMT
+
+                    SumChunkEven += Convert.ToInt32(DataBuffer[i]);
                 }
+                for (int i = Math.Max(1, (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2 + 1); i < AverageIndex2 * AverageChunkSize2 - AdjustIndex2; i += 2)
+                {
+                    // Separates bytes from each PMT
+
+                    SumChunkOdd += Convert.ToInt32(DataBuffer[i]);
+                }
+
 
                 // If loops control which PMT's data is displayed
                 if (PMT1_pane2 && !PMT2_pane2)
@@ -1174,16 +1129,14 @@ namespace Graph_practice_2_Rolling_data
             while (DataBuffer.Length - ((AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2) > 2*AverageChunkSize2) 
             {
 
-                for (int i = ((AverageIndex2 -2) * AverageChunkSize2 - AdjustIndex2); i < (AverageChunkSize2 * AverageIndex2 - AdjustIndex2); i++)
+                for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2; i < AverageChunkSize2 * AverageIndex2 - AdjustIndex2; i += 2)
                 {
-                    if (i % 2 == 0)
-                    {
-                        SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
-                    }
-                    else if (i % 2 == 1)
-                    {
-                        SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
-                    }
+                    SumEndChunkEven += Convert.ToInt32(DataBuffer[i]);
+                }
+
+                for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2 + 1; i < AverageChunkSize2 * AverageIndex2 - AdjustIndex2; i += 2)
+                {
+                    SumEndChunkOdd += Convert.ToInt32(DataBuffer[i]);
                 }
 
                 // If loops control which PMT's data is displayed
@@ -1240,17 +1193,18 @@ namespace Graph_practice_2_Rolling_data
                 AverageIndex2+=2;
             }
 
-            for (int i = ((AverageIndex2-2) * AverageChunkSize2 - AdjustIndex2); i < DataBuffer.Length; i++) // For loop to sum remaining bytes in DataBuffer
+            // For loop to sum remaining bytes in DataBuffer that dont make up whole average chunk size
+            for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2; i < DataBuffer.Length; i += 2)
             {
-                if (i % 2 == 0)
-                {
-                    SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
-                }
-                else if (i % 2 == 1)
-                {
-                    SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
-                }
-                NumProcessedBytes++;
+                SumProcessedBytesEven += Convert.ToInt32(DataBuffer[i]);
+
+                NumProcessedBytes += 1;
+            }
+            for (int i = (AverageIndex2 - 2) * AverageChunkSize2 - AdjustIndex2 + 1; i < DataBuffer.Length; i += 2)
+            {
+                SumProcessedBytesOdd += Convert.ToInt32(DataBuffer[i]);
+
+                NumProcessedBytes += 1;
             }
 
             if (PMT1_pane2 && !PMT2_pane2)
@@ -1809,7 +1763,7 @@ namespace Graph_practice_2_Rolling_data
             if (TimeControl1.Checked)
             {
                 TrueTime1 = true;
-
+                SetXAxis1();
                 // Existing elements in list must have X-coord changed into time in microseconds
                 for (int i = 0; i < list1.LongCount(); i++)
                 {
@@ -1835,7 +1789,7 @@ namespace Graph_practice_2_Rolling_data
                 }
                 time1 = time1 / (AverageChunkSize1*TimebinFactor*100);
             }
-            SetXAxis1();
+            
             Console.WriteLine("TrueTime1 = {0}", TrueTime1);
         }
 
